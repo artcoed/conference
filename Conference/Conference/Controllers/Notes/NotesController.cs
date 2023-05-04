@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Conference.Controllers.Meetings
+namespace Conference.Controllers.Notes
 {
     public class NotesController : BaseController
     {
