@@ -1,9 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Meetings
 {
     public class MeetingsController : BaseController
     {
+        private readonly IMediator _mediator;
+
+        public MeetingsController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         /// <summary>
         /// Get list with all meetings
         /// </summary>

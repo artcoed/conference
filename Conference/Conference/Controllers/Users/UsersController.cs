@@ -7,6 +7,7 @@ namespace Conference.Controllers.Users
         /// <summary>
         /// Create user with quest role
         /// </summary>
+        [HttpPost]
         public Task<IActionResult> CreateGuestAsync()
         {
             throw new NotImplementedException();
