@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Conference.Commands.Reports.GetByMeetingId;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Reports
@@ -16,9 +17,9 @@ namespace Conference.Controllers.Reports
         /// Get report
         /// </summary>
         [HttpGet]
-        public Task<IActionResult> GetReportByMeetingIdAsync()
+        public async Task<IActionResult> GetReportByMeetingIdAsync(GetReportByMeetingIdQuery getReportByMeetingIdQuery, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return ConvertToActionResult(await _mediator.Send(getReportByMeetingIdQuery, cancellationToken));
         }
     }
 }

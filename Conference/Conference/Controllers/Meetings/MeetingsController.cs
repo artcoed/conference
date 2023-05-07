@@ -1,4 +1,9 @@
-﻿using MediatR;
+﻿using Conference.Commands.Meetings.Complete;
+using Conference.Commands.Meetings.Create;
+using Conference.Commands.Meetings.Get;
+using Conference.Commands.Meetings.GetByInvitedUser;
+using FluentResults;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Meetings
@@ -13,39 +18,39 @@ namespace Conference.Controllers.Meetings
         }
 
         /// <summary>
-        /// Get list with all meetings
-        /// </summary>
-        [HttpGet]
-        public Task<IActionResult> GetMeetingsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Create new meeting
         /// </summary>
         [HttpPost]
-        public Task<IActionResult> CreateMeetingAsync()
+        public async Task<IActionResult> CreateMeetingAsync(CreateMeetingCommand createMeetingCommand, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Get meetings to which the user is invited
-        /// </summary>
-        [HttpGet]
-        public Task<IActionResult> GetMeetingsByInvitedAsync()
-        {
-            throw new NotImplementedException();
+            return ConvertToActionResult(await _mediator.Send(createMeetingCommand, cancellationToken));
         }
 
         /// <summary>
         /// Complete meeting
         /// </summary>
         [HttpPost]
-        public Task<IActionResult> CompleteMeetingAsync()
+        public async Task<IActionResult> CompleteMeetingAsync(CompleteMeetingCommand completeMeetingCommand, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return ConvertToActionResult(await _mediator.Send(completeMeetingCommand, cancellationToken));
+        }
+
+        /// <summary>
+        /// Get list with all meetings
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetMeetingsAsync(GetMeetingsQuery getMeetingsQuery, CancellationToken cancellationToken)
+        {
+            return ConvertToActionResult(await _mediator.Send(getMeetingsQuery, cancellationToken));
+        }
+
+        /// <summary>
+        /// Get meetings to which the user is invited
+        /// </summary>
+        [HttpGet]
+        public async Task<IActionResult> GetByInvitedUserMeetingsAsync(GetByInvitedUserMeetingsQuery getByInvitedUserMeetingsQuery, CancellationToken cancellationToken)
+        {
+            return ConvertToActionResult(await _mediator.Send(getByInvitedUserMeetingsQuery, cancellationToken));
         }
     }
 }

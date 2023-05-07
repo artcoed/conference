@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Conference.Commands.Notifications.GetMeetingsInvation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Notifications
@@ -16,9 +17,9 @@ namespace Conference.Controllers.Notifications
         /// Get meetings invitation notifications
         /// </summary>
         [HttpGet]
-        public Task<IActionResult> GetMeetingsInvationNotificationsAsync()
+        public async Task<IActionResult> GetMeetingsInvationNotificationsAsync(GetMeetingsInvationNotificationsQuery getMeetingsInvationNotificationsQuery, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return ConvertToActionResult(await _mediator.Send(getMeetingsInvationNotificationsQuery, cancellationToken));
         }
     }
 }

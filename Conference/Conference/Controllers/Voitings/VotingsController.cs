@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Conference.Commands.Voitings.Create;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Voitings
@@ -16,18 +17,9 @@ namespace Conference.Controllers.Voitings
         /// Create new voting
         /// </summary>
         [HttpPost]
-        public Task<IActionResult> CreateVotingAsync()
+        public async Task<IActionResult> CreateVotingAsync(CreateVotingCommand createVotingCommand, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Vote in voting
-        /// </summary>
-        [HttpPost]
-        public Task<IActionResult> VoteAsync()
-        {
-            throw new NotImplementedException();
+            return ConvertToActionResult(await _mediator.Send(createVotingCommand, cancellationToken));
         }
     }
 }

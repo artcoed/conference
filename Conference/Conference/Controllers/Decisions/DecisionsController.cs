@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Conference.Commands.Decisions.Create;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Decisions
@@ -16,9 +17,9 @@ namespace Conference.Controllers.Decisions
         /// Create new decision
         /// </summary>
         [HttpPost]
-        public Task<IActionResult> CreateDecisionAsync()
+        public async Task<IActionResult> CreateDecisionAsync(CreateDecisionCommand createDecisionCommand, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return ConvertToActionResult(await _mediator.Send(createDecisionCommand, cancellationToken));
         }
     }
 }

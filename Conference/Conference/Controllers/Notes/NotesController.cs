@@ -1,5 +1,8 @@
-﻿using MediatR;
+﻿using Conference.Commands.Meetings.Complete;
+using Conference.Commands.Notes.Create;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace Conference.Controllers.Notes
 {
@@ -16,9 +19,9 @@ namespace Conference.Controllers.Notes
         /// Create new note
         /// </summary>
         [HttpPost]
-        public Task<IActionResult> CreateNoteAsync()
+        public async Task<IActionResult> CreateNoteAsync(CreateNoteCommand createNoteCommand, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return ConvertToActionResult(await _mediator.Send(createNoteCommand, cancellationToken));
         }
     }
 }
