@@ -4,12 +4,14 @@ namespace Conference.Domain
 {
     public class Member
     {
-        public IReadOnlyList<Meeting> Meetings { get; }
-        public IReadOnlyList<Notification> Notifications { get; }
+        private readonly List<Notification> _notifications = new();
+
+        public IReadOnlyList<Notification> Notifications => _notifications;
 
         public Result AddNotification(Notification notification)
         {
-            throw new NotImplementedException();
+            _notifications.Add(notification);
+            return Result.Ok();
         }
     }
 }

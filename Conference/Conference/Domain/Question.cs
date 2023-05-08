@@ -1,12 +1,25 @@
-﻿namespace Conference.Domain
+﻿using FluentResults;
+
+namespace Conference.Domain
 {
     public class Question
     {
         public string Content { get; }
 
-        public Question(string content)
+        private Question(string content)
         {
             Content = content;
+        }
+
+        public static Result<Question> Create(string content)
+        {
+            if (content.Length > 50)
+                return Result.Fail("Too many question");
+
+            if (content.Length < 3)
+                return Result.Fail("Too small question");
+
+            return Result.Ok(new Question(content));
         }
     }
 }

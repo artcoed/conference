@@ -1,12 +1,25 @@
-﻿namespace Conference.Domain
+﻿using FluentResults;
+
+namespace Conference.Domain
 {
-    public class Option
+    public record Option
     {
         public string Value { get; }
 
-        public Option(string value)
+        private Option(string value)
         {
             Value = value;
+        }
+
+        public static Result<Option> Create(string value)
+        {
+            if (value.Length > 50)
+                return Result.Fail("Too many option");
+
+            if (value.Length < 1)
+                return Result.Fail("Too small option");
+
+            return Result.Ok(new Option(value));
         }
     }
 }

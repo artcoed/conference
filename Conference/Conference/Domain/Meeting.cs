@@ -4,9 +4,9 @@ namespace Conference.Domain
 {
     public class Meeting
     {
-        private List<Member> _members;
-        private List<Note> _notes;
-        private List<Decision> _decisions;
+        private readonly List<Member> _members;
+        private readonly List<Note> _notes;
+        private readonly List<Decision> _decisions;
 
         public DateTime StartTime { get; }
         public Agenda Agenda { get; }
@@ -29,10 +29,10 @@ namespace Conference.Domain
             var agenda = Agenda;
             var members = _members;
             var notes = _notes;
-            var votingResult = Voting.GetResult().Value;
+            var votes = Voting.Votes.ToList();
             var decisions = _decisions;
 
-            var report = new Report(startMeetingTime, agenda, members, notes, votingResult, decisions);
+            var report = new Report(startMeetingTime, agenda, members, notes, votes, decisions);
 
             throw new NotImplementedException();
         }

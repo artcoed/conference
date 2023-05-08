@@ -4,23 +4,26 @@ namespace Conference.Domain
 {
     public class Voting
     {
-        public string Title { get; }
-        public IReadOnlyList<Option> Options { get; }
+        private readonly List<Vote> _votes = new();
 
-        public Voting(string title, List<Option> options)
+        public VotingTitle Title { get; }
+        public IReadOnlyList<Option> Options { get; }
+        public IReadOnlyList<Vote> Votes => _votes;
+
+        public Voting(VotingTitle title, List<Option> options)
         {
             Title = title;
             Options = options;
         }
 
-        public Result Vote(Member member, Option option)
+        public Result AddVote(Vote vote)
         {
-            throw new NotImplementedException();
-        }
+            if (Options.Contains(vote.Option) == false)
+                return Result.Fail("Voting havent this option");
 
-        public Result<VotingResult> GetResult()
-        {
-            throw new NotImplementedException();
+            _votes.Add(vote);
+
+            return Result.Ok();
         }
     }
 }
