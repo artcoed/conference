@@ -11,7 +11,7 @@ namespace Conference.Domain
         public DateTime StartTime { get; }
         public Agenda Agenda { get; }
         public IReadOnlyList<Document> Documents { get; }
-        public Voiting Voiting { get; private set; }
+        public Voting Voting { get; private set; }
         public IReadOnlyList<Note> Notes => _notes;
         public IReadOnlyList<Member> Members => _members;
 
@@ -23,23 +23,23 @@ namespace Conference.Domain
             _members = members;
         }
 
-        public Result<Report> Complete()
+        public Result Complete()
         {
             var startMeetingTime = StartTime;
             var agenda = Agenda;
             var members = _members;
             var notes = _notes;
-            var voitingResult = Voiting.GetResult().Value;
+            var votingResult = Voting.GetResult().Value;
             var decisions = _decisions;
 
-            var report = new Report(startMeetingTime, agenda, members, notes, voitingResult, decisions);
+            var report = new Report(startMeetingTime, agenda, members, notes, votingResult, decisions);
 
             throw new NotImplementedException();
         }
 
-        public Result AddVoiting(Voiting voiting)
+        public Result AddVoiting(Voting voting)
         {
-            Voiting = voiting;
+            Voting = voting;
             throw new NotImplementedException();
         }
 
@@ -49,6 +49,11 @@ namespace Conference.Domain
         }
 
         public Result AddDecision(Decision decision)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Result<Report> GetReport()
         {
             throw new NotImplementedException();
         }

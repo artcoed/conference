@@ -2,7 +2,6 @@
 using Conference.Commands.Meetings.Create;
 using Conference.Commands.Meetings.Get;
 using Conference.Commands.Meetings.GetByInvitedUser;
-using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

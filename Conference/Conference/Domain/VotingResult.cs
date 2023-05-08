@@ -1,6 +1,6 @@
 ﻿namespace Conference.Domain
 {
-    public class VoitingResult
+    public class VotingResult
     {
 
     }

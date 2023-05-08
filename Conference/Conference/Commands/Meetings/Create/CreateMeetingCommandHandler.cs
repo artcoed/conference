@@ -1,13 +1,37 @@
-﻿using FluentResults;
+﻿using Conference.Database;
+using Conference.Domain;
+using FluentResults;
 using MediatR;
 
 namespace Conference.Commands.Meetings.Create
 {
     public class CreateMeetingCommandHandler : IRequestHandler<CreateMeetingCommand, Result>
     {
-        public Task<Result> Handle(CreateMeetingCommand request, CancellationToken cancellationToken)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CreateMeetingCommandHandler(IUnitOfWork unitOfWork)
         {
-            throw new NotImplementedException();
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<Result> Handle(CreateMeetingCommand request, CancellationToken cancellationToken)
+        {
+            var getMembersResult = await _unitOfWork.MembersRepository.GetMembersById(request.MembersId, cancellationToken);
+            if (getMembersResult.IsFailed)
+                return Result.Fail("One or more members not found");
+
+            var members = getMembersResult.Value.ToList();
+
+            var questions = new List<Question>(request.Questions.Select(x => new Question(x)));
+            var agenda = new Agenda(questions);
+            var documents = new List<Document>(request.Documents.Select(x => new Document()));
+
+            var meeting = new Meeting(request.StartMeetingTime, agenda, documents, members);
+
+            await _unitOfWork.MeetingsRepository.Create(meeting, cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result.Ok();
         }
     }
 }

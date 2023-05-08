@@ -2,12 +2,12 @@
 
 namespace Conference.Domain
 {
-    public class Voiting
+    public class Voting
     {
         public string Title { get; }
         public IReadOnlyList<Option> Options { get; }
 
-        public Voiting(string title, List<Option> options)
+        public Voting(string title, List<Option> options)
         {
             Title = title;
             Options = options;
@@ -18,7 +18,7 @@ namespace Conference.Domain
             throw new NotImplementedException();
         }
 
-        public Result<VoitingResult> GetResult()
+        public Result<VotingResult> GetResult()
         {
             throw new NotImplementedException();
         }

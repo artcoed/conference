@@ -1,8 +1,8 @@
-﻿using Conference.Commands.Voitings.Create;
+﻿using Conference.Commands.Votings.Create;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Conference.Controllers.Voitings
+namespace Conference.Controllers.Votings
 {
     public class VotingsController : BaseController
     {

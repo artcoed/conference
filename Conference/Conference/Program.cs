@@ -1,3 +1,5 @@
+using Conference.Middlewares.CustomExceptionsHandler;
+
 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
 {
+    app.UseCustomExceptionsHandlerMiddleware();
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
