@@ -2,9 +2,9 @@
 
 namespace Conference.Domain
 {
-    public record Decision
+    public class Decision
     {
-        private int _id;
+        public int Id { get; private set; }
 
         public string Content { get; }
 

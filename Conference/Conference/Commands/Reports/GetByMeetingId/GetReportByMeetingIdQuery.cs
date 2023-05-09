@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Conference.Commands.Reports.GetByMeetingId
 {
-    public record GetReportByMeetingIdQuery : IRequest<Result<Report>>
+    public record GetReportByMeetingIdQuery : IRequest<Result<ReportDto>>
     {
         public int MeetingId { get; init; }
     }

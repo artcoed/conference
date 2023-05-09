@@ -20,7 +20,7 @@ namespace Conference.Commands.Decisions.Create
             if (getMeetingResult.IsFailed)
                 return Result.Fail("Meeting not found");
 
-            var decision = new Decision(request.Content);
+            var decision = Decision.Create(request.Content).Value;
 
             var addDecisionResult = getMeetingResult.Value.AddDecision(decision);
             if (addDecisionResult.IsFailed)

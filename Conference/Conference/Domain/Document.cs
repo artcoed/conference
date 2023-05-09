@@ -2,9 +2,9 @@
 
 namespace Conference.Domain
 {
-    public record Document
+    public class Document
     {
-        private int _id;
+        public int Id { get; private set; }
 
         public string Source { get; }
 

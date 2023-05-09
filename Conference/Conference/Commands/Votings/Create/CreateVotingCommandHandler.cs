@@ -20,10 +20,9 @@ namespace Conference.Commands.Votings.Create
             if (getMeetingResult.IsFailed)
                 return Result.Fail("Meeting not found");
 
-            var options = new List<Option>(request.Options.Select(x => new Option(x)));
-            var voting = new Voting(request.Title, options);
+            var options = new List<Option>(request.Options.Select(x => Option.Create(x).Value));
 
-            var addVotingResult = getMeetingResult.Value.AddVoiting(voting);
+            var addVotingResult = getMeetingResult.Value.AddVoiting(VotingTitle.Create(request.Title).Value, options);
             if (addVotingResult.IsFailed)
                 return Result.Fail("Create voting failed");
 

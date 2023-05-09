@@ -19,7 +19,7 @@ namespace Conference.Commands.Meetings.Complete
             if (getMeetingResult.IsFailed)
                 return Result.Fail("Meeting not found");
 
-            var completeResult = getMeetingResult.Value.Complete();
+            var completeResult = getMeetingResult.Value.Complete(DateTime.Now);
             if (completeResult.IsFailed)
                 return Result.Fail("Complete meeting failed");
 

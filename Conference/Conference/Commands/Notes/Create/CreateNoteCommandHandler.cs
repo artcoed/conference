@@ -20,7 +20,7 @@ namespace Conference.Commands.Notes.Create
             if (getMeetingResult.IsFailed)
                 return Result.Fail("Meeting not found");
 
-            var note = new Note(request.Content);
+            var note = Note.Create(request.Content).Value;
 
             var addNoteResult = getMeetingResult.Value.AddNote(note);
             if (addNoteResult.IsFailed)

@@ -22,11 +22,10 @@ namespace Conference.Commands.Meetings.Create
 
             var members = getMembersResult.Value.ToList();
 
-            var questions = new List<Question>(request.Questions.Select(x => new Question(x)));
-            var agenda = new Agenda(questions);
-            var documents = new List<Document>(request.Documents.Select(x => new Document()));
+            var questions = new List<Question>(request.Questions.Select(x => Question.Create(x).Value));
+            var documents = new List<Document>(request.Documents.Select(x => Document.Create(x).Value));
 
-            var meeting = new Meeting(request.StartMeetingTime, agenda, documents, members);
+            var meeting = new Meeting(request.StartMeetingTime, questions, documents, members);
 
             await _unitOfWork.MeetingsRepository.Create(meeting, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);

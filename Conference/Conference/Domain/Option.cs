@@ -2,9 +2,13 @@
 
 namespace Conference.Domain
 {
-    public record Option
+    public class Option
     {
-        private int _id;
+        private readonly List<Member> _members = new();
+
+        public int Id { get; private set; }
+
+        public IReadOnlyList<Member> Members => _members;
 
         public string Value { get; }
 
@@ -22,6 +26,11 @@ namespace Conference.Domain
                 return Result.Fail("Too small option");
 
             return Result.Ok(new Option(value));
+        }
+
+        public void AddMember(Member member)
+        {
+            _members.Add(member);
         }
     }
 }

@@ -4,47 +4,54 @@ namespace Conference.Domain
 {
     public class Meeting
     {
-        private readonly List<Member> _members;
+        private readonly List<Question> _agenda;
+        private readonly List<Document> _documents;
         private readonly List<Note> _notes = new();
         private readonly List<Decision> _decisions = new();
 
-        private Report _report;
+        private readonly List<MemberMeeting> _memberMeetings = new();
 
-        public int Id { get; }
+        private  List<Option> _votes = new();
+
+        public int Id { get; private set; }
 
         public DateTime StartTime { get; }
-        public Agenda Agenda { get; }
-        public Voting Voting { get; private set; }
+        public DateTime EndTime { get; private set; }
+        public VotingTitle VotingTitle { get; private set; }
 
-        public IReadOnlyList<Document> Documents { get; }
+        public IReadOnlyList<Member> Members => _memberMeetings.Select(x => x.Member).ToList();
+
+        public IReadOnlyList<Question> Agenda => _agenda;
+        public IReadOnlyList<Document> Documents => _documents;
         public IReadOnlyList<Note> Notes => _notes;
-        public IReadOnlyList<Member> Members => _members;
+        public IReadOnlyList<Decision> Decisions => _decisions;
+        public IReadOnlyList<Option> Votes => _votes;
 
-        public Meeting(DateTime startTime, Agenda agenda, List<Document> documents, List<Member> members)
+        public IReadOnlyList<MemberMeeting> MemberMeetings => _memberMeetings;
+
+        public Meeting(DateTime startTime, List<Question> agenda, List<Document> documents, List<Member> members)
         {
             StartTime = startTime;
-            Agenda = agenda;
-            Documents = documents;
-            _members = members;
+
+            foreach (var member in members)
+            {
+                _memberMeetings.Add(new MemberMeeting(member, this));
+            }
+
+            _agenda = agenda;
+            _documents = documents;
         }
 
-        public Result Complete()
+        public Result Complete(DateTime endTime)
         {
-            var startMeetingTime = StartTime;
-            var agenda = new Agenda(Agenda.Questions.ToList());
-            var members = _members.ToList();
-            var notes = _notes.ToList();
-            var votes = Voting.Votes.ToList();
-            var decisions = _decisions.ToList();
-
-            _report = new Report(startMeetingTime, agenda, members, notes, votes, decisions);
-
+            EndTime = endTime;
             return Result.Ok();
         }
-
-        public Result AddVoiting(Voting voting)
+         
+        public Result AddVoiting(VotingTitle title, List<Option> options)
         {
-            Voting = voting;
+            VotingTitle = title;
+            _votes = options;
             return Result.Ok();
         }
 
@@ -60,12 +67,14 @@ namespace Conference.Domain
             return Result.Ok();
         }
 
-        public Result<Report> GetReport()
+        public Result Vote(Option option, Member member)
         {
-            if (_report == null)
-                return Result.Fail("Have not report");
+            if (_votes.Contains(option) == false)
+                return Result.Fail("Voting havent this option");
 
-            return Result.Ok(_report);
+            _votes.First(o => o == option).AddMember(member);
+
+            return Result.Ok();
         }
     }
 }
