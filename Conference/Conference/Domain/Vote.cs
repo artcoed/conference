@@ -1,14 +1,16 @@
 ﻿namespace Conference.Domain
 {
-    public record Vote
+    public class Vote
     {
+        public int Id { get; }
+
         public Option Option { get; }
-        private readonly Member _member;
+        public Member Member { get; }
 
         public Vote(Option option, Member member)
         {
             Option = option;
-            _member = member;
+            Member = member;
         }
     }
 }

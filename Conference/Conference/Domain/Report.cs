@@ -2,6 +2,8 @@
 {
     public class Report
     {
+        public int Id { get; }
+
         public DateTime StartMeetingTime { get; }
         public Agenda Agenda { get; }
         public IReadOnlyList<Member> Members { get; }

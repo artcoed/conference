@@ -1,7 +1,7 @@
 ﻿using Conference.Domain;
 using FluentResults;
 
-namespace Conference.Database.MembersRepository
+namespace Conference.Database.Repository.Members
 {
     public interface IMembersRepository
     {

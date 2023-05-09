@@ -5,13 +5,18 @@ namespace Conference.Domain
     public class Meeting
     {
         private readonly List<Member> _members;
-        private readonly List<Note> _notes;
-        private readonly List<Decision> _decisions;
+        private readonly List<Note> _notes = new();
+        private readonly List<Decision> _decisions = new();
+
+        private Report _report;
+
+        public int Id { get; }
 
         public DateTime StartTime { get; }
         public Agenda Agenda { get; }
-        public IReadOnlyList<Document> Documents { get; }
         public Voting Voting { get; private set; }
+
+        public IReadOnlyList<Document> Documents { get; }
         public IReadOnlyList<Note> Notes => _notes;
         public IReadOnlyList<Member> Members => _members;
 
@@ -26,36 +31,41 @@ namespace Conference.Domain
         public Result Complete()
         {
             var startMeetingTime = StartTime;
-            var agenda = Agenda;
-            var members = _members;
-            var notes = _notes;
+            var agenda = new Agenda(Agenda.Questions.ToList());
+            var members = _members.ToList();
+            var notes = _notes.ToList();
             var votes = Voting.Votes.ToList();
-            var decisions = _decisions;
+            var decisions = _decisions.ToList();
 
-            var report = new Report(startMeetingTime, agenda, members, notes, votes, decisions);
+            _report = new Report(startMeetingTime, agenda, members, notes, votes, decisions);
 
-            throw new NotImplementedException();
+            return Result.Ok();
         }
 
         public Result AddVoiting(Voting voting)
         {
             Voting = voting;
-            throw new NotImplementedException();
+            return Result.Ok();
         }
 
         public Result AddNote(Note note)
         {
-            throw new NotImplementedException();
+            _notes.Add(note);
+            return Result.Ok();
         }
 
         public Result AddDecision(Decision decision)
         {
-            throw new NotImplementedException();
+            _decisions.Add(decision);
+            return Result.Ok();
         }
 
         public Result<Report> GetReport()
         {
-            throw new NotImplementedException();
+            if (_report == null)
+                return Result.Fail("Have not report");
+
+            return Result.Ok(_report);
         }
     }
 }

@@ -2,8 +2,10 @@
 
 namespace Conference.Domain
 {
-    public class Question
+    public record Question
     {
+        private int _id;
+
         public string Content { get; }
 
         private Question(string content)

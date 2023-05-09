@@ -1,5 +1,5 @@
-﻿using Conference.Database.Meetings;
-using Conference.Database.MembersRepository;
+﻿using Conference.Database.Repository.Meetings;
+using Conference.Database.Repository.Members;
 
 namespace Conference.Database
 {

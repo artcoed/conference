@@ -5,6 +5,8 @@ namespace Conference.Domain
     public class Voting
     {
         private readonly List<Vote> _votes = new();
+        
+        public int Id { get; }
 
         public VotingTitle Title { get; }
         public IReadOnlyList<Option> Options { get; }

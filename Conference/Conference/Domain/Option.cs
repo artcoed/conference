@@ -4,6 +4,8 @@ namespace Conference.Domain
 {
     public record Option
     {
+        private int _id;
+
         public string Value { get; }
 
         private Option(string value)

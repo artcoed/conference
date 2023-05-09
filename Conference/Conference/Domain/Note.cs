@@ -4,6 +4,8 @@ namespace Conference.Domain
 {
     public record Note
     {
+        private int _id;
+
         public string Content { get; }
 
         private Note(string content)
