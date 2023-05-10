@@ -2,6 +2,11 @@
 {
     public class Member
     {
-        public int Id { get; private set; }
+        public string Login { get; private set; }
+
+        public Member(string login)
+        {
+            Login = login;
+        }
     }
 }

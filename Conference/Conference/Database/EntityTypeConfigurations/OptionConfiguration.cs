@@ -14,7 +14,7 @@ namespace Conference.Database.EntityTypeConfigurations
 
             builder.HasMany(option => option.Members)
                 .WithOne()
-                .HasForeignKey(member => member.Id);
+                .HasForeignKey(member => member.Login);
         }
     }
 }

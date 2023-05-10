@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Conference.Commands.Members
 {
-    public class CreateMemberCommandHandler : IRequestHandler<CreateMemberCommand, Result<int>>
+    public class CreateMemberCommandHandler : IRequestHandler<CreateMemberCommand, Result>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -14,10 +14,11 @@ namespace Conference.Commands.Members
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<int>> Handle(CreateMemberCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(CreateMemberCommand request, CancellationToken cancellationToken)
         {
-            var id = await _unitOfWork.MembersRepository.Create(new Member(), cancellationToken);
-            return Result.Ok(id);
+            await _unitOfWork.MembersRepository.Create(new Member(request.Login), cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            return Result.Ok();
         }
     }
 }

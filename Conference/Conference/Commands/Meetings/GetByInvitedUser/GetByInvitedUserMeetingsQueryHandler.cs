@@ -16,7 +16,7 @@ namespace Conference.Commands.Meetings.GetByInvitedUser
 
         public async Task<Result<IEnumerable<Meeting>>> Handle(GetByInvitedUserMeetingsQuery request, CancellationToken cancellationToken)
         {
-            var getByInvitedUserMeetingsResult = await _unitOfWork.MeetingsRepository.GetByInvitedUser(request.UserId, cancellationToken);
+            var getByInvitedUserMeetingsResult = await _unitOfWork.MeetingsRepository.GetByInvitedUser(request.UserLogin, cancellationToken);
             if (getByInvitedUserMeetingsResult.IsFailed)
                 return Result.Fail("Meetings not found");
 

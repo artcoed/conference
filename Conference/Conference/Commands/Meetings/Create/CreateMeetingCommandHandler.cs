@@ -16,7 +16,7 @@ namespace Conference.Commands.Meetings.Create
 
         public async Task<Result> Handle(CreateMeetingCommand request, CancellationToken cancellationToken)
         {
-            var getMembersResult = await _unitOfWork.MembersRepository.GetMembersById(request.MembersId, cancellationToken);
+            var getMembersResult = await _unitOfWork.MembersRepository.GetMembersByLogin(request.MembersLogins, cancellationToken);
             if (getMembersResult.IsFailed)
                 return Result.Fail("One or more members not found");
 

@@ -8,9 +8,7 @@ namespace Conference.Database.EntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Member> builder)
         {
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Id)
-                .ValueGeneratedOnAdd();
+            builder.HasKey(x => x.Login);
         }
     }
 }

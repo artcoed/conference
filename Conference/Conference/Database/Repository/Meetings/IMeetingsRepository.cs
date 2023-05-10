@@ -8,6 +8,6 @@ namespace Conference.Database.Repository.Meetings
         Task<Result<Meeting>> GetById(int id, CancellationToken cancellationToken);
         Task Create(Meeting meeting, CancellationToken cancellationToken);
         Task<Result<IEnumerable<Meeting>>> GetAll(CancellationToken cancellationToken);
-        Task<Result<IEnumerable<Meeting>>> GetByInvitedUser(int userId, CancellationToken cancellationToken);
+        Task<Result<IEnumerable<Meeting>>> GetByInvitedUser(string userLogin, CancellationToken cancellationToken);
     }
 }

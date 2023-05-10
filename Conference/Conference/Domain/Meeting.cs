@@ -13,6 +13,8 @@ namespace Conference.Domain
 
         private  List<Option> _votes = new();
 
+        private bool _hasCompleted;
+
         public int Id { get; private set; }
 
         public DateTime StartTime { get; }
@@ -44,6 +46,10 @@ namespace Conference.Domain
 
         public Result Complete(DateTime endTime)
         {
+            if (_hasCompleted)
+                return Result.Fail("Meeteng has arleady completed");
+
+            _hasCompleted = true;
             EndTime = endTime;
             return Result.Ok();
         }

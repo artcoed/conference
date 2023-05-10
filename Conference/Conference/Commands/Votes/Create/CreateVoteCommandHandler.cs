@@ -20,7 +20,7 @@ namespace Conference.Commands.Votes.Create
             if (getMeetingResult.IsFailed)
                 return Result.Fail("Meeting not found");
 
-            var getMemberResult = await _unitOfWork.MembersRepository.GetMemberById(request.MemberId, cancellationToken);
+            var getMemberResult = await _unitOfWork.MembersRepository.GetMemberByLogin(request.MemberLogin, cancellationToken);
             if (getMemberResult.IsFailed)
                 return Result.Fail("Member not found");
 
