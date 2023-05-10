@@ -8,8 +8,6 @@ namespace Conference.Commands.Meetings.Create
     {
         public CreateMeetingCommandValidator()
         {
-            RuleFor(x => x.StartMeetingTime).Must(x => x > DateTime.Now);
-
             RuleFor(x => x.Questions)
                 .ForEach(x => x.CanCreate(Question.Create));
 

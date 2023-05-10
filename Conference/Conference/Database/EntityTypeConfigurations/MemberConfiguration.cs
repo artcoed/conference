@@ -12,6 +12,8 @@ namespace Conference.Database.EntityTypeConfigurations
             builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd()
                 .UseIdentityColumn();
+
+            builder.Property(x => x.Login);
         }
     }
 }

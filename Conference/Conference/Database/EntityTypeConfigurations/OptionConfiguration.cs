@@ -13,6 +13,8 @@ namespace Conference.Database.EntityTypeConfigurations
                 .ValueGeneratedOnAdd()
                 .UseIdentityColumn();
 
+            builder.Property(x => x.Value);
+
             builder.HasMany(option => option.Members)
                 .WithOne()
                 .HasForeignKey("Option_Members");

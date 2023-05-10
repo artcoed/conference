@@ -13,6 +13,11 @@ namespace Conference.Database.EntityTypeConfigurations
                 .ValueGeneratedOnAdd()
                 .UseIdentityColumn();
 
+            builder.Property(x => x.StartTime);
+            builder.Property(x => x.EndTime);
+
+            builder.Property(x => x.HasCompleted);
+
             builder.Property(x => x.VotingTitle)
                 .HasConversion(
                     votingTitle => votingTitle.Value,

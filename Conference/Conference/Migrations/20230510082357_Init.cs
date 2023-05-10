@@ -17,8 +17,10 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    VotingTitle = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    VotingTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HasCompleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,6 +33,7 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Meeting_Decisions = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -49,6 +52,7 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Meeting_Documents = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -67,6 +71,7 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Meeting_Notes = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -85,6 +90,7 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Meeting_Votes = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -103,6 +109,7 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Meeting_Agenda = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

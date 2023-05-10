@@ -29,6 +29,8 @@ namespace Conference.Domain
         public IReadOnlyList<Decision> Decisions => _decisions;
         public IReadOnlyList<Option> Votes => _votes;
 
+        public bool HasCompleted => _hasCompleted;
+
         private Meeting()
         {
         }

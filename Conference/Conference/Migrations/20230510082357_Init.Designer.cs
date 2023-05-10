@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Conference.Migrations
 {
     [DbContext(typeof(EntityFrameworkContext))]
-    [Migration("20230510053222_Init")]
+    [Migration("20230510082357_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -32,6 +32,9 @@ namespace Conference.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Meeting_Decisions")
                         .HasColumnType("int");
@@ -54,6 +57,9 @@ namespace Conference.Migrations
                     b.Property<int?>("Meeting_Documents")
                         .HasColumnType("int");
 
+                    b.Property<string>("Source")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Meeting_Documents");
@@ -70,6 +76,12 @@ namespace Conference.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("HasCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("VotingTitle")
@@ -114,6 +126,9 @@ namespace Conference.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("Meeting_Notes")
                         .HasColumnType("int");
 
@@ -135,6 +150,9 @@ namespace Conference.Migrations
                     b.Property<int?>("Meeting_Votes")
                         .HasColumnType("int");
 
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Meeting_Votes");
@@ -149,6 +167,9 @@ namespace Conference.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Meeting_Agenda")
                         .HasColumnType("int");
