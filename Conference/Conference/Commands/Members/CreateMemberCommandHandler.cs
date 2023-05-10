@@ -16,7 +16,13 @@ namespace Conference.Commands.Members
 
         public async Task<Result> Handle(CreateMemberCommand request, CancellationToken cancellationToken)
         {
-            await _unitOfWork.MembersRepository.Create(new Member(request.Login), cancellationToken);
+            var existedUser = await _unitOfWork.MembersRepository.GetMemberByLogin(request.Login, cancellationToken);
+            if (existedUser.IsSuccess)
+                return Result.Fail("Member arleady existed");
+
+            var member = new Member(request.Login);
+
+            await _unitOfWork.MembersRepository.Create(member, cancellationToken);
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result.Ok();
         }

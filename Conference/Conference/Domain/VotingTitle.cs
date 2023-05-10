@@ -6,6 +6,10 @@ namespace Conference.Domain
     {
         public string Value { get; }
 
+        private VotingTitle()
+        {
+        }
+
         private VotingTitle(string value)
         {
             Value = value;

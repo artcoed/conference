@@ -10,11 +10,12 @@ namespace Conference.Database.EntityTypeConfigurations
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
-                .ValueGeneratedOnAdd();
+                .ValueGeneratedOnAdd()
+                .UseIdentityColumn();
 
             builder.HasMany(option => option.Members)
                 .WithOne()
-                .HasForeignKey(member => member.Login);
+                .HasForeignKey("Option_Members");
         }
     }
 }

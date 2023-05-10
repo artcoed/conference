@@ -10,7 +10,8 @@ namespace Conference.Database.EntityTypeConfigurations
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
-                .ValueGeneratedOnAdd();
+                .ValueGeneratedOnAdd()
+                .UseIdentityColumn();
         }
     }
 }

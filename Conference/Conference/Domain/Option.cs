@@ -6,11 +6,15 @@ namespace Conference.Domain
     {
         private readonly List<Member> _members = new();
 
-        public int Id { get; private set; }
+        public int Id { get; private set; } = 0;
 
         public IReadOnlyList<Member> Members => _members;
 
         public string Value { get; }
+
+        private Option()
+        {
+        }
 
         private Option(string value)
         {

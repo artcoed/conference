@@ -10,7 +10,8 @@ namespace Conference.Database.EntityTypeConfigurations
         {
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id)
-                .ValueGeneratedOnAdd();
+                .ValueGeneratedOnAdd()
+                .UseIdentityColumn();
 
             builder.Property(x => x.VotingTitle)
                 .HasConversion(
@@ -19,23 +20,23 @@ namespace Conference.Database.EntityTypeConfigurations
 
             builder.HasMany(meeting => meeting.Agenda)
                 .WithOne()
-                .HasForeignKey(question => question.Id);
+                .HasForeignKey("Meeting_Agenda");
 
             builder.HasMany(meeting => meeting.Documents)
                 .WithOne()
-                .HasForeignKey(document => document.Id);
+                .HasForeignKey("Meeting_Documents");
 
             builder.HasMany(meeting => meeting.Notes)
                 .WithOne()
-                .HasForeignKey(note => note.Id);
+                .HasForeignKey("Meeting_Notes");
 
             builder.HasMany(meeting => meeting.Decisions)
                 .WithOne()
-                .HasForeignKey(decision => decision.Id);
+                .HasForeignKey("Meeting_Decisions");
 
             builder.HasMany(meeting => meeting.Votes)
                 .WithOne()
-                .HasForeignKey(option => option.Id);
+                .HasForeignKey("Meeting_Votes");
         }
     }
 }

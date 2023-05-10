@@ -38,7 +38,7 @@ namespace Conference.Controllers.Meetings
         /// Get list with all meetings
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetMeetingsAsync(GetMeetingsQuery getMeetingsQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetMeetingsAsync([FromQuery] GetMeetingsQuery getMeetingsQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getMeetingsQuery, cancellationToken));
         }
@@ -47,7 +47,7 @@ namespace Conference.Controllers.Meetings
         /// Get meetings to which the user is invited
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetByInvitedUserMeetingsAsync(GetByInvitedUserMeetingsQuery getByInvitedUserMeetingsQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetByInvitedUserMeetingsAsync([FromQuery] GetByInvitedUserMeetingsQuery getByInvitedUserMeetingsQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getByInvitedUserMeetingsQuery, cancellationToken));
         }

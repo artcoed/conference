@@ -9,19 +9,19 @@ namespace Conference.Domain
         private readonly List<Note> _notes = new();
         private readonly List<Decision> _decisions = new();
 
-        private readonly List<MemberMeeting> _memberMeetings = new();
+        private readonly List<Member> _member = new();
 
         private  List<Option> _votes = new();
 
         private bool _hasCompleted;
 
-        public int Id { get; private set; }
+        public int Id { get; private set; } = 0;
 
         public DateTime StartTime { get; }
         public DateTime EndTime { get; private set; }
         public VotingTitle VotingTitle { get; private set; }
 
-        public IReadOnlyList<Member> Members => _memberMeetings.Select(x => x.Member).ToList();
+        public IReadOnlyList<Member> Members => _member;
 
         public IReadOnlyList<Question> Agenda => _agenda;
         public IReadOnlyList<Document> Documents => _documents;
@@ -29,19 +29,17 @@ namespace Conference.Domain
         public IReadOnlyList<Decision> Decisions => _decisions;
         public IReadOnlyList<Option> Votes => _votes;
 
-        public IReadOnlyList<MemberMeeting> MemberMeetings => _memberMeetings;
+        private Meeting()
+        {
+        }
 
         public Meeting(DateTime startTime, List<Question> agenda, List<Document> documents, List<Member> members)
         {
             StartTime = startTime;
 
-            foreach (var member in members)
-            {
-                _memberMeetings.Add(new MemberMeeting(member, this));
-            }
-
             _agenda = agenda;
             _documents = documents;
+            _member = members;
         }
 
         public Result Complete(DateTime endTime)

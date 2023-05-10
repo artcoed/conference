@@ -4,9 +4,13 @@ namespace Conference.Domain
 {
     public class Document
     {
-        public int Id { get; private set; }
+        public int Id { get; private set; } = 0;
 
         public string Source { get; }
+
+        private Document()
+        {
+        }
 
         private Document(string source)
         {

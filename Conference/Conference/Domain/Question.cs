@@ -4,9 +4,13 @@ namespace Conference.Domain
 {
     public class Question
     {
-        public int Id { get; private set; }
+        public int Id { get; private set; } = 0;
 
         public string Content { get; }
+
+        private Question()
+        {
+        }
 
         private Question(string content)
         {
