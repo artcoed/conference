@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using Conference.Behavior;
+using Conference.Services.Users;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -36,6 +37,10 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddValidatorsFromAssemblies(assemblies);
     builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+
+    builder.Services.AddHttpContextAccessor();
+
+    builder.Services.AddScoped<IUsersService, UsersService>();
 
     builder.Services.AddDbContext<IEntityFrameworkContext, EntityFrameworkContext>(c =>
         c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

@@ -9,6 +9,6 @@ namespace Conference.Commands.Meetings.Create
 
         public IReadOnlyList<string> Questions { get; init; }
         public IReadOnlyList<string> Documents { get; init; }
-        public IReadOnlyList<string> MembersLogins { get; init; }
+        public IReadOnlyList<int> UsersId { get; init; }
     }
 }

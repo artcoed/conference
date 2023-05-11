@@ -17,14 +17,28 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    VotingTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HasCompleted = table.Column<bool>(type: "bit", nullable: false)
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    HasCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    VotingTitle = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Meetings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Members",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Members", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -33,15 +47,15 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Meeting_Decisions = table.Column<int>(type: "int", nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MeetingId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Decisions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Decisions_Meetings_Meeting_Decisions",
-                        column: x => x.Meeting_Decisions,
+                        name: "FK_Decisions_Meetings_MeetingId",
+                        column: x => x.MeetingId,
                         principalTable: "Meetings",
                         principalColumn: "Id");
                 });
@@ -52,15 +66,15 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Source = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Meeting_Documents = table.Column<int>(type: "int", nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MeetingId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Documents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Documents_Meetings_Meeting_Documents",
-                        column: x => x.Meeting_Documents,
+                        name: "FK_Documents_Meetings_MeetingId",
+                        column: x => x.MeetingId,
                         principalTable: "Meetings",
                         principalColumn: "Id");
                 });
@@ -71,15 +85,15 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Meeting_Notes = table.Column<int>(type: "int", nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MeetingId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notes_Meetings_Meeting_Notes",
-                        column: x => x.Meeting_Notes,
+                        name: "FK_Notes_Meetings_MeetingId",
+                        column: x => x.MeetingId,
                         principalTable: "Meetings",
                         principalColumn: "Id");
                 });
@@ -91,14 +105,14 @@ namespace Conference.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Meeting_Votes = table.Column<int>(type: "int", nullable: true)
+                    MeetingId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Options", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Options_Meetings_Meeting_Votes",
-                        column: x => x.Meeting_Votes,
+                        name: "FK_Options_Meetings_MeetingId",
+                        column: x => x.MeetingId,
                         principalTable: "Meetings",
                         principalColumn: "Id");
                 });
@@ -109,78 +123,111 @@ namespace Conference.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Meeting_Agenda = table.Column<int>(type: "int", nullable: true)
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MeetingId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Questions_Meetings_Meeting_Agenda",
-                        column: x => x.Meeting_Agenda,
+                        name: "FK_Questions_Meetings_MeetingId",
+                        column: x => x.MeetingId,
                         principalTable: "Meetings",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Members",
+                name: "MeetingMembers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Login = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MeetingId = table.Column<int>(type: "int", nullable: true),
-                    Option_Members = table.Column<int>(type: "int", nullable: true)
+                    MemberId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Members", x => x.Id);
+                    table.PrimaryKey("PK_MeetingMembers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Members_Meetings_MeetingId",
+                        name: "FK_MeetingMembers_Meetings_MeetingId",
                         column: x => x.MeetingId,
                         principalTable: "Meetings",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Members_Options_Option_Members",
-                        column: x => x.Option_Members,
+                        name: "FK_MeetingMembers_Members_MemberId",
+                        column: x => x.MemberId,
+                        principalTable: "Members",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Votes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OptionId = table.Column<int>(type: "int", nullable: true),
+                    MeetingId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Votes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Votes_Meetings_MeetingId",
+                        column: x => x.MeetingId,
+                        principalTable: "Meetings",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Votes_Options_OptionId",
+                        column: x => x.OptionId,
                         principalTable: "Options",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Decisions_Meeting_Decisions",
+                name: "IX_Decisions_MeetingId",
                 table: "Decisions",
-                column: "Meeting_Decisions");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Documents_Meeting_Documents",
-                table: "Documents",
-                column: "Meeting_Documents");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Members_MeetingId",
-                table: "Members",
                 column: "MeetingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Members_Option_Members",
-                table: "Members",
-                column: "Option_Members");
+                name: "IX_Documents_MeetingId",
+                table: "Documents",
+                column: "MeetingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notes_Meeting_Notes",
+                name: "IX_MeetingMembers_MeetingId",
+                table: "MeetingMembers",
+                column: "MeetingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MeetingMembers_MemberId",
+                table: "MeetingMembers",
+                column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notes_MeetingId",
                 table: "Notes",
-                column: "Meeting_Notes");
+                column: "MeetingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Options_Meeting_Votes",
+                name: "IX_Options_MeetingId",
                 table: "Options",
-                column: "Meeting_Votes");
+                column: "MeetingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_Meeting_Agenda",
+                name: "IX_Questions_MeetingId",
                 table: "Questions",
-                column: "Meeting_Agenda");
+                column: "MeetingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votes_MeetingId",
+                table: "Votes",
+                column: "MeetingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votes_OptionId",
+                table: "Votes",
+                column: "OptionId");
         }
 
         /// <inheritdoc />
@@ -193,13 +240,19 @@ namespace Conference.Migrations
                 name: "Documents");
 
             migrationBuilder.DropTable(
-                name: "Members");
+                name: "MeetingMembers");
 
             migrationBuilder.DropTable(
                 name: "Notes");
 
             migrationBuilder.DropTable(
                 name: "Questions");
+
+            migrationBuilder.DropTable(
+                name: "Votes");
+
+            migrationBuilder.DropTable(
+                name: "Members");
 
             migrationBuilder.DropTable(
                 name: "Options");

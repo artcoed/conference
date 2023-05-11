@@ -13,52 +13,24 @@ namespace Conference.Database.Repository.Meetings
             _entityFrameworkContext = entityFrameworkContext;
         }
 
-        public async Task Create(Meeting meeting, CancellationToken cancellationToken)
+        public Task Create(Meeting meeting, CancellationToken cancellationToken)
         {
-            await _entityFrameworkContext.Meetings.AddAsync(meeting, cancellationToken);
+            throw new NotImplementedException();
         }
 
-        public async Task<Result<IEnumerable<Meeting>>> GetAll(CancellationToken cancellationToken)
+        public Task<Result<IEnumerable<Meeting>>> GetAll(CancellationToken cancellationToken)
         {
-            IEnumerable<Meeting> meetings = await _entityFrameworkContext.Meetings
-                .Include(x => x.Members)
-                .Include(x => x.Agenda)
-                .Include(x => x.Documents)
-                .Include(x => x.Notes)
-                .Include(x => x.Decisions)
-                .Include(x => x.Votes)
-                .ToListAsync(cancellationToken);
-            if (!meetings.Any())
-                return Result.Fail("Meetings not found");
-
-            return Result.Ok(meetings);
+            throw new NotImplementedException();
         }
 
-        public async Task<Result<Meeting>> GetById(int id, CancellationToken cancellationToken)
+        public Task<Result<Meeting>> GetById(int id, CancellationToken cancellationToken)
         {
-            var meeting = await _entityFrameworkContext.Meetings.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-            if (meeting == null)
-                return Result.Fail("Meeting not found");
-         
-            return Result.Ok(meeting);
+            throw new NotImplementedException();
         }
 
-        public async Task<Result<IEnumerable<Meeting>>> GetByInvitedUser(string userLogin, CancellationToken cancellationToken)
+        public Task<Result<IEnumerable<Meeting>>> GetByInvitedUser(string userLogin, CancellationToken cancellationToken)
         {
-            IEnumerable<Meeting> meetings = await _entityFrameworkContext.Meetings
-                .Where(x => x.Members.Any(m => m.Login == userLogin))
-                .Include(x => x.Members)
-                .Include(x => x.Agenda)
-                .Include(x => x.Documents)
-                .Include(x => x.Notes)
-                .Include(x => x.Decisions)
-                .Include(x => x.Votes)
-                .ToListAsync(cancellationToken);
-
-            if (!meetings.Any())
-                return Result.Fail("Meetings not found");
-
-            return Result.Ok(meetings);
+            throw new NotImplementedException();
         }
     }
 }

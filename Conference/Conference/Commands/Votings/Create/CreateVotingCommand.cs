@@ -7,7 +7,6 @@ namespace Conference.Commands.Votings.Create
     {
         public int MeetingId { get; init; }
         public string Title { get; init; }
-
         public IReadOnlyList<string> Options { get; init; }
     }
 }

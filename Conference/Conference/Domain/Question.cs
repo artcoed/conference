@@ -1,31 +1,8 @@
-﻿using FluentResults;
-
-namespace Conference.Domain
+﻿namespace Conference.Domain
 {
     public class Question
     {
-        public int Id { get; private set; } = 0;
-
-        public string Content { get; }
-
-        private Question()
-        {
-        }
-
-        private Question(string content)
-        {
-            Content = content;
-        }
-
-        public static Result<Question> Create(string content)
-        {
-            if (content.Length > 50)
-                return Result.Fail("Too many question");
-
-            if (content.Length < 3)
-                return Result.Fail("Too small question");
-
-            return Result.Ok(new Question(content));
-        }
+        public int Id { get; set; }
+        public string Value { get; set; }
     }
 }

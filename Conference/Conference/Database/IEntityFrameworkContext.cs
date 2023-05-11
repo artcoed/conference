@@ -8,10 +8,13 @@ namespace Conference.Database
         DbSet<Decision> Decisions { get; }
         DbSet<Document> Documents { get; }
         DbSet<Meeting> Meetings { get; }
-        DbSet<Member> Members { get; }
+        DbSet<MeetingUser> MeetingUsers { get; }
+        DbSet<User> Users { get; }
         DbSet<Note> Notes { get; }
         DbSet<Option> Options { get; }
         DbSet<Question> Questions { get; }
+        DbSet<Vote> Votes { get; }
+        DbSet<Role> Roles { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

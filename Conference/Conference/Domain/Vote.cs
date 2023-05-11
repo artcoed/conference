@@ -1,8 +1,8 @@
 ﻿namespace Conference.Domain
 {
-    public class Note
+    public class Vote
     {
         public int Id { get; set; }
-        public string Value { get; set; }
+        public Option Option { get; set; }
     }
 }

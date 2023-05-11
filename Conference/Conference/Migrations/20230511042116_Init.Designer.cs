@@ -4,6 +4,7 @@ using Conference.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Conference.Migrations
 {
     [DbContext(typeof(EntityFrameworkContext))]
-    partial class EntityFrameworkContextModelSnapshot : ModelSnapshot
+    [Migration("20230511042116_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,7 +98,7 @@ namespace Conference.Migrations
                     b.ToTable("Meetings");
                 });
 
-            modelBuilder.Entity("Conference.Domain.MeetingUser", b =>
+            modelBuilder.Entity("Conference.Domain.MeetingMember", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -106,16 +109,29 @@ namespace Conference.Migrations
                     b.Property<int?>("MeetingId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("MemberId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MeetingId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("MemberId");
 
-                    b.ToTable("MeetingUsers");
+                    b.ToTable("MeetingMembers");
+                });
+
+            modelBuilder.Entity("Conference.Domain.Member", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Members");
                 });
 
             modelBuilder.Entity("Conference.Domain.Note", b =>
@@ -181,46 +197,6 @@ namespace Conference.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("Conference.Domain.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
-
-            modelBuilder.Entity("Conference.Domain.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Login")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("Conference.Domain.Vote", b =>
                 {
                     b.Property<int>("Id")
@@ -258,19 +234,19 @@ namespace Conference.Migrations
                         .HasForeignKey("MeetingId");
                 });
 
-            modelBuilder.Entity("Conference.Domain.MeetingUser", b =>
+            modelBuilder.Entity("Conference.Domain.MeetingMember", b =>
                 {
                     b.HasOne("Conference.Domain.Meeting", "Meeting")
-                        .WithMany("MeetingUsers")
+                        .WithMany("MeetingMembers")
                         .HasForeignKey("MeetingId");
 
-                    b.HasOne("Conference.Domain.User", "User")
-                        .WithMany("MeetingUsers")
-                        .HasForeignKey("UserId");
+                    b.HasOne("Conference.Domain.Member", "Member")
+                        .WithMany("MeetingMembers")
+                        .HasForeignKey("MemberId");
 
                     b.Navigation("Meeting");
 
-                    b.Navigation("User");
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("Conference.Domain.Note", b =>
@@ -294,15 +270,6 @@ namespace Conference.Migrations
                         .HasForeignKey("MeetingId");
                 });
 
-            modelBuilder.Entity("Conference.Domain.User", b =>
-                {
-                    b.HasOne("Conference.Domain.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId");
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("Conference.Domain.Vote", b =>
                 {
                     b.HasOne("Conference.Domain.Meeting", null)
@@ -322,7 +289,7 @@ namespace Conference.Migrations
 
                     b.Navigation("Documents");
 
-                    b.Navigation("MeetingUsers");
+                    b.Navigation("MeetingMembers");
 
                     b.Navigation("Notes");
 
@@ -333,9 +300,9 @@ namespace Conference.Migrations
                     b.Navigation("Votes");
                 });
 
-            modelBuilder.Entity("Conference.Domain.User", b =>
+            modelBuilder.Entity("Conference.Domain.Member", b =>
                 {
-                    b.Navigation("MeetingUsers");
+                    b.Navigation("MeetingMembers");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Conference.Migrations
 {
     [DbContext(typeof(EntityFrameworkContext))]
-    [Migration("20230510082357_Init")]
-    partial class Init
+    [Migration("20230511052618_Roles")]
+    partial class Roles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,15 +33,15 @@ namespace Conference.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Meeting_Decisions")
+                    b.Property<int?>("MeetingId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Meeting_Decisions");
+                    b.HasIndex("MeetingId");
 
                     b.ToTable("Decisions");
                 });
@@ -54,15 +54,15 @@ namespace Conference.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Meeting_Documents")
+                    b.Property<int?>("MeetingId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Source")
+                    b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Meeting_Documents");
+                    b.HasIndex("MeetingId");
 
                     b.ToTable("Documents");
                 });
@@ -75,14 +75,20 @@ namespace Conference.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EndTime")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
 
                     b.Property<bool>("HasCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("StartTime")
+                    b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
 
                     b.Property<string>("VotingTitle")
                         .HasColumnType("nvarchar(max)");
@@ -92,7 +98,7 @@ namespace Conference.Migrations
                     b.ToTable("Meetings");
                 });
 
-            modelBuilder.Entity("Conference.Domain.Member", b =>
+            modelBuilder.Entity("Conference.Domain.MeetingUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,22 +106,19 @@ namespace Conference.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Login")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("MeetingId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Option_Members")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("MeetingId");
 
-                    b.HasIndex("Option_Members");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Members");
+                    b.ToTable("MeetingUsers");
                 });
 
             modelBuilder.Entity("Conference.Domain.Note", b =>
@@ -126,15 +129,15 @@ namespace Conference.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Meeting_Notes")
+                    b.Property<int?>("MeetingId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Meeting_Notes");
+                    b.HasIndex("MeetingId");
 
                     b.ToTable("Notes");
                 });
@@ -147,7 +150,7 @@ namespace Conference.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Meeting_Votes")
+                    b.Property<int?>("MeetingId")
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
@@ -155,7 +158,7 @@ namespace Conference.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Meeting_Votes");
+                    b.HasIndex("MeetingId");
 
                     b.ToTable("Options");
                 });
@@ -168,83 +171,174 @@ namespace Conference.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Content")
+                    b.Property<int?>("MeetingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Meeting_Agenda")
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("Conference.Domain.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("Conference.Domain.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Login")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Meeting_Agenda");
+                    b.HasIndex("RoleId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Conference.Domain.Vote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("MeetingId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OptionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("OptionId");
+
+                    b.ToTable("Votes");
                 });
 
             modelBuilder.Entity("Conference.Domain.Decision", b =>
                 {
                     b.HasOne("Conference.Domain.Meeting", null)
                         .WithMany("Decisions")
-                        .HasForeignKey("Meeting_Decisions");
+                        .HasForeignKey("MeetingId");
                 });
 
             modelBuilder.Entity("Conference.Domain.Document", b =>
                 {
                     b.HasOne("Conference.Domain.Meeting", null)
                         .WithMany("Documents")
-                        .HasForeignKey("Meeting_Documents");
+                        .HasForeignKey("MeetingId");
                 });
 
-            modelBuilder.Entity("Conference.Domain.Member", b =>
+            modelBuilder.Entity("Conference.Domain.MeetingUser", b =>
                 {
-                    b.HasOne("Conference.Domain.Meeting", null)
-                        .WithMany("Members")
+                    b.HasOne("Conference.Domain.Meeting", "Meeting")
+                        .WithMany("MeetingUsers")
                         .HasForeignKey("MeetingId");
 
-                    b.HasOne("Conference.Domain.Option", null)
-                        .WithMany("Members")
-                        .HasForeignKey("Option_Members");
+                    b.HasOne("Conference.Domain.User", "User")
+                        .WithMany("MeetingUsers")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Conference.Domain.Note", b =>
                 {
                     b.HasOne("Conference.Domain.Meeting", null)
                         .WithMany("Notes")
-                        .HasForeignKey("Meeting_Notes");
+                        .HasForeignKey("MeetingId");
                 });
 
             modelBuilder.Entity("Conference.Domain.Option", b =>
                 {
                     b.HasOne("Conference.Domain.Meeting", null)
-                        .WithMany("Votes")
-                        .HasForeignKey("Meeting_Votes");
+                        .WithMany("Options")
+                        .HasForeignKey("MeetingId");
                 });
 
             modelBuilder.Entity("Conference.Domain.Question", b =>
                 {
                     b.HasOne("Conference.Domain.Meeting", null)
-                        .WithMany("Agenda")
-                        .HasForeignKey("Meeting_Agenda");
+                        .WithMany("Questions")
+                        .HasForeignKey("MeetingId");
+                });
+
+            modelBuilder.Entity("Conference.Domain.User", b =>
+                {
+                    b.HasOne("Conference.Domain.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Conference.Domain.Vote", b =>
+                {
+                    b.HasOne("Conference.Domain.Meeting", null)
+                        .WithMany("Votes")
+                        .HasForeignKey("MeetingId");
+
+                    b.HasOne("Conference.Domain.Option", "Option")
+                        .WithMany()
+                        .HasForeignKey("OptionId");
+
+                    b.Navigation("Option");
                 });
 
             modelBuilder.Entity("Conference.Domain.Meeting", b =>
                 {
-                    b.Navigation("Agenda");
-
                     b.Navigation("Decisions");
 
                     b.Navigation("Documents");
 
-                    b.Navigation("Members");
+                    b.Navigation("MeetingUsers");
 
                     b.Navigation("Notes");
+
+                    b.Navigation("Options");
+
+                    b.Navigation("Questions");
 
                     b.Navigation("Votes");
                 });
 
-            modelBuilder.Entity("Conference.Domain.Option", b =>
+            modelBuilder.Entity("Conference.Domain.User", b =>
                 {
-                    b.Navigation("Members");
+                    b.Navigation("MeetingUsers");
                 });
 #pragma warning restore 612, 618
         }
