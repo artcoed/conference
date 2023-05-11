@@ -26,14 +26,14 @@ var config = builder.Configuration;
     builder.Services.AddCors(options =>
     {
         options.AddPolicy(name: MyAllowSpecificOrigins,
-                          policy =>
-                          {
-                              policy.WithOrigins("http://127.0.0.1:7081",
-                                              "http://localhost:7081",
-                                              "https://localhost:7081",
-                                              "https://127.0.0.1:7081",
-                                              "*");
-                          });
+            policy =>
+            {
+                policy.WithOrigins("http://127.0.0.1:7081",
+                                "http://localhost:7081",
+                                "https://localhost:7081",
+                                "https://127.0.0.1:7081",
+                                "*");
+            });
     });
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -1,5 +1,4 @@
-﻿using Conference.Domain;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Conference.Commands.Decisions.Create
 {
@@ -7,6 +6,8 @@ namespace Conference.Commands.Decisions.Create
     {
         public CreateDecisionCommandValidator()
         {
+            RuleFor(x => x.Content)
+                .Length(2, 100);
         }
     }
 }

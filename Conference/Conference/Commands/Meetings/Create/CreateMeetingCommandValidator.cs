@@ -1,5 +1,4 @@
-﻿using Conference.Domain;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Conference.Commands.Meetings.Create
 {
@@ -7,6 +6,16 @@ namespace Conference.Commands.Meetings.Create
     {
         public CreateMeetingCommandValidator()
         {
+            RuleFor(x => x.Questions)
+                .Must(x => x.Count > 1)
+                .ForEach(q =>
+                    q.Length(2, 70));
+
+            RuleFor(x => x.UsersId)
+                .Must(x => x.Count > 1);
+            
+            RuleFor(x => x.Documents)
+                .ForEach(q => q.MinimumLength(3));
         }
     }
 }

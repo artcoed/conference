@@ -1,5 +1,4 @@
-﻿using Conference.Domain;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace Conference.Commands.Notes.Create
 {
@@ -7,6 +6,8 @@ namespace Conference.Commands.Notes.Create
     {
         public CreateNoteCommandValidator()
         {
+            RuleFor(x => x.Content)
+                .Length(2, 100);
         }
     }
 }
