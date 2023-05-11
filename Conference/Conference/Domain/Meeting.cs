@@ -19,5 +19,6 @@
         public string VotingTitle { get; set; }
         public List<Option> Options { get; set; }
         public List<Vote> Votes { get; set; }
+        public bool HasVoting { get; set; }
     }
 }

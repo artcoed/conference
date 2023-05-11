@@ -16,6 +16,17 @@ namespace Conference.Commands.Notes.Create
 
         public async Task<Result> Handle(CreateNoteCommand request, CancellationToken cancellationToken)
         {
+            var meetingResult = await _unitOfWork.MeetingsRepository.GetById(request.MeetingId, cancellationToken);
+            if (meetingResult.IsFailed)
+                return Result.Fail("Совещание не найдено");
+
+            meetingResult.Value.Notes.Add(new Note
+            {
+                Value = request.Content
+            });
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             return Result.Ok();
         }
     }

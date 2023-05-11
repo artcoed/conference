@@ -16,6 +16,17 @@ namespace Conference.Commands.Decisions.Create
 
         public async Task<Result> Handle(CreateDecisionCommand request, CancellationToken cancellationToken)
         {
+            var meetingResult = await _unitOfWork.MeetingsRepository.GetById(request.MeetingId, cancellationToken);
+            if (meetingResult.IsFailed)
+                return Result.Fail("Совещание не найдено");
+
+            meetingResult.Value.Decisions.Add(new Decision
+            {
+                Value = request.Content
+            });
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             return Result.Ok();
         }
     }
