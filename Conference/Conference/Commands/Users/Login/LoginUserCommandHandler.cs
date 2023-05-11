@@ -18,7 +18,7 @@ namespace Conference.Commands.Users.Login
 
         public async Task<Result<TokenDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            var userResult = await _unitOfWork.UsersRepository.GetByLoginAndPassword(request.Login, request.Password, cancellationToken);
+            var userResult = await _unitOfWork.UsersRepository.GetByLoginAndPasswordAsync(request.Login, request.Password, cancellationToken);
             if (userResult.IsFailed)
                 return Result.Fail("Пользователя с таким логином или паролем не существует");
 

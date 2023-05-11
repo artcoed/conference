@@ -16,7 +16,7 @@ namespace Conference.Commands.Users.Create
 
         public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
-            var existedUserResult = await _unitOfWork.UsersRepository.GetByLogin(request.Login, cancellationToken);
+            var existedUserResult = await _unitOfWork.UsersRepository.GetByLoginAsync(request.Login, cancellationToken);
             if (existedUserResult.IsSuccess)
                 return Result.Fail("Пользователь с таким логином уже существует");
 

@@ -12,22 +12,22 @@ namespace Conference.Database.Repository.Meetings
             _entityFrameworkContext = entityFrameworkContext;
         }
 
-        public Task Create(Meeting meeting, CancellationToken cancellationToken)
+        public Task AddAsync(Meeting meeting, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result<IEnumerable<Meeting>>> GetAll(CancellationToken cancellationToken)
+        public Task<Result<IReadOnlyList<Meeting>>> GetAllAsync(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result<Meeting>> GetById(int id, CancellationToken cancellationToken)
+        public Task<Result<Meeting>> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Result<IEnumerable<Meeting>>> GetByInvitedUser(string userLogin, CancellationToken cancellationToken)
+        public Task<Result<IReadOnlyList<Meeting>>> GetByInvitedUserAsync(string userLogin, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

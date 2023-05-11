@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Conference.Commands.Meetings.Get
 {
-    public class GetMeetingsQueryHandler : IRequestHandler<GetMeetingsQuery, Result<IEnumerable<Meeting>>>
+    public class GetMeetingsQueryHandler : IRequestHandler<GetMeetingsQuery, Result<IReadOnlyList<Meeting>>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -14,11 +14,11 @@ namespace Conference.Commands.Meetings.Get
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<IEnumerable<Meeting>>> Handle(GetMeetingsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IReadOnlyList<Meeting>>> Handle(GetMeetingsQuery request, CancellationToken cancellationToken)
         {
-            var getAllMeetingsResult = await _unitOfWork.MeetingsRepository.GetAll(cancellationToken);
+            var getAllMeetingsResult = await _unitOfWork.MeetingsRepository.GetAllAsync(cancellationToken);
             if (getAllMeetingsResult.IsFailed)
-                return Result.Fail("Meetings not found");
+                return Result.Fail("Совещания не найдены");
 
             return Result.Ok(getAllMeetingsResult.Value);
         }

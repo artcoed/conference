@@ -31,7 +31,7 @@ namespace Conference.Services.Users
             if (int.TryParse(suspectId, out var id) == false)
                 return Result.Fail("Неудачная попытка аунтефикации");
 
-            var userResult = await _unitOfWork.UsersRepository.GetById(id, cancellationToken);
+            var userResult = await _unitOfWork.UsersRepository.GetByIdAsync(id, cancellationToken);
             if (userResult.IsFailed)
                 return Result.Fail("Неудачная попытка аунтефикации");
 

@@ -1,22 +1,26 @@
-﻿using Conference.Database;
-using Conference.Domain;
+﻿using Conference.Domain;
+using Conference.Services.Users;
 using FluentResults;
 using MediatR;
 
 namespace Conference.Commands.Meetings.GetByInvitedUser
 {
-    public class GetByInvitedUserMeetingsQueryHandler : IRequestHandler<GetByInvitedUserMeetingsQuery, Result<IEnumerable<Meeting>>>
+    public class GetByInvitedUserMeetingsQueryHandler : IRequestHandler<GetByInvitedUserMeetingsQuery, Result<IReadOnlyList<Meeting>>>
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUsersService _usersService;
 
-        public GetByInvitedUserMeetingsQueryHandler(IUnitOfWork unitOfWork)
+        public GetByInvitedUserMeetingsQueryHandler(IUsersService usersService)
         {
-            _unitOfWork = unitOfWork;
+            _usersService = usersService;
         }
 
-        public async Task<Result<IEnumerable<Meeting>>> Handle(GetByInvitedUserMeetingsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IReadOnlyList<Meeting>>> Handle(GetByInvitedUserMeetingsQuery request, CancellationToken cancellationToken)
         {
-            return Result.Ok();
+            var userResult = await _usersService.GetCurrentUser(cancellationToken);
+            if (userResult.IsFailed)
+                return Result.Fail("Ошибка аутентификации");
+
+            return Result.Ok(userResult.Value.Meetings);
         }
     }
 }

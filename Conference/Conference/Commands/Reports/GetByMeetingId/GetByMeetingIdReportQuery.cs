@@ -1,10 +1,9 @@
-﻿using Conference.Domain;
-using FluentResults;
+﻿using FluentResults;
 using MediatR;
 
 namespace Conference.Commands.Reports.GetByMeetingId
 {
-    public record GetReportByMeetingIdQuery : IRequest<Result<ReportDto>>
+    public record GetByMeetingIdReportQuery : IRequest<Result<ReportDto>>
     {
         public int MeetingId { get; init; }
     }

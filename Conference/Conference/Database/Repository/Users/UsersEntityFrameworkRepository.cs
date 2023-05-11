@@ -18,7 +18,7 @@ namespace Conference.Database.Repository.Users
             await _entityFrameworkContext.Users.AddAsync(user, cancellationToken);
         }
 
-        public async Task<Result<User>> GetById(int id, CancellationToken cancellationToken)
+        public async Task<Result<User>> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var suspectUser = await _entityFrameworkContext.Users
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
@@ -29,7 +29,7 @@ namespace Conference.Database.Repository.Users
             return Result.Ok(suspectUser);
         }
 
-        public async Task<Result<User>> GetByLogin(string login, CancellationToken cancellationToken)
+        public async Task<Result<User>> GetByLoginAsync(string login, CancellationToken cancellationToken)
         {
             var suspectUser = await _entityFrameworkContext.Users
                 .FirstOrDefaultAsync(x => x.Login == login, cancellationToken);
@@ -40,7 +40,7 @@ namespace Conference.Database.Repository.Users
             return Result.Ok(suspectUser);
         }
 
-        public async Task<Result<User>> GetByLoginAndPassword(string login, string password, CancellationToken cancellationToken)
+        public async Task<Result<User>> GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken)
         {
             var suspectUser = await _entityFrameworkContext.Users
                 .FirstOrDefaultAsync(x => x.Login == login && x.Password == password, cancellationToken);
@@ -49,6 +49,11 @@ namespace Conference.Database.Repository.Users
                 return Result.Fail("User not found");
 
             return Result.Ok(suspectUser);
+        }
+
+        public Task<Result<IReadOnlyList<User>>> GetByIdAsync(IReadOnlyList<int> id, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

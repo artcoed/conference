@@ -19,11 +19,17 @@ namespace Conference.Commands.Votes.Create
 
         public async Task<Result> Handle(CreateVoteCommand request, CancellationToken cancellationToken)
         {
-            var meetingResult = await _unitOfWork.MeetingsRepository.GetById(request.MeetingId, cancellationToken);
+            var meetingResult = await _unitOfWork.MeetingsRepository.GetByIdAsync(request.MeetingId, cancellationToken);
             if (meetingResult.IsFailed)
                 return Result.Fail("Совещание не найдено");
 
             var meeting = meetingResult.Value;
+
+            if (meeting.HasCompleted)
+                return Result.Fail("Совещание уже было завершено");
+
+            if (meeting.HasVoting == false)
+                return Result.Fail("У совещания нет голосования");
 
             var userResult = await _usersService.GetCurrentUser(cancellationToken);
             if (userResult.IsFailed)

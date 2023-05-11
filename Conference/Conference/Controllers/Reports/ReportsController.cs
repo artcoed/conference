@@ -17,7 +17,7 @@ namespace Conference.Controllers.Reports
         /// Get report
         /// </summary>
         [HttpGet]
-        public async Task<IActionResult> GetReportByMeetingIdAsync([FromQuery] GetReportByMeetingIdQuery getReportByMeetingIdQuery, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetByMeetingIdAsync([FromQuery] GetByMeetingIdReportQuery getReportByMeetingIdQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getReportByMeetingIdQuery, cancellationToken));
         }

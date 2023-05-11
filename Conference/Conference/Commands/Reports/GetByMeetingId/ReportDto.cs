@@ -6,10 +6,10 @@ namespace Conference.Commands.Reports.GetByMeetingId
     {
         public DateTime StartDateTime { get; init; }
         public DateTime EndDateTime { get; init; }
-        public List<Question> Questions { get; init; }
-        public List<User> Users { get; init; }
-        public List<Note> Notes { get; init; }
-        public List<Option> Votes { get; init; }
-        public List<Decision> Decisions { get; init; }
+        public IReadOnlyList<Question> Questions { get; init; }
+        public IReadOnlyList<User> Users { get; init; }
+        public IReadOnlyList<Note> Notes { get; init; }
+        public IReadOnlyList<Vote> Votes { get; init; }
+        public IReadOnlyList<Decision> Decisions { get; init; }
     }
 }

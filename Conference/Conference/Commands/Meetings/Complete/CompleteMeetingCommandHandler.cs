@@ -15,6 +15,19 @@ namespace Conference.Commands.Meetings.Complete
 
         public async Task<Result> Handle(CompleteMeetingCommand request, CancellationToken cancellationToken)
         {
+            var meetingResult = await _unitOfWork.MeetingsRepository.GetByIdAsync(request.MeetingId, cancellationToken);
+            if (meetingResult.IsFailed)
+                return Result.Fail("Совещание не найдено");
+
+            var meeting = meetingResult.Value;
+            if (meeting.HasCompleted)
+                return Result.Fail("Совещание уже было завершено ранее");
+
+            meeting.HasCompleted = true;
+            var date = DateTime.Now;
+            meeting.EndDate = date.Date;
+            meeting.EndTime = date.TimeOfDay;
+
             return Result.Ok();
         }
     }
