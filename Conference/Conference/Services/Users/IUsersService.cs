@@ -1,9 +1,11 @@
 ﻿using Conference.Domain;
+using FluentResults;
 
 namespace Conference.Services.Users
 {
     public interface IUsersService
     {
-        User GetCurrentUser();
+        Task<Result<User>> GetCurrentUser(CancellationToken cancellationToken);
+        string GenerateToken(User user);
     }
 }

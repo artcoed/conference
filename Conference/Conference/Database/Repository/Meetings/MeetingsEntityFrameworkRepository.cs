@@ -1,6 +1,5 @@
 ﻿using Conference.Domain;
 using FluentResults;
-using Microsoft.EntityFrameworkCore;
 
 namespace Conference.Database.Repository.Meetings
 {

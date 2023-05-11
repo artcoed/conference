@@ -1,5 +1,6 @@
 ﻿using Conference.Commands.Decisions.Create;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Decisions
@@ -16,6 +17,7 @@ namespace Conference.Controllers.Decisions
         /// <summary>
         /// Create new decision
         /// </summary>
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateDecisionAsync(CreateDecisionCommand createDecisionCommand, CancellationToken cancellationToken)
         {

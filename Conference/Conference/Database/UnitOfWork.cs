@@ -1,5 +1,5 @@
 ﻿using Conference.Database.Repository.Meetings;
-using Conference.Database.Repository.Members;
+using Conference.Database.Repository.Users;
 
 namespace Conference.Database
 {
@@ -9,12 +9,12 @@ namespace Conference.Database
 
         public IMeetingsRepository MeetingsRepository { get; }
 
-        public IMembersRepository MembersRepository { get; }
+        public IUsersRepository UsersRepository { get; }
 
-        public UnitOfWork(IMeetingsRepository meetingsRepository, IMembersRepository membersRepository, IEntityFrameworkContext context)
+        public UnitOfWork(IMeetingsRepository meetingsRepository, IUsersRepository usersRepository, IEntityFrameworkContext context)
         {
             MeetingsRepository = meetingsRepository;
-            MembersRepository = membersRepository;
+            UsersRepository = usersRepository;
             _context = context;
         }
 
