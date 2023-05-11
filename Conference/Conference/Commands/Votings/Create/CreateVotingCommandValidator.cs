@@ -10,7 +10,7 @@ namespace Conference.Commands.Votings.Create
                 .Length(3, 100);
 
             RuleFor(x => x.Options)
-                .Must(x => x.Count() > 1)
+                .Must(x => x.Count > 1)
                 .ForEach(o =>
                     o.Length(1, 50));
         }
