@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Conference.Database.Repository.Users;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Conference.Swagger;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -52,6 +55,7 @@ var config = builder.Configuration;
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
     builder.Services.AddMediatR(c =>
             c.RegisterServicesFromAssemblies(assemblies));

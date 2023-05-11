@@ -17,8 +17,8 @@ namespace Conference.Controllers.Decisions
         /// <summary>
         /// Create new decision
         /// </summary>
-        [Authorize]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateDecisionAsync(CreateDecisionCommand createDecisionCommand, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(createDecisionCommand, cancellationToken));
