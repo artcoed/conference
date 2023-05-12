@@ -2,7 +2,9 @@
 using Conference.Commands.Users.CreateQuest;
 using Conference.Commands.Users.Delete;
 using Conference.Commands.Users.Login;
+using Conference.Services.Roles;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Users
@@ -20,6 +22,7 @@ namespace Conference.Controllers.Users
         /// Create new user with role
         /// </summary>
         [HttpPost]
+        [Authorize(Policy = RolesConstants.Administrator)]
         public async Task<IActionResult> CreateUserAsync(CreateUserCommand createUserCommand, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(createUserCommand, cancellationToken));
@@ -29,6 +32,7 @@ namespace Conference.Controllers.Users
         /// Create new user with quest role
         /// </summary>
         [HttpPost]
+        [Authorize(Policy = RolesConstants.Secretary)]
         public async Task<IActionResult> CreateQuestUserAsync(CreateQuestUserCommand createQuestUserCommand, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(createQuestUserCommand, cancellationToken));
@@ -38,6 +42,7 @@ namespace Conference.Controllers.Users
         /// Delete user
         /// </summary>
         [HttpDelete]
+        [Authorize(Policy = RolesConstants.Administrator)]
         public async Task<IActionResult> DeleteUserAsync(DeleteUserCommand deleteUserCommand, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(deleteUserCommand, cancellationToken));

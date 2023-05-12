@@ -1,6 +1,8 @@
 ﻿using Conference.Commands.Notifications.Check;
 using Conference.Commands.Notifications.GetByUser;
+using Conference.Services.Roles;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Notifications
@@ -18,6 +20,7 @@ namespace Conference.Controllers.Notifications
         /// Check notification
         /// </summary>
         [HttpGet]
+        [Authorize(Policy = RolesConstants.Quest)]
         public async Task<IActionResult> CheckNotificationAsync(CheckNotificationCommand checkNotificationCommand, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(checkNotificationCommand, cancellationToken));
@@ -27,6 +30,7 @@ namespace Conference.Controllers.Notifications
         /// Get notifications to which the user is invited
         /// </summary>
         [HttpGet]
+        [Authorize(Policy = RolesConstants.Quest)]
         public async Task<IActionResult> GetByUserNotificationsAsync([FromQuery] GetByUserNotificationsQuery getByUserNotificationsQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getByUserNotificationsQuery, cancellationToken));

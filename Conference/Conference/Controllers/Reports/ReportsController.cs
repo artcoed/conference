@@ -1,5 +1,7 @@
 ﻿using Conference.Commands.Reports.GetByMeetingId;
+using Conference.Services.Roles;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Reports
@@ -17,6 +19,7 @@ namespace Conference.Controllers.Reports
         /// Get report
         /// </summary>
         [HttpGet]
+        [Authorize(Policy = RolesConstants.Administrator)]
         public async Task<IActionResult> GetByMeetingIdAsync([FromQuery] GetByMeetingIdReportQuery getReportByMeetingIdQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getReportByMeetingIdQuery, cancellationToken));

@@ -1,5 +1,7 @@
 ﻿using Conference.Commands.Notes.Create;
+using Conference.Services.Roles;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Notes
@@ -17,6 +19,7 @@ namespace Conference.Controllers.Notes
         /// Create new note
         /// </summary>
         [HttpPost]
+        [Authorize(Policy = RolesConstants.Quest)]
         public async Task<IActionResult> CreateNoteAsync(CreateNoteCommand createNoteCommand, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(createNoteCommand, cancellationToken));

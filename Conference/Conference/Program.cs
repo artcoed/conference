@@ -18,6 +18,7 @@ using Conference.Services.Roles;
 using Conference.Database.Repository.Roles;
 using System.Text.Json.Serialization;
 using Conference.Database.Repository.Notifications;
+using System.Security.Claims;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -74,7 +75,9 @@ var config = builder.Configuration;
 
         options.AddPolicy(RolesConstants.Quest, builder =>
         {
-            builder.RequireRole(RolesConstants.Quest);
+
+            builder.RequireAssertion(x => x.User.HasClaim(ClaimTypes.Role, RolesConstants.Worker) ||
+                                        x.User.HasClaim(ClaimTypes.Role, RolesConstants.Quest));
         });
     });
 

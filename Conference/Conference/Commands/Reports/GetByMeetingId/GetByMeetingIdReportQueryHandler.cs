@@ -20,6 +20,10 @@ namespace Conference.Commands.Reports.GetByMeetingId
                 return Result.Fail("Совещание не найдено");
 
             var meeting = meetingResult.Value;
+
+            if (meeting.HasCompleted == false)
+                return Result.Fail("Совещание еще не завершено");
+
             var reportDto = new ReportDto
             {
                 StartDateTime = meeting.StartDateTime,
@@ -27,8 +31,10 @@ namespace Conference.Commands.Reports.GetByMeetingId
                 Decisions = meeting.Decisions,
                 Notes = meeting.Notes,
                 Questions = meeting.Questions,
+                Users = meeting.Users,
                 Votes = meeting.Votes,
-                Users = meeting.Users
+                VotingTitle = meeting.VotingTitle,
+                VotingOptions = meeting.Options
             };
 
             return Result.Ok(reportDto);
