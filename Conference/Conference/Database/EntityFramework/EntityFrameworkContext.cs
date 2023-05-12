@@ -14,6 +14,7 @@ namespace Conference.Database.EntityFramework
         public DbSet<Question> Questions { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public EntityFrameworkContext(DbContextOptions<EntityFrameworkContext> options)
             : base(options) { }

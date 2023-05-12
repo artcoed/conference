@@ -17,6 +17,7 @@ using Conference.Database.EntityFramework;
 using Conference.Services.Roles;
 using Conference.Database.Repository.Roles;
 using System.Text.Json.Serialization;
+using Conference.Database.Repository.Notifications;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -100,6 +101,7 @@ var config = builder.Configuration;
     builder.Services.AddScoped<IMeetingsRepository, MeetingsEntityFrameworkRepository>();
     builder.Services.AddScoped<IUsersRepository, UsersEntityFrameworkRepository>();
     builder.Services.AddScoped<IRolesRepository, RolesEntityFrameworkRepository>();
+    builder.Services.AddScoped<INotificationsRepository, NotificationsEntityFrameworkRepository>();
 
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 }

@@ -1,9 +1,10 @@
 ﻿namespace Conference.Domain
 {
-    public class Note
+    public class Notification
     {
         public int Id { get; set; }
-        public string Value { get; set; }
+        public Meeting Meeting { get; set; }
         public User User { get; set; }
+        public bool IsChecked { get; set; }
     }
 }

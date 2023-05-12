@@ -14,6 +14,7 @@ namespace Conference.Database.EntityFramework
         DbSet<Question> Questions { get; }
         DbSet<Vote> Votes { get; }
         DbSet<Role> Roles { get; }
+        DbSet<Notification> Notifications { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
