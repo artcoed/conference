@@ -6,8 +6,6 @@
         public string Login { get; set; }
         public string Password { get; set; }
         public Role Role { get; set; }
-        public List<MeetingUser> MeetingUsers { get; set; }
-        public IReadOnlyList<Meeting> Meetings => MeetingUsers.Select(u => u.Meeting)
-                                   .ToList();
+        public List<Meeting> Meetings { get; set; }
     }
 }

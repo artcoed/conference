@@ -4,6 +4,7 @@ using Conference.Database.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Conference.Migrations
 {
     [DbContext(typeof(EntityFrameworkContext))]
-    partial class EntityFrameworkContextModelSnapshot : ModelSnapshot
+    [Migration("20230512042707_MeetingsUsers")]
+    partial class MeetingsUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,6 +99,29 @@ namespace Conference.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Meetings");
+                });
+
+            modelBuilder.Entity("Conference.Domain.MeetingUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("MeetingId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MeetingsUsers");
                 });
 
             modelBuilder.Entity("Conference.Domain.Note", b =>
@@ -258,6 +284,21 @@ namespace Conference.Migrations
                         .HasForeignKey("MeetingId");
                 });
 
+            modelBuilder.Entity("Conference.Domain.MeetingUser", b =>
+                {
+                    b.HasOne("Conference.Domain.Meeting", "Meeting")
+                        .WithMany("MeetingsUsers")
+                        .HasForeignKey("MeetingId");
+
+                    b.HasOne("Conference.Domain.User", "User")
+                        .WithMany("MeetingsUsers")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Conference.Domain.Note", b =>
                 {
                     b.HasOne("Conference.Domain.Meeting", null)
@@ -328,6 +369,8 @@ namespace Conference.Migrations
 
                     b.Navigation("Documents");
 
+                    b.Navigation("MeetingsUsers");
+
                     b.Navigation("Notes");
 
                     b.Navigation("Options");
@@ -335,6 +378,11 @@ namespace Conference.Migrations
                     b.Navigation("Questions");
 
                     b.Navigation("Votes");
+                });
+
+            modelBuilder.Entity("Conference.Domain.User", b =>
+                {
+                    b.Navigation("MeetingsUsers");
                 });
 #pragma warning restore 612, 618
         }

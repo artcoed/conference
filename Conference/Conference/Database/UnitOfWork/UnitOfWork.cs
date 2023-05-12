@@ -1,7 +1,8 @@
-﻿using Conference.Database.Repository.Meetings;
+﻿using Conference.Database.EntityFramework;
+using Conference.Database.Repository.Meetings;
 using Conference.Database.Repository.Users;
 
-namespace Conference.Database
+namespace Conference.Database.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

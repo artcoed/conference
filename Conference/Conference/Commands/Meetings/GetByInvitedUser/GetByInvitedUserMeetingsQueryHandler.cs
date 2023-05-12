@@ -20,7 +20,9 @@ namespace Conference.Commands.Meetings.GetByInvitedUser
             if (userResult.IsFailed)
                 return Result.Fail("Ошибка аутентификации");
 
-            return Result.Ok(userResult.Value.Meetings);
+            IReadOnlyList<Meeting> meetings = userResult.Value.Meetings;
+
+            return Result.Ok(meetings);
         }
     }
 }

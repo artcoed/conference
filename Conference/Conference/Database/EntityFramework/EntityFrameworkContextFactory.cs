@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Conference.Database
+namespace Conference.Database.EntityFramework
 {
     public class EntityFrameworkContextFactory : IDesignTimeDbContextFactory<EntityFrameworkContext>
     {

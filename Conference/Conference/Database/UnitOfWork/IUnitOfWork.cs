@@ -1,7 +1,7 @@
 ﻿using Conference.Database.Repository.Meetings;
 using Conference.Database.Repository.Users;
 
-namespace Conference.Database
+namespace Conference.Database.UnitOfWork
 {
     public interface IUnitOfWork
     {

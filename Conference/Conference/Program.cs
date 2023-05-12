@@ -1,4 +1,3 @@
-using Conference.Database;
 using Conference.Database.Repository.Meetings;
 using Conference.Middlewares.CustomExceptionsHandler;
 using MediatR;
@@ -13,6 +12,8 @@ using Conference.Database.Repository.Users;
 using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Conference.Swagger;
+using Conference.Database.UnitOfWork;
+using Conference.Database.EntityFramework;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -26,14 +27,14 @@ var config = builder.Configuration;
     builder.Services.AddCors(options =>
     {
         options.AddPolicy(name: MyAllowSpecificOrigins,
-            policy =>
-            {
-                policy.WithOrigins("http://127.0.0.1:7081",
-                                "http://localhost:7081",
-                                "https://localhost:7081",
-                                "https://127.0.0.1:7081",
-                                "*");
-            });
+                          policy =>
+                          {
+                              policy.WithOrigins("http://127.0.0.1:7081",
+                                              "http://localhost:7081",
+                                              "https://localhost:7081",
+                                              "https://127.0.0.1:7081",
+                                              "*");
+                          });
     });
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -68,7 +69,8 @@ var config = builder.Configuration;
     builder.Services.AddScoped<IUsersService, UsersService>();
 
     builder.Services.AddDbContext<IEntityFrameworkContext, EntityFrameworkContext>(c =>
-        c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        c.UseSqlServer(builder.Configuration
+            .GetConnectionString("DefaultConnection")));
 
     builder.Services.AddScoped<IMeetingsRepository, MeetingsEntityFrameworkRepository>();
     builder.Services.AddScoped<IUsersRepository, UsersEntityFrameworkRepository>();

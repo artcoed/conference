@@ -1,5 +1,7 @@
-﻿using Conference.Domain;
+﻿using Conference.Database.EntityFramework;
+using Conference.Domain;
 using FluentResults;
+using Microsoft.EntityFrameworkCore;
 
 namespace Conference.Database.Repository.Meetings
 {
@@ -12,24 +14,39 @@ namespace Conference.Database.Repository.Meetings
             _entityFrameworkContext = entityFrameworkContext;
         }
 
-        public Task AddAsync(Meeting meeting, CancellationToken cancellationToken)
+        public async Task AddAsync(Meeting meeting, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _entityFrameworkContext.Meetings.AddAsync(meeting, cancellationToken);
         }
 
-        public Task<Result<IReadOnlyList<Meeting>>> GetAllAsync(CancellationToken cancellationToken)
+        public async Task<Result<IReadOnlyList<Meeting>>> GetAllAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            IReadOnlyList<Meeting> meetings = await _entityFrameworkContext.Meetings.ToListAsync(cancellationToken);
+            if (!meetings.Any())
+                return Result.Fail("Конференции не найдены");
+
+            return Result.Ok(meetings);
         }
 
-        public Task<Result<Meeting>> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<Result<Meeting>> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var meeting = await _entityFrameworkContext.Meetings.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            if (meeting == null)
+                return Result.Fail("Конференция не найдена");
+
+            return Result.Ok(meeting);
         }
 
-        public Task<Result<IReadOnlyList<Meeting>>> GetByInvitedUserAsync(string userLogin, CancellationToken cancellationToken)
+        public async Task<Result<IReadOnlyList<Meeting>>> GetByInvitedUserAsync(int id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            IReadOnlyList<Meeting> meetings = await _entityFrameworkContext.Meetings
+                .Where(x => x.Users.Any(u => u.Id == id))
+                .ToListAsync(cancellationToken);
+
+            if (!meetings.Any())
+                return Result.Fail("Конференции не найдены");
+
+            return Result.Ok(meetings);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Conference.Domain;
+﻿using Conference.Database.EntityFramework;
+using Conference.Domain;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +25,7 @@ namespace Conference.Database.Repository.Users
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
             
             if (suspectUser == null)
-                return Result.Fail("User not found");
+                return Result.Fail("Пользователь не найден");
 
             return Result.Ok(suspectUser);
         }
@@ -35,7 +36,7 @@ namespace Conference.Database.Repository.Users
                 .FirstOrDefaultAsync(x => x.Login == login, cancellationToken);
 
             if (suspectUser == null)
-                return Result.Fail("User not found");
+                return Result.Fail("Пользователь не найден");
 
             return Result.Ok(suspectUser);
         }
@@ -46,14 +47,21 @@ namespace Conference.Database.Repository.Users
                 .FirstOrDefaultAsync(x => x.Login == login && x.Password == password, cancellationToken);
 
             if (suspectUser == null)
-                return Result.Fail("User not found");
+                return Result.Fail("Пользователь не найден");
 
             return Result.Ok(suspectUser);
         }
 
-        public Task<Result<IReadOnlyList<User>>> GetByIdAsync(IReadOnlyList<int> id, CancellationToken cancellationToken)
+        public async Task<Result<IReadOnlyList<User>>> GetByIdAsync(IReadOnlyList<int> id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            IReadOnlyList<User> suspectUsers = await _entityFrameworkContext.Users
+                .Where(x => id.Contains(x.Id))
+                .ToListAsync(cancellationToken);
+
+            if (!suspectUsers.Any())
+                return Result.Fail("Пользователи не найдены");
+
+            return Result.Ok(suspectUsers);
         }
     }
 }

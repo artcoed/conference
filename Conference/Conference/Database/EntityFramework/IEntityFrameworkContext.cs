@@ -1,14 +1,13 @@
 ﻿using Conference.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Conference.Database
+namespace Conference.Database.EntityFramework
 {
     public interface IEntityFrameworkContext
     {
         DbSet<Decision> Decisions { get; }
         DbSet<Document> Documents { get; }
         DbSet<Meeting> Meetings { get; }
-        DbSet<MeetingUser> MeetingUsers { get; }
         DbSet<User> Users { get; }
         DbSet<Note> Notes { get; }
         DbSet<Option> Options { get; }

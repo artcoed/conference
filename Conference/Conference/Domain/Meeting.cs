@@ -14,9 +14,7 @@
         public List<Document> Documents { get; set; }
         public List<Note> Notes { get; set; }
         public List<Decision> Decisions { get; set; }
-        public List<MeetingUser> MeetingUsers { get; set; }
-        public IReadOnlyList<User> Users => MeetingUsers.Select(u => u.User)
-                                   .ToList();
+        public List<User> Users { get; set; }
 
         public string VotingTitle { get; set; }
         public List<Option> Options { get; set; }

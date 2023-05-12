@@ -1,4 +1,4 @@
-﻿using Conference.Database;
+﻿using Conference.Database.UnitOfWork;
 using Conference.Domain;
 using FluentResults;
 using MediatR;
@@ -20,13 +20,18 @@ namespace Conference.Commands.Meetings.Create
             if (invitedUsersResult.IsFailed)
                 return Result.Fail("Как минимум один из пользователей не существует");
 
+            var uniqueUsers = invitedUsersResult.Value.ToList().Distinct();
+
+            if (uniqueUsers.Count() != invitedUsersResult.Value.Count)
+                return Result.Fail("Один или более пользователей переданы повторно");
+
             var meeting = new Meeting
             {
                 StartDate = request.StartMeetingDateTime.Date,
                 StartTime = request.StartMeetingDateTime.TimeOfDay,
                 Questions = request.Questions.Select(x => new Question { Value = x }).ToList(),
                 Documents = request.Documents.Select(x => new Document { Value = x }).ToList(),
-                MeetingUsers = invitedUsersResult.Value.Select(x => new MeetingUser { User = x }).ToList()
+                Users = invitedUsersResult.Value.ToList()
             };
 
             await _unitOfWork.MeetingsRepository.AddAsync(meeting, cancellationToken);
