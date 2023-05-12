@@ -16,7 +16,7 @@ namespace Conference.Commands.Meetings.Create
 
         public async Task<Result> Handle(CreateMeetingCommand request, CancellationToken cancellationToken)
         {
-            if (request.UsersId.Count() != request.UsersId.ToList().Distinct().Count())
+            if (request.UsersId.Count != request.UsersId.ToList().Distinct().Count())
                 return Result.Fail("Один или более пользователей переданы повторно");
 
             var invitedUsersResult = await _unitOfWork.UsersRepository.GetByIdAsync(request.UsersId, cancellationToken);

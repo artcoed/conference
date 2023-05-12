@@ -1,5 +1,6 @@
 ﻿using Conference.Database.UnitOfWork;
 using Conference.Domain;
+using Conference.Services.Roles;
 using FluentResults;
 using MediatR;
 
@@ -20,10 +21,15 @@ namespace Conference.Commands.Users.Create
             if (existedUserResult.IsSuccess)
                 return Result.Fail("Пользователь с таким логином уже существует");
 
+            var workerRoleResult = await _unitOfWork.RolesRepository.GetByName(RolesConstants.Worker, cancellationToken);
+            if (workerRoleResult.IsFailed)
+                return Result.Fail("Ошибка создания пользователя");
+
             var user = new User
             {
                 Login = request.Login,
                 Password = request.Password,
+                Role = workerRoleResult.Value
             };
 
             await _unitOfWork.UsersRepository.AddAsync(user, cancellationToken);

@@ -1,8 +1,6 @@
-﻿using Conference.Commands.Meetings.Complete;
-using Conference.Commands.Notes.Create;
+﻿using Conference.Commands.Notes.Create;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading;
 
 namespace Conference.Controllers.Notes
 {

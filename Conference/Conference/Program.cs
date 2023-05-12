@@ -14,6 +14,9 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Conference.Swagger;
 using Conference.Database.UnitOfWork;
 using Conference.Database.EntityFramework;
+using Conference.Services.Roles;
+using Conference.Database.Repository.Roles;
+using System.Text.Json.Serialization;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -51,9 +54,31 @@ var config = builder.Configuration;
                 ValidateIssuerSigningKey = true
             });
 
-    builder.Services.AddAuthorization();
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy(RolesConstants.Administrator, builder =>
+        {
+            builder.RequireRole(RolesConstants.Administrator);
+        });
 
-    builder.Services.AddControllers();
+        options.AddPolicy(RolesConstants.Secretary, builder =>
+        {
+            builder.RequireRole(RolesConstants.Secretary);
+        });
+   
+        options.AddPolicy(RolesConstants.Worker, builder =>
+        {
+            builder.RequireRole(RolesConstants.Worker);
+        });
+    });
+
+    builder.Services.AddControllers()
+        .AddJsonOptions(configure =>
+        {
+            configure.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            configure.JsonSerializerOptions.WriteIndented = true;
+        });
+
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
     builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
@@ -74,10 +99,11 @@ var config = builder.Configuration;
 
     builder.Services.AddScoped<IMeetingsRepository, MeetingsEntityFrameworkRepository>();
     builder.Services.AddScoped<IUsersRepository, UsersEntityFrameworkRepository>();
+    builder.Services.AddScoped<IRolesRepository, RolesEntityFrameworkRepository>();
 
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 }
-
+ 
 var app = builder.Build();
 
 {

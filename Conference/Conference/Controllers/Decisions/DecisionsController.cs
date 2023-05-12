@@ -1,6 +1,5 @@
 ﻿using Conference.Commands.Decisions.Create;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Conference.Controllers.Decisions
@@ -18,7 +17,6 @@ namespace Conference.Controllers.Decisions
         /// Create new decision
         /// </summary>
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> CreateDecisionAsync(CreateDecisionCommand createDecisionCommand, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(createDecisionCommand, cancellationToken));
