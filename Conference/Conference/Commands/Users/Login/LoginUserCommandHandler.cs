@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Conference.Commands.Users.Login
 {
-    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<TokenDto>>
+    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<LoginDataDto>>
     {
         private readonly IUsersService _usersService;
         private readonly IUnitOfWork _unitOfWork;
@@ -16,19 +16,20 @@ namespace Conference.Commands.Users.Login
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Result<TokenDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result<LoginDataDto>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            var userResult = await _unitOfWork.UsersRepository.GetByLoginAndPasswordAsync(request.Login, request.Password, cancellationToken);
+            var userResult = await _unitOfWork.UsersRepository.GetExistedByLoginAndPasswordAsync(request.Login, request.Password, cancellationToken);
             if (userResult.IsFailed)
                 return Result.Fail("Пользователя с таким логином или паролем не существует");
 
             var token = _usersService.GenerateToken(userResult.Value);
-            var tokenDto = new TokenDto
+            var loginDataDto = new LoginDataDto
             {
-                Token = token
+                Token = token,
+                Role = userResult.Value.Role.Name
             };
 
-            return Result.Ok(tokenDto);
+            return Result.Ok(loginDataDto);
         }
     }
 }

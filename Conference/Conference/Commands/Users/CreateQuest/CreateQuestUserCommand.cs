@@ -1,9 +1,9 @@
 ﻿using FluentResults;
 using MediatR;
 
-namespace Conference.Commands.Users.Login
+namespace Conference.Commands.Users.CreateQuest
 {
-    public record LoginUserCommand : IRequest<Result<LoginDataDto>>
+    public record CreateQuestUserCommand : IRequest<Result>
     {
         public string Login { get; init; }
         public string Password { get; init; }

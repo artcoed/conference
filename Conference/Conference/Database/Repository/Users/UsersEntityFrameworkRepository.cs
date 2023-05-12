@@ -32,12 +32,12 @@ namespace Conference.Database.Repository.Users
             return Result.Ok(suspectUser);
         }
 
-        public async Task<Result<User>> GetByLoginAsync(string login, CancellationToken cancellationToken)
+        public async Task<Result<User>> GetExistedByLoginAsync(string login, CancellationToken cancellationToken)
         {
             var suspectUser = await _entityFrameworkContext.Users
                 .Include(x => x.Role)
                 .Include(x => x.Meetings)
-                .FirstOrDefaultAsync(x => x.Login == login, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Login == login && x.IsDeleted == false, cancellationToken);
 
             if (suspectUser == null)
                 return Result.Fail("Пользователь не найден");
@@ -45,12 +45,12 @@ namespace Conference.Database.Repository.Users
             return Result.Ok(suspectUser);
         }
 
-        public async Task<Result<User>> GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken)
+        public async Task<Result<User>> GetExistedByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken)
         {
             var suspectUser = await _entityFrameworkContext.Users
                 .Include(x => x.Role)
                 .Include(x => x.Meetings)
-                .FirstOrDefaultAsync(x => x.Login == login && x.Password == password, cancellationToken);
+                .FirstOrDefaultAsync(x => x.Login == login && x.Password == password && x.IsDeleted == false, cancellationToken);
 
             if (suspectUser == null)
                 return Result.Fail("Пользователь не найден");

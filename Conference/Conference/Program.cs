@@ -71,6 +71,11 @@ var config = builder.Configuration;
         {
             builder.RequireRole(RolesConstants.Worker);
         });
+
+        options.AddPolicy(RolesConstants.Quest, builder =>
+        {
+            builder.RequireRole(RolesConstants.Quest);
+        });
     });
 
     builder.Services.AddControllers()
