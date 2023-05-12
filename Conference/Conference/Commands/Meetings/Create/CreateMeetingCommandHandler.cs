@@ -16,14 +16,12 @@ namespace Conference.Commands.Meetings.Create
 
         public async Task<Result> Handle(CreateMeetingCommand request, CancellationToken cancellationToken)
         {
+            if (request.UsersId.Count() != request.UsersId.ToList().Distinct().Count())
+                return Result.Fail("Один или более пользователей переданы повторно");
+
             var invitedUsersResult = await _unitOfWork.UsersRepository.GetByIdAsync(request.UsersId, cancellationToken);
             if (invitedUsersResult.IsFailed)
                 return Result.Fail("Как минимум один из пользователей не существует");
-
-            var uniqueUsers = invitedUsersResult.Value.ToList().Distinct();
-
-            if (uniqueUsers.Count() != invitedUsersResult.Value.Count)
-                return Result.Fail("Один или более пользователей переданы повторно");
 
             var meeting = new Meeting
             {

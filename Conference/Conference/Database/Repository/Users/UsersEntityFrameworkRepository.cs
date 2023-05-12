@@ -22,6 +22,8 @@ namespace Conference.Database.Repository.Users
         public async Task<Result<User>> GetByIdAsync(int id, CancellationToken cancellationToken)
         {
             var suspectUser = await _entityFrameworkContext.Users
+                .Include(x => x.Role)
+                .Include(x => x.Meetings)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
             
             if (suspectUser == null)
@@ -33,6 +35,8 @@ namespace Conference.Database.Repository.Users
         public async Task<Result<User>> GetByLoginAsync(string login, CancellationToken cancellationToken)
         {
             var suspectUser = await _entityFrameworkContext.Users
+                .Include(x => x.Role)
+                .Include(x => x.Meetings)
                 .FirstOrDefaultAsync(x => x.Login == login, cancellationToken);
 
             if (suspectUser == null)
@@ -44,6 +48,8 @@ namespace Conference.Database.Repository.Users
         public async Task<Result<User>> GetByLoginAndPasswordAsync(string login, string password, CancellationToken cancellationToken)
         {
             var suspectUser = await _entityFrameworkContext.Users
+                .Include(x => x.Role)
+                .Include(x => x.Meetings)
                 .FirstOrDefaultAsync(x => x.Login == login && x.Password == password, cancellationToken);
 
             if (suspectUser == null)
@@ -56,10 +62,15 @@ namespace Conference.Database.Repository.Users
         {
             IReadOnlyList<User> suspectUsers = await _entityFrameworkContext.Users
                 .Where(x => id.Contains(x.Id))
+                .Include(x => x.Role)
+                .Include(x => x.Meetings)
                 .ToListAsync(cancellationToken);
 
             if (!suspectUsers.Any())
                 return Result.Fail("Пользователи не найдены");
+
+            if (id.Count != suspectUsers.Count)
+                return Result.Fail("Не все пользователи найдены");
 
             return Result.Ok(suspectUsers);
         }
