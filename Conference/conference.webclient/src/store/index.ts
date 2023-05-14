@@ -1,0 +1,14 @@
+import { type } from "@testing-library/user-event/dist/type";
+import exp from "constants";
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import thunk from "redux-thunk";
+
+const rootReducer = combineReducers({
+
+})
+
+export const store = createStore(rootReducer, applyMiddleware(thunk))
+
+export type RootState = ReturnType<typeof store.getState>
+
+export type AppDispatch = typeof store.dispatch;

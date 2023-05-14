@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Conference", "Conference\Conference.csproj", "{30B256EA-FA98-4B48-B618-79673E683A7E}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "conference.client", "Conference.Client\conference.client.esproj", "{CD757348-4DC6-4E88-8A2F-5E5267222551}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "conference.webclient", "Conference.WebClient\conference.webclient.esproj", "{9E4589A4-E087-4BF5-8F0A-84831D4E3041}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +17,12 @@ Global
 		{30B256EA-FA98-4B48-B618-79673E683A7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30B256EA-FA98-4B48-B618-79673E683A7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30B256EA-FA98-4B48-B618-79673E683A7E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD757348-4DC6-4E88-8A2F-5E5267222551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CD757348-4DC6-4E88-8A2F-5E5267222551}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CD757348-4DC6-4E88-8A2F-5E5267222551}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{CD757348-4DC6-4E88-8A2F-5E5267222551}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD757348-4DC6-4E88-8A2F-5E5267222551}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CD757348-4DC6-4E88-8A2F-5E5267222551}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9E4589A4-E087-4BF5-8F0A-84831D4E3041}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E4589A4-E087-4BF5-8F0A-84831D4E3041}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E4589A4-E087-4BF5-8F0A-84831D4E3041}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{9E4589A4-E087-4BF5-8F0A-84831D4E3041}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E4589A4-E087-4BF5-8F0A-84831D4E3041}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E4589A4-E087-4BF5-8F0A-84831D4E3041}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
