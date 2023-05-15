@@ -16,6 +16,9 @@ namespace Conference.Commands.Meetings.Create
             
             RuleFor(x => x.Documents)
                 .ForEach(q => q.MinimumLength(3));
+
+            RuleFor(x => x.Title)
+                .Length(3, 50);
         }
     }
 }

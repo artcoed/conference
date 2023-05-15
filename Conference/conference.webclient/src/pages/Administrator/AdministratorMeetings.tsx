@@ -5,13 +5,46 @@ import { GetReportPath } from '../../routes';
 
 const AdministratorMeetings: FC = () => {
     const navigate = useNavigate();
-    const [id, setId] = useState('0');
+
+    const meetings = [
+        {
+            id: 1,
+            title: "Заголовок",
+            startDateTime: Date.now(),
+            endDateTime: Date.now(),
+            hasCompleted: true
+        },
+        {
+            id: 2,
+            title: "Заголовок2",
+            startDateTime: Date.now(),
+            endDateTime: Date.now(),
+            hasCompleted: false
+        }
+    ]
 
     return (
         <div>
-            AdministratorMeetings
-            <Input value={id} onChange={(e) => setId(e.target.value)} />
-            <Button onClick={() => navigate(GetReportPath(id))}>Open report</Button>
+            <h1>AdministratorMeetings</h1>
+            <div>
+                {meetings.map(meeting =>
+                    <div>
+                        <p>{meeting.title}</p>
+                        <p>{meeting.startDateTime}</p>
+                        {meeting.hasCompleted ?
+                            <>
+                                <p>{meeting.endDateTime}</p>
+                                <Button onClick={() => navigate(GetReportPath(meeting.id.toString()))}>Open report</Button>
+                            </>
+                        :
+                            <>
+                                <Button disabled>Meeting in process</Button>
+                            </>
+                        }
+                    </div>
+                )}
+            </div>
+
         </div>
     );
 };
