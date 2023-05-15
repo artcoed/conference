@@ -1,0 +1,9 @@
+.meeting {
+    margin: 10px;
+    padding: 20px;
+    border: 2px solid #4cff00;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFFFFF;
+}

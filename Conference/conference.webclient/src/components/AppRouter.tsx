@@ -1,18 +1,20 @@
 import { Layout } from 'antd';
 import React, { FC } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useTypedSelector } from '../hooks/useTypedSelector';
+import { Roles } from '../models/Roles';
 import { administratorRoutes, PathNames, publicRoutes, questRoutes, secretaryRoutes } from '../routes';
 import AdministratorNavbar from './Administrator/AdministratorNavbar';
 import AnonymousNavbar from './Anonymous/AnonymousNavbar';
 import QuestNavbar from './Quest/QuestNavbar';
 import SecretaryNavbar from './Secretary/SecretaryNavbar';
 
-const AppRouter: FC = () => {
-    const isAdministrator = false;
-    const isSecretary = true;
-    const isQuest = false;
 
-    if (isAdministrator) {
+
+const AppRouter: FC = () => {
+    const { role } = useTypedSelector(state => state.auth);
+
+    if (role === Roles.Administrator) {
         return (
             <>
                 <AdministratorNavbar />
@@ -28,7 +30,7 @@ const AppRouter: FC = () => {
         );
     }
 
-    if (isSecretary) {
+    if (role === Roles.Secretary) {
         return (
             <>
                 <SecretaryNavbar />
@@ -44,7 +46,7 @@ const AppRouter: FC = () => {
         );
     }
 
-    if (isQuest) {
+    if (role === Roles.Quest) {
         return (
             <>
                 <QuestNavbar />

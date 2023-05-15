@@ -10,10 +10,10 @@ const AnonymousNavbar: FC = () => {
     return (
         <Header>
             <Row justify="end">
-                <Menu selectable={false}  theme="dark" mode="horizontal" items={[
+                <Menu selectable={false} theme="dark" mode="horizontal" disabledOverflow items={[
                     {
                         key: 1,
-                        label: 'LOGIN',
+                        label: 'Вход',
                         onClick: () => navigate(PathNames.LOGIN)
                     }
                 ]} />

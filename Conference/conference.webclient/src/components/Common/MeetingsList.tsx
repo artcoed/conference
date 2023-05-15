@@ -1,7 +1,9 @@
 import { Button } from 'antd';
+import moment from 'moment';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GetMeetingPath } from '../../routes';
+import classes from "./MeetingsList.module.css";
 
 const MeetingsList: FC = () => {
     const navigate = useNavigate();
@@ -9,14 +11,14 @@ const MeetingsList: FC = () => {
     const meetings = [
         {
             id: 1,
-            title: "Заголовок",
+            title: "Title1",
             startDateTime: Date.now(),
             endDateTime: Date.now(),
             hasCompleted: true
         },
         {
             id: 2,
-            title: "Заголовок2",
+            title: "Title2",
             startDateTime: Date.now(),
             endDateTime: Date.now(),
             hasCompleted: false
@@ -26,19 +28,14 @@ const MeetingsList: FC = () => {
     return (
         <div>
             {meetings.map(meeting =>
-                <div>
-                    <p>{meeting.title}</p>
-                    <p>{meeting.startDateTime}</p>
-                    {meeting.hasCompleted ?
-                        <>
-                            <Button disabled>Meeting completed</Button>
-                        </>
-                        :
-                        <>
-                            <p>{meeting.endDateTime}</p>
-                            <Button onClick={() => navigate(GetMeetingPath(meeting.id.toString()))}>Open meeting</Button>
-                        </>
-                    }
+                <div className={classes.meeting}>
+                    <div>
+                        <p>{meeting.title}</p>
+                        <p>{moment(meeting.startDateTime).calendar()}</p>
+                        {meeting.hasCompleted && <p>{moment(meeting.endDateTime).calendar()}</p>}
+                    </div>
+                    {meeting.hasCompleted && <Button disabled>Meeting completed</Button>}
+                    {!meeting.hasCompleted && <Button onClick={() => navigate(GetMeetingPath(meeting.id.toString()))}>Open meeting</Button>}
                 </div>
             )}
         </div>

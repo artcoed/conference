@@ -11,7 +11,7 @@ const SecretaryMeeting: FC = () => {
 
     const meeting = {
         id: 2,
-        title: "Заголовок2",
+        title: "Title 2",
         startDateTime: Date.now(),
         endDateTime: Date.now(),
         hasCompleted: false,
