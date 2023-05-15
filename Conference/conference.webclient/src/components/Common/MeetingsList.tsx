@@ -1,9 +1,9 @@
-import { Input, Button } from 'antd';
-import React, { FC, useState } from 'react';
+import { Button } from 'antd';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GetMeetingPath } from '../../routes';
 
-const QuestAccount: FC = () => {
+const MeetingsList: FC = () => {
     const navigate = useNavigate();
 
     const meetings = [
@@ -25,19 +25,18 @@ const QuestAccount: FC = () => {
 
     return (
         <div>
-            <h1>QuestAccount</h1>
             {meetings.map(meeting =>
-                <div key={meeting.id}>
+                <div>
                     <p>{meeting.title}</p>
                     <p>{meeting.startDateTime}</p>
                     {meeting.hasCompleted ?
                         <>
-                            <p>{meeting.endDateTime}</p>
-                            <Button disabled>Meeting ended</Button>
+                            <Button disabled>Meeting completed</Button>
                         </>
                         :
                         <>
-                            <Button onClick={() => navigate(GetMeetingPath(meeting.id.toString()))}>Join meeting</Button>
+                            <p>{meeting.endDateTime}</p>
+                            <Button onClick={() => navigate(GetMeetingPath(meeting.id.toString()))}>Open meeting</Button>
                         </>
                     }
                 </div>
@@ -46,4 +45,4 @@ const QuestAccount: FC = () => {
     );
 };
 
-export default QuestAccount;
+export default MeetingsList;

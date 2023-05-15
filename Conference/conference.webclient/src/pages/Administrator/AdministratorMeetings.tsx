@@ -27,8 +27,8 @@ const AdministratorMeetings: FC = () => {
         <div>
             <h1>AdministratorMeetings</h1>
             <div>
-                {meetings.map(meeting =>
-                    <div>
+                {meetings.map((meeting) =>
+                    <div key={meeting.id}>
                         <p>{meeting.title}</p>
                         <p>{meeting.startDateTime}</p>
                         {meeting.hasCompleted ?
