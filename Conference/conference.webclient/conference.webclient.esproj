@@ -17,6 +17,11 @@
     <Folder Include="src\components\Common\" />
     <Folder Include="src\pages\Administrator\" />
     <Folder Include="src\pages\Secretary\" />
-    <Folder Include="src\store\reducers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptConfiguration Remove="src\store\reducers\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="src\store\reducers\**" />
   </ItemGroup>
 </Project>
