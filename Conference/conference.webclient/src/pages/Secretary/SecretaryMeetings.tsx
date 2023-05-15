@@ -1,4 +1,4 @@
-import { Button, Form } from 'antd';
+import { Button, Form, Input } from 'antd';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GetMeetingPath } from '../../routes';
@@ -26,6 +26,13 @@ const SecretaryMeetings: FC = () => {
     return (
         <div>
             <h1>SecretaryMeetings</h1>
+
+            <Form>
+                <Input placeholder="login"/>
+                <Input placeholder="password" />
+                <Input placeholder="name" />
+                <Button>Create quest</Button>
+            </Form>
 
             <div>
                 {meetings.map(meeting =>
