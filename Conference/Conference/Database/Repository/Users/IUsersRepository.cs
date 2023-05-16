@@ -10,5 +10,6 @@ namespace Conference.Database.Repository.Users
         Task<Result<User>> GetByIdAsync(int id, CancellationToken cancellationToken);
         Task<Result<IReadOnlyList<User>>> GetByIdAsync(IReadOnlyList<int> id, CancellationToken cancellationToken);
         Task<Result<User>> GetExistedByLoginAsync(string login, CancellationToken cancellationToken);
+        Task<Result<IReadOnlyList<User>>> GetExistedAll(CancellationToken cancellationToken);
     }
 }

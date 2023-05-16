@@ -1,0 +1,12 @@
+.ErrorMessageContainer {
+    height: 100px;
+    margin: 10px 0;
+}
+
+.ErrorMessage {
+    padding: 10px;
+    border-radius: 5px;
+    background: red;
+    color: white;
+    word-wrap: break-word;
+}

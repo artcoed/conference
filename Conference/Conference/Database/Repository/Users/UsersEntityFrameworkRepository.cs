@@ -2,6 +2,7 @@
 using Conference.Domain;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 namespace Conference.Database.Repository.Users
 {
@@ -71,6 +72,19 @@ namespace Conference.Database.Repository.Users
 
             if (id.Count != suspectUsers.Count)
                 return Result.Fail("Не все пользователи найдены");
+
+            return Result.Ok(suspectUsers);
+        }
+
+        public async Task<Result<IReadOnlyList<User>>> GetExistedAll(CancellationToken cancellationToken)
+        {
+            IReadOnlyList<User> suspectUsers = await _entityFrameworkContext.Users
+                .Where(x => x.IsDeleted == false)
+                .Include(x => x.Role)
+                .ToListAsync(cancellationToken);
+
+            if (!suspectUsers.Any())
+                return Result.Fail("Пользователи не найдены");
 
             return Result.Ok(suspectUsers);
         }

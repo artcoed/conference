@@ -75,6 +75,13 @@ var config = builder.Configuration;
             builder.RequireAssertion(x => x.User.HasClaim(ClaimTypes.Role, RolesConstants.Worker) ||
                                         x.User.HasClaim(ClaimTypes.Role, RolesConstants.Quest));
         });
+
+        options.AddPolicy(RolesConstants.AdministratorSecretary, builder =>
+        {
+
+            builder.RequireAssertion(x => x.User.HasClaim(ClaimTypes.Role, RolesConstants.Administrator) ||
+                                        x.User.HasClaim(ClaimTypes.Role, RolesConstants.Secretary));
+        });
     });
 
     builder.Services.AddControllers()

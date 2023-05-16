@@ -24,7 +24,9 @@ namespace Conference.Commands.Users.Delete
                 return Result.Fail("Пользователь уже удален");
 
             user.IsDeleted = true;
-            
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             return Result.Ok();
         }
     }

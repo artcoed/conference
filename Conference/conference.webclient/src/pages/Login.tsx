@@ -22,11 +22,10 @@ const Login: FC<{setRole: (role: Roles) => void}> = ({setRole}) => {
     const [isLoading, setIsLoading] = useState(false)
 
     const submit = async () => {
+        setError('')
         setIsLoading(true)
         try {
             const response = await $api.post<AuthResponse>("Users/LoginUser", { login, password });
-            setError('')
-
             localStorage.setItem('token', response.data.token)
             localStorage.setItem('role', response.data.role)
             setRole(response.data.role as Roles)
@@ -44,7 +43,7 @@ const Login: FC<{setRole: (role: Roles) => void}> = ({setRole}) => {
                 <h1 className={classes.Header}>Вход</h1>
                 <Form>
                     <Input className={classes.Input} placeholder="Введите логин" value={login} onChange={e => setLogin(e.target.value)} />
-                    <Input className={classes.Input} placeholder="Введите пароль" value={password} onChange={e => setPassword(e.target.value)} />
+                    <Input.Password className={classes.Input} placeholder="Введите пароль" value={password} onChange={e => setPassword(e.target.value)} />
                     <div className={classes.ButtonContainer}>
                         <Button className={classes.Button} onClick={submit} loading={isLoading}>Войти</Button>
                     </div>

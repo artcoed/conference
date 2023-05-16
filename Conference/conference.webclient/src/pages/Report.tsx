@@ -5,28 +5,43 @@ type ReportParams = {
     id: string;
 };
 
+interface IReportVoteResponse {
+    id: number,
+    value: string,
+    users: IReportUserResponse[]
+}
+
+interface IReportUserResponse {
+    id: number,
+    login: string,
+    name: string
+}
+
+interface IReportNoteResponse {
+    id: number,
+    value: string,
+    user: IReportUserResponse 
+}
+
+interface IFullReportResponse {
+    id: number,
+    meetingTitle: string,
+    meetingCompleted: boolean,
+    startDateTime: Date,
+    endDateTime: Date,
+    decisions: string[],
+    notes: IReportNoteResponse[],
+    questions: string[],
+    users: IReportUserResponse[],
+    hasVoting: boolean,
+    votingTitle: string
+    votes: IReportVoteResponse[]
+}
+
 const Report: FC = () => {
     const { id } = useParams<ReportParams>();
 
     const report = {
-        meetingTitle: "",
-        startDateTime: Date.now(),
-        endDateTime: Date.now(),
-        decisions: [
-            { value: "" }
-        ],
-        notes: [
-            {
-                value: "",
-                user: { login: "", displayingName: "" }
-            }
-        ],
-        questions: [
-            { value: "" }
-        ],
-        users: [
-            { login: "", displayingName: "" }
-        ],
         votingTitle: "",
         votingOptions: [
             { value: "" }

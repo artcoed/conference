@@ -11,6 +11,9 @@ namespace Conference.Commands.Users.Create
 
             RuleFor(x => x.Password)
                 .Length(3, 50);
+
+            RuleFor(x => x.Name)
+                .Length(3, 50);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Conference.Commands.Users.Create;
 using Conference.Commands.Users.CreateQuest;
 using Conference.Commands.Users.Delete;
+using Conference.Commands.Users.Get;
 using Conference.Commands.Users.Login;
 using Conference.Services.Roles;
 using MediatR;
@@ -16,6 +17,16 @@ namespace Conference.Controllers.Users
         public UsersController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        /// <summary>
+        /// Get all users list
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = RolesConstants.Administrator)]
+        public async Task<IActionResult> GetUsersAsync([FromQuery] GetUsersQuery getUsersQuery, CancellationToken cancellationToken)
+        {
+            return ConvertToActionResult(await _mediator.Send(getUsersQuery, cancellationToken));
         }
 
         /// <summary>

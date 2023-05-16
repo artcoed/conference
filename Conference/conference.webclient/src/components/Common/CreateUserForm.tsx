@@ -1,18 +1,61 @@
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import Input from 'antd/es/input/Input';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { IUser } from '../../models/IUser';
+import { ICreatingUser } from '../../pages/Users';
+import classes from "./CreateUserForm.module.css";
 
-const CreateUserForm: FC<{ addUser: (user: IUser) => void }> = ({ addUser }) => {
-    const [creatingUser, setCreatingUser] = useState({ id: Date.now(), login: "", password: "", name: "", role: "" });
+const CreateUserForm: FC<{ error: string, creatingUser: ICreatingUser, setCreatingUser: (user: ICreatingUser) => void }> = ({ error, creatingUser, setCreatingUser }) => {
+    const handleChange = (value: { value: string; label: React.ReactNode }) => {
+        setCreatingUser({ ...creatingUser, role: value.value })
+    };
 
     return (
         <Form>
-            <Input placeholder="Login" value={creatingUser.login} onChange={(e) => setCreatingUser({ ...creatingUser, login: e.target.value })} />
-            <Input placeholder="Password" value={creatingUser.password} onChange={(e) => setCreatingUser({ ...creatingUser, password: e.target.value })} />
-            <Input placeholder="Name" value={creatingUser.name} onChange={(e) => setCreatingUser({ ...creatingUser, name: e.target.value })} />
-            <Input placeholder="Role" value={creatingUser.role} onChange={(e) => setCreatingUser({ ...creatingUser, role: e.target.value })} />
-            <Button onClick={() => addUser(creatingUser)}>Add user</Button>
+            <Form.Item label="Логин">
+                <Input placeholder="Введите логин" value={creatingUser.login} onChange={(e) => setCreatingUser({ ...creatingUser, login: e.target.value })} />
+            </Form.Item>
+            <Form.Item label="Пароль">
+                <Input placeholder="Введите пароль" value={creatingUser.password} onChange={(e) => setCreatingUser({ ...creatingUser, password: e.target.value })} />
+            </Form.Item>
+            <Form.Item label="Имя">
+                <Input placeholder="Введите имя" value={creatingUser.name} onChange={(e) => setCreatingUser({ ...creatingUser, name: e.target.value })} />
+            </Form.Item>
+            <Form.Item label="Роль">
+                <Select
+                    labelInValue
+                    defaultValue={{
+                        value: 'quest',
+                        label: 'Гость',
+                    }}
+                    onChange={handleChange}
+                    options={[
+                        {
+                            value: 'quest',
+                            label: 'Гость',
+                        },
+                        {
+                            value: 'worker',
+                            label: 'Работник',
+                        },
+                        {
+                            value: 'secretary',
+                            label: 'Секретарь',
+                        },
+                        {
+                            value: 'administrator',
+                            label: 'Администратор',
+                        },
+                    ]}>
+                    <Select.Option value="quest">Гость</Select.Option>
+                    <Select.Option value="worker">Работник</Select.Option>
+                    <Select.Option value="secretary">Секретарь</Select.Option>
+                    <Select.Option value="administrator">Администратор</Select.Option>
+                </Select>
+            </Form.Item>
+            <div className={classes.ErrorMessageContainer}>
+                {error && <p className={classes.ErrorMessage}>{error}</p>}
+            </div>
         </Form>
     );
 };

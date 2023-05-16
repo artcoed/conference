@@ -14,6 +14,11 @@ namespace Conference.Database.Repository.Roles
             _context = context;
         }
 
+        public async Task<Result<IReadOnlyList<Role>>> GetAll(CancellationToken cancellationToken)
+        {
+            return await _context.Roles.ToListAsync(cancellationToken);
+        }
+
         public async Task<Result<Role>> GetByName(string name, CancellationToken cancellationToken)
         {
             var role = await _context.Roles.FirstOrDefaultAsync(x => x.Name == name, cancellationToken);

@@ -1,4 +1,4 @@
-import { Layout } from 'antd';
+import { Layout, Spin } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Roles } from '../models/Roles';
@@ -8,18 +8,31 @@ import AdministratorNavbar from './Administrator/AdministratorNavbar';
 import AnonymousNavbar from './Anonymous/AnonymousNavbar';
 import QuestNavbar from './Quest/QuestNavbar';
 import SecretaryNavbar from './Secretary/SecretaryNavbar';
-
-
+import classes from "./AppRouter.module.css";
 
 const AppRouter: FC = () => {
     const [role, setRole] = useState(Roles.None)
+    const [isLoadingRole, setIsLoadingRole] = useState(true)
 
     useEffect(() => {
         const storageRole = localStorage.getItem('role');
         if (storageRole) {
             setRole(storageRole as Roles);
         }
+        setTimeout(() => {
+            setIsLoadingRole(false)
+        }, 1000)
     }, [])
+
+    if (isLoadingRole) {
+        return (
+            <div>
+                <Spin tip="Loading" size="large">
+                    <div className={classes.Content} />
+                </Spin>
+            </div>
+        )
+    }
 
     if (role === Roles.Administrator) {
         return (

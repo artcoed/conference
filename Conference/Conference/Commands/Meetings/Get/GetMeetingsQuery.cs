@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Conference.Commands.Meetings.Get
 {
-    public record GetMeetingsQuery : IRequest<Result<IReadOnlyList<Meeting>>>
+    public record GetMeetingsQuery : IRequest<Result<IReadOnlyList<MeetingDto>>>
     {
     }
 }
