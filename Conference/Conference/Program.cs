@@ -19,8 +19,9 @@ using Conference.Database.Repository.Roles;
 using System.Text.Json.Serialization;
 using Conference.Database.Repository.Notifications;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+const string corsPolicy = "CorsPolicy";
 
 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
@@ -29,19 +30,6 @@ var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
 {
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy(name: MyAllowSpecificOrigins,
-                          policy =>
-                          {
-                              policy.WithOrigins("http://127.0.0.1:7081",
-                                              "http://localhost:7081",
-                                              "https://localhost:7081",
-                                              "https://127.0.0.1:7081",
-                                              "*");
-                          });
-    });
-
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(x
             => x.TokenValidationParameters = new TokenValidationParameters
@@ -55,6 +43,14 @@ var config = builder.Configuration;
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true
             });
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(corsPolicy,
+            builder => builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+    });
 
     builder.Services.AddAuthorization(options =>
     {
@@ -117,7 +113,6 @@ var config = builder.Configuration;
 var app = builder.Build();
 
 {
-    app.UseCors(MyAllowSpecificOrigins);
 
     app.UseCustomExceptionsHandlerMiddleware();
 
@@ -130,6 +125,9 @@ var app = builder.Build();
     app.UseHttpsRedirection();
 
     app.UseAuthentication();
+    
+    app.UseCors(corsPolicy);
+
     app.UseAuthorization();
 
     app.MapControllers();

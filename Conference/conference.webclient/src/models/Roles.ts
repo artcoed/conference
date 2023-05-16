@@ -1,6 +1,7 @@
 export enum Roles {
-    Administrator = "Administrator",
-    Secretary = "Secretary",
-    Worker = "Worker",
-    Quest = "Quest",
+    Administrator = "administrator",
+    Secretary = "secretary",
+    Worker = "worker",
+    Quest = "quest",
+    None = ""
 }

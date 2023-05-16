@@ -1,9 +1,9 @@
 import { Layout } from 'antd';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useTypedSelector } from '../hooks/useTypedSelector';
 import { Roles } from '../models/Roles';
-import { administratorRoutes, PathNames, publicRoutes, questRoutes, secretaryRoutes } from '../routes';
+import Login from '../pages/Login';
+import { administratorRoutes, PathNames, questRoutes, secretaryRoutes } from '../routes';
 import AdministratorNavbar from './Administrator/AdministratorNavbar';
 import AnonymousNavbar from './Anonymous/AnonymousNavbar';
 import QuestNavbar from './Quest/QuestNavbar';
@@ -12,12 +12,19 @@ import SecretaryNavbar from './Secretary/SecretaryNavbar';
 
 
 const AppRouter: FC = () => {
-    const { role } = useTypedSelector(state => state.auth);
+    const [role, setRole] = useState(Roles.None)
+
+    useEffect(() => {
+        const storageRole = localStorage.getItem('role');
+        if (storageRole) {
+            setRole(storageRole as Roles);
+        }
+    }, [])
 
     if (role === Roles.Administrator) {
         return (
             <>
-                <AdministratorNavbar />
+                <AdministratorNavbar setRole={setRole} />
                 <Layout.Content>
                     <Routes>
                         {administratorRoutes.map(route =>
@@ -33,7 +40,7 @@ const AppRouter: FC = () => {
     if (role === Roles.Secretary) {
         return (
             <>
-                <SecretaryNavbar />
+                <SecretaryNavbar setRole={setRole} />
                 <Layout.Content>
                     <Routes>
                         {secretaryRoutes.map(route =>
@@ -49,7 +56,7 @@ const AppRouter: FC = () => {
     if (role === Roles.Quest) {
         return (
             <>
-                <QuestNavbar />
+                <QuestNavbar setRole={setRole} />
                 <Layout.Content>
                     <Routes>
                         {questRoutes.map(route =>
@@ -67,9 +74,7 @@ const AppRouter: FC = () => {
             <AnonymousNavbar />
             <Layout.Content>
                 <Routes>
-                    {publicRoutes.map(route =>
-                        <Route path={route.path} element={route.component} key={route.path} />
-                    )}
+                    <Route path={PathNames.LOGIN} element={<Login setRole={setRole} />} />
                     <Route path={PathNames.ALL} element={<Navigate to={PathNames.LOGIN} />} />
                 </Routes>
             </Layout.Content>

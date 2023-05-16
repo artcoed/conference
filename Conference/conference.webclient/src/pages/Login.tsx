@@ -1,21 +1,41 @@
 import { Button, Form, Input } from 'antd';
 import React, { FC, useState } from 'react';
-import { useAppDispatch } from '../hooks/useAppDispatch';
-import { useTypedSelector } from '../hooks/useTypedSelector';
-import { store } from '../store';
-import { AuthActionCreators } from '../store/reducers/auth/action-creators';
+import $api from '../http';
+import { AuthResponse } from '../models/response/AuthResponse';
+import { Roles } from '../models/Roles';
 import classes from "./Login.module.css";
 
-const Login: FC = () => {
-    const dispatch = useAppDispatch()
+interface ILoginErrorMessage {
+    message: string;
+}
 
+interface ILoginError {
+    response: {
+        data: ILoginErrorMessage[];
+    }
+}
+
+const Login: FC<{setRole: (role: Roles) => void}> = ({setRole}) => {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
-    const { error, isLoading } = useTypedSelector(state => state.auth);
+    const [error, setError] = useState(''); 
+    const [isLoading, setIsLoading] = useState(false)
 
-    const submit = () => {
-        AuthActionCreators.doLogin(login, password)
-        
+    const submit = async () => {
+        setIsLoading(true)
+        try {
+            const response = await $api.post<AuthResponse>("Users/LoginUser", { login, password });
+            setError('')
+
+            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('role', response.data.role)
+            setRole(response.data.role as Roles)
+
+        } catch (e) {
+            const error: ILoginError = e as ILoginError;
+            setError(error.response.data[0].message)
+        }
+        setIsLoading(false)
     }
 
     return (

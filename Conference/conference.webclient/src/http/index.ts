@@ -1,9 +1,8 @@
 import axios from "axios";
 
-export const BASE_URL = "https://localhost:7001/api";
+export const BASE_URL = "https://localhost:7081/api";
 
 const $api = axios.create({
-    withCredentials: true,
     baseURL: BASE_URL
 })
 

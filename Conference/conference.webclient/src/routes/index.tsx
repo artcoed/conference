@@ -47,8 +47,3 @@ export const questRoutes: IRoute[] = [
     { path: PathNames.ACCOUNT, component: <QuestAccount /> },
     { path: PathNames.MEETING, component: <QuestMeeting/> }
 ]
-
-export const publicRoutes: IRoute[] = [
-    { path: PathNames.LOGIN, component: <Login/> }
-]
-
