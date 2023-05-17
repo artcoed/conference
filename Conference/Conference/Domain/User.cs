@@ -5,7 +5,6 @@ namespace Conference.Domain
     public class User
     {
         public int Id { get; set; }
-        [JsonIgnore]
         public string Login { get; set; }
         [JsonIgnore]
         public string Password { get; set; }

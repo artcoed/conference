@@ -4,10 +4,7 @@ import React, { FC } from 'react';
 const CreateQuestForm: FC = () => {
     return (
         <Form>
-            <Input placeholder="login" />
-            <Input placeholder="password" />
-            <Input placeholder="name" />
-            <Button>Create quest</Button>
+            
         </Form>
     );
 };

@@ -7,7 +7,7 @@ import $api from '../../http';
 import { GetReportPath } from '../../routes';
 moment.locale('ru')
 
-interface IAdministratorReportResponse {
+export interface IAdministratorReportResponse {
     id: number,
     title: string,
     startDateTime: Date,
@@ -15,7 +15,7 @@ interface IAdministratorReportResponse {
     hasCompleted: boolean
 }
 
-interface IAdministratorReportsResponse {
+export interface IAdministratorReportsResponse {
     data: IAdministratorReportResponse[]
 }
 

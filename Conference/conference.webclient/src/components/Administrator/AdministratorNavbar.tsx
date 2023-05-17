@@ -19,7 +19,7 @@ const AdministratorNavbar: FC<{ setRole: (role: Roles) => void }> = ({ setRole }
                     },
                     {
                         key: 2,
-                        label: 'Совещания',
+                        label: 'Отчеты',
                         onClick: () => navigate(PathNames.MEETINGS)
                     },
                     {
