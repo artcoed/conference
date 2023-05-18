@@ -7,6 +7,7 @@ namespace Conference.Commands.Meetings.Create
         public CreateMeetingCommandValidator()
         {
             RuleFor(x => x.Questions)
+                .Must(x => x != null)
                 .Must(x => x.Count > 0)
                 .ForEach(q =>
                     q.Length(2, 70));
@@ -14,9 +15,6 @@ namespace Conference.Commands.Meetings.Create
             RuleFor(x => x.UsersId)
                 .Must(x => x.Count > 0);
             
-            RuleFor(x => x.Documents)
-                .ForEach(q => q.MinimumLength(3));
-
             RuleFor(x => x.Title)
                 .Length(3, 50);
         }

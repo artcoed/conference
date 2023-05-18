@@ -18,13 +18,13 @@ interface IUsersCreateResponseErrorMessage {
     message: string
 } 
 
-interface IUsersCreateResponseError {
+export interface IUsersCreateResponseError {
     response: {
         data: IUsersCreateResponseErrorMessage[]
     }
 }
 
-interface IUsersListSuccessResponse {
+export interface IUsersListSuccessResponse {
     data: IUserListRequest[]
 }
 

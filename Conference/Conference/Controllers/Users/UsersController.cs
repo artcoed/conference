@@ -2,6 +2,7 @@
 using Conference.Commands.Users.CreateQuest;
 using Conference.Commands.Users.Delete;
 using Conference.Commands.Users.Get;
+using Conference.Commands.Users.GetCanInvite;
 using Conference.Commands.Users.Login;
 using Conference.Services.Roles;
 using MediatR;
@@ -27,6 +28,16 @@ namespace Conference.Controllers.Users
         public async Task<IActionResult> GetUsersAsync([FromQuery] GetUsersQuery getUsersQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getUsersQuery, cancellationToken));
+        }
+
+        /// <summary>
+        /// Get users list for invite
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = RolesConstants.Secretary)]
+        public async Task<IActionResult> GetCanInviteUsersAsync([FromQuery] GetCanInviteUsersQuery getCanInviteUsersQuery, CancellationToken cancellationToken)
+        {
+            return ConvertToActionResult(await _mediator.Send(getCanInviteUsersQuery, cancellationToken));
         }
 
         /// <summary>

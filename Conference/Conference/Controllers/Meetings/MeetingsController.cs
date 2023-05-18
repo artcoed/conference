@@ -1,6 +1,7 @@
 ﻿using Conference.Commands.Meetings.Complete;
 using Conference.Commands.Meetings.Create;
 using Conference.Commands.Meetings.Get;
+using Conference.Commands.Meetings.GetById;
 using Conference.Commands.Meetings.GetByInvitedUser;
 using Conference.Services.Roles;
 using MediatR;
@@ -56,6 +57,13 @@ namespace Conference.Controllers.Meetings
         public async Task<IActionResult> GetByInvitedUserMeetingsAsync([FromQuery] GetByInvitedUserMeetingsQuery getByInvitedUserMeetingsQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getByInvitedUserMeetingsQuery, cancellationToken));
+        }
+
+        [HttpGet]
+        [Authorize(Policy = RolesConstants.Secretary)]
+        public async Task<IActionResult> GetByIdMeetingAsync([FromQuery] GetByIdMeetingQuery getByIdMeetingQuery, CancellationToken cancellationToken)
+        {
+            return ConvertToActionResult(await _mediator.Send(getByIdMeetingQuery, cancellationToken));
         }
     }
 }

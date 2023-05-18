@@ -30,7 +30,7 @@ namespace Conference.Commands.Meetings.Create
                 StartDate = request.StartMeetingDateTime.Date,
                 StartTime = request.StartMeetingDateTime.TimeOfDay,
                 Questions = request.Questions.Select(x => new Question { Value = x }).ToList(),
-                Documents = request.Documents.Select(x => new Document { Value = x }).ToList(),
+                Documents = request.Documents.Select(x => new Document { Value = x.Source, Name = x.Name }).ToList(),
                 Users = users
             };
 

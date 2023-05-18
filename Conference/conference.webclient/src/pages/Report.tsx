@@ -6,29 +6,29 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 import $api from '../http';
 import classes from "./Report.module.css";
 
-type ReportParams = {
+export type ReportParams = {
     id: string;
 };
 
-interface IReportVoteResponse {
+export interface IReportVoteResponse {
     id: number,
     value: string,
     users: IReportUserResponse[]
 }
 
-interface IReportUserResponse {
+export interface IReportUserResponse {
     id: number,
     login: string,
     displayingName: string
 }
 
-interface IReportNoteResponse {
+export interface IReportNoteResponse {
     id: number,
     value: string,
     user: IReportUserResponse 
 }
 
-interface IReport {
+export interface IReport {
     id: number,
     meetingTitle: string,
     meetingCompleted: boolean,
@@ -43,11 +43,11 @@ interface IReport {
     votes: IReportVoteResponse[]
 }
 
-interface IReportResponse {
+export interface IReportResponse {
     data: IReport
 }
 
-interface IGraphDataElement {
+export interface IGraphDataElement {
     name: string,
     pv: number
 }

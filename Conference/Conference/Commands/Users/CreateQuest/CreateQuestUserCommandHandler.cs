@@ -27,6 +27,7 @@ namespace Conference.Commands.Users.CreateQuest
 
             var user = new User
             {
+                DisplayingName = request.Name,
                 Login = request.Login,
                 Password = request.Password,
                 Role = questRoleResult.Value

@@ -1,31 +1,12 @@
 import { Button, List } from 'antd';
 import moment from 'moment';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import $api from '../../http';
-import { IAdministratorReportResponse, IAdministratorReportsResponse } from '../../pages/Administrator/AdministratorMeetings';
+import { IAdministratorReportResponse} from '../../pages/Administrator/AdministratorMeetings';
 import { GetMeetingPath } from '../../routes';
-import classes from "./MeetingsList.module.css";
 
-const MeetingsList: FC = () => {
+const MeetingsList: FC<{ meetings: IAdministratorReportResponse[], isLoading: boolean }> = ({ meetings, isLoading }) => {
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true)
-
-    const [meetings, setMeetings] = useState([] as IAdministratorReportResponse[])
-
-    useEffect(() => {
-        updateMeetingsList();
-    }, [])
-
-    const updateMeetingsList = async () => {
-        setIsLoading(true)
-        try {
-            const response = await $api.get("Meetings/GetMeetings") as IAdministratorReportsResponse;
-            setMeetings(response.data)
-        } catch (e) {
-        }
-        setIsLoading(false)
-    }
 
     return (
         <div

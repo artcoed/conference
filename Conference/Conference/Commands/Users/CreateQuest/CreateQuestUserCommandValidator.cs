@@ -11,6 +11,9 @@ namespace Conference.Commands.Users.CreateQuest
 
             RuleFor(x => x.Password)
                 .Length(3, 50);
+
+            RuleFor(x => x.Password)
+                .Length(3, 50);
         }
     }
 }

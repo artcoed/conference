@@ -7,5 +7,6 @@ namespace Conference.Commands.Users.CreateQuest
     {
         public string Login { get; init; }
         public string Password { get; init; }
+        public string Name { get; init; }
     }
 }

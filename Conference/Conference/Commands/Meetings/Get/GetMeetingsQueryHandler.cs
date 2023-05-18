@@ -1,5 +1,4 @@
 ﻿using Conference.Database.UnitOfWork;
-using Conference.Domain;
 using FluentResults;
 using MediatR;
 
