@@ -54,6 +54,7 @@ const AdministratorMeetings: FC = () => {
                             marginTop: "20px"
                         }}>
                         <List
+                            locale={{emptyText: "Отчетов нет"} }
                             loading={isLoading}
                             dataSource={meetings}
                             renderItem={(meeting) => (
