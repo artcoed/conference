@@ -12,5 +12,7 @@ namespace Conference.Domain
         public Role Role { get; set; }
         public List<Meeting> Meetings { get; set; }
         public bool IsDeleted { get; set; }
+        public List<Vote> Votes { get; set; }
+        public List<Note> Notes { get; set; }
     }
 }
