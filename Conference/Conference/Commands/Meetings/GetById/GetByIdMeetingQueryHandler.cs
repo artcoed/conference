@@ -23,54 +23,19 @@ namespace Conference.Commands.Meetings.GetById
 
             var meeting = meetingResult.Value;
 
-            if (meeting.HasCompleted == false)
-                return Result.Fail("Совещание еще не завершено");
-
-            var votes = new List<VoteDto>();
-            foreach (var option in meeting.Options)
+            var meetingDto = new MeetingDto
             {
-                votes.Add(new VoteDto { Id = option.Id, Value = option.Value, Users = new List<User>() });
-            }
-
-            foreach (var vote in meeting.Votes)
-            {
-                foreach (var voteDto in votes)
-                {
-                    if (vote.Option.Id == voteDto.Id)
-                    {
-                        voteDto.Users.Add(vote.User);
-                        vote.User.Meetings = new List<Meeting>();
-                    }
-                }
-            }
-
-            var meetingDto = new MeetingDto();
-
-            var reportDto = new ReportDto
-            {
-                Id = request.MeetingId,
-                MeetingTitle = meeting.Title,
-                MeetingCompleted = meeting.HasCompleted,
-                StartDateTime = meeting.StartDateTime,
-                EndDateTime = meeting.EndDateTime,
+                Id = meeting.Id,
                 Decisions = meeting.Decisions.Select(x => x.Value).ToList(),
-                Notes = meeting.Notes,
                 Questions = meeting.Questions.Select(x => x.Value).ToList(),
-                Users = meeting.Users,
+                EndDateTime = meeting.EndDateTime,
+                HasCompleted = meeting.HasCompleted,
                 HasVoting = meeting.HasVoting,
-                VotingTitle = meeting.VotingTitle,
-                Votes = votes
+                MeetingTitle = meeting.Title,
+                StartDateTime = meeting.StartDateTime,
+                VotingOptions = meeting.Options.Select(x => x.Value).ToList(),
+                VotingTitle = meeting.VotingTitle
             };
-
-            foreach (var report in reportDto.Notes)
-            {
-                report.User.Meetings = new List<Meeting>();
-            }
-
-            foreach (var user in reportDto.Users)
-            {
-                user.Meetings = new List<Meeting>();
-            }
 
             return Result.Ok(meetingDto);
         }

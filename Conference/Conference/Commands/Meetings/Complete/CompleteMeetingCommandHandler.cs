@@ -28,6 +28,8 @@ namespace Conference.Commands.Meetings.Complete
             meeting.EndDate = date.Date;
             meeting.EndTime = date.TimeOfDay;
 
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             return Result.Ok();
         }
     }

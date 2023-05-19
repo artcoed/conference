@@ -11,75 +11,54 @@ type SecretaryMeetingParams = {
     id: string;
 };
 
-export interface IMeetingVoteResponse {
-    id: number,
-    value: string,
-    users: IMeetingUserResponse[]
-}
-
-export interface IMeetingUserResponse {
-    id: number,
-    login: string,
-    displayingName: string
-}
-
-export interface IMeetingNoteResponse {
-    id: number,
-    value: string,
-    user: IMeetingUserResponse
-}
-
 export interface IMeeting {
     id: number,
     meetingTitle: string,
-    meetingCompleted: boolean,
+    hasCompleted: boolean,
     startDateTime: Date,
     endDateTime: Date,
-    decisions: string[],
-    notes: IMeetingNoteResponse[],
     questions: string[],
-    users: IMeetingUserResponse[],
+    decisions: string[],
     hasVoting: boolean,
     votingTitle: string
-    votes: IMeetingVoteResponse[],
-    hasCompleted: boolean
+    votingOptions: string[],
 }
 
 export interface IMeetingResponse {
     data: IMeeting
 }
 
-export interface IGraphDataElement {
-    name: string,
-    pv: number
+interface IErrorCreateDecisionMessage {
+    message: string
+}
+
+interface IErrorCreateDecision {
+    response: {
+        data: IErrorCreateDecisionMessage[]
+    }
 }
 
 const SecretaryMeeting: FC = () => {
     const { id } = useParams<SecretaryMeetingParams>();
 
-    const [report, setReport] = useState({} as IMeeting);
-    const [graphData, setGraphData] = useState([] as IGraphDataElement[]);
+    const [meeting, setMeeting] = useState({} as IMeeting);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingCreateDecision, setIsLoadingCreateDecision] = useState(false);
+    const [inputVotingTitle, setInputVotingTitle] = useState('')
+    const [inputOption, setInputOption] = useState('')
+    const [isCreatingVotingLoading, setIsCreatingVotingLoading] = useState(false)
+    const [isCompleteLoading, setIsCompleteLoading] = useState(false)
 
     const [inputDecision, setInputDecision] = useState('')
     const [messageApi, contextHolder] = message.useMessage();
 
-    const updateReport = async () => {
+    const updateMeeting = async () => {
         setIsLoading(true)
         try {
             const response = await $api.get(`Meetings/GetByIdMeeting?meetingId=${id}`) as IMeetingResponse;
-            console.log(response)
-            setReport(response.data)
-            if (report.votes) {
-                const newGraphData = [] as IGraphDataElement[];
-                for (let i = 0; i < report.votes.length; i++) {
-                    if (report.votes[i].users) {
-                        newGraphData.push({ name: report.votes[i].value, pv: report.votes[i].users.length })
-                    }
-                }
-                setGraphData(newGraphData)
-            }
+            setMeeting(response.data)
         } catch (e) {
+            console.log(e)
         }
         setIsLoading(false)
     }
@@ -98,151 +77,209 @@ const SecretaryMeeting: FC = () => {
         });
     };
 
-    const addDecisionInList = () => {
-        setInputDecision(inputDecision.trim())
+    const addDecisionInList = async () => {
+        const trimmedInput = inputDecision.trim()
 
-        if (inputDecision.length < 2 || inputDecision.length > 100) {
+        if (trimmedInput.length < 2 || trimmedInput.length > 100) {
             error("Длина вопроса должна быть от 2 до 100 символов")
             return;
         }
 
-        setInputDecision('')
+        setIsLoadingCreateDecision(true);
+
+        try {
+            await $api.post("Decisions/CreateDecision", { meetingId: meeting.id, content: trimmedInput });
+            setMeeting({ ...meeting, decisions: [...meeting.decisions, trimmedInput] })
+            setInputDecision('')
+            success("Решение успешно добавлено")
+        } catch (e) {
+            const err = e as IErrorCreateDecision;
+            if (err.response) {
+                error(err.response.data[0].message);
+            }
+        }
+
+        setIsLoadingCreateDecision(false);
+    }
+
+    const addOptionInList = () => {
+        const trimOption = inputOption.trim()
+        if (trimOption.length < 1 || trimOption.length > 50) {
+            error("Вариант голосования должен содержать от 1 до 50 символов")
+            return;
+        }
+
+        if (meeting.votingOptions.includes(trimOption)) {
+            error("Нельзя создать одинаковые варианты голосования")
+            return;
+        }
+
+        setMeeting({ ...meeting, votingOptions: [...meeting.votingOptions, trimOption] })
+        setInputOption('')
+    }
+
+    const createVoting = async () => {
+        const trimTitle = inputVotingTitle.trim()
+        if (trimTitle.length < 3 || trimTitle.length > 100) {
+            error("Заголовок голосования должен содержать от 3 до 100 символов")
+            return;
+        }
+
+        if (meeting.votingOptions.length < 2 || meeting.votingOptions.length > 8) {
+            error("Голосование должно содержать от 2 до 8 вариантов голосования")
+            return;
+        }
+
+        setIsCreatingVotingLoading(true);
+
+        try {
+            await $api.post("Votings/CreateVoting", { meetingId: meeting.id, title: trimTitle, options: meeting.votingOptions });
+            meeting.votingTitle = trimTitle
+            meeting.hasVoting = true;
+            success("Голосование успешно добавлено")
+        } catch (e) {
+            const err = e as IErrorCreateDecision
+            if (err.response) {
+                error(err.response.data[0].message)
+            }
+        }
+
+        setIsCreatingVotingLoading(false);
+    }
+
+    const completeMeeting = async () => {
+        setIsCompleteLoading(true)
+        try {
+            await $api.post("Meetings/CompleteMeeting", { meetingId: meeting.id })
+            success("Совещание успешно завершено")
+            updateMeeting()
+        } catch (e) {
+            console.log(e)
+            const err = e as IErrorCreateDecision
+            if (err.response) {
+                error(err.response.data[0].message);
+            }
+        }
+        setIsCompleteLoading(false)
     }
 
     useEffect(() => {
-        updateReport();
+        updateMeeting();
     }, [])
 
-    if (isLoading) {
-        return (
-            <div>
-                <Spin tip="Loading" size="large">
-                    <div className={classes.Content} />
-                </Spin>
-            </div>
-        )
-    }
-
     return (
-        <div style={{ display: "flex", "justifyContent": "center" }} >
-            {contextHolder}
-            <div style={{ width: "1200px", minHeight: "calc(100vh - 64px)" }}>
-                <h1 style={{ fontSize: "28px", textAlign: "center", marginTop: "10px" }}>Отчет</h1>
-                <Descriptions title="Основная информация" layout="horizontal" style={{ marginTop: "10px" }}>
-                    <Descriptions.Item label="Тема">{report.meetingTitle}</Descriptions.Item>
-                    <Descriptions.Item label="Начато">{moment(report.startDateTime).format("lll")}</Descriptions.Item>
-                    {
-                        report.hasCompleted &&
-                        <Descriptions.Item label="Завершено">{moment(report.endDateTime).format("lll")}</Descriptions.Item>
-                    }
-                    <Descriptions.Item label="Наличие голосования">{report.hasVoting ? "Существует" : "Не сущeствует"}</Descriptions.Item>
-                    <Descriptions.Item label="Количество участников">{report.users ? report.users.length : 0}</Descriptions.Item>
-                </Descriptions>
-
-                <div className={classes.List}>
-                    <List
-                        locale={{ emptyText: "Вопросы отсутствуют" }}
-                        size="small"
-                        header={<div>Вопросы</div>}
-                        dataSource={report.questions}
-                        renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
-                    />
+        <>
+        {contextHolder}
+        {
+            isLoading &&
+                <div>
+                    <Spin tip="Loading" size="large">
+                        <div className={classes.Content} />
+                    </Spin>
                 </div>
+        }
+        {!isLoading &&
+                <div style={{ display: "flex", "justifyContent": "center" }} >
+                    <div style={{ width: "1200px", minHeight: "calc(100vh - 64px)" }}>
+                        <h1 style={{ fontSize: "28px", textAlign: "center", marginTop: "10px" }}>Отчет</h1>
+                        <Descriptions title="Основная информация" layout="horizontal" style={{ marginTop: "10px" }}>
+                            <Descriptions.Item label="Тема">{meeting.meetingTitle}</Descriptions.Item>
+                            <Descriptions.Item label="Начато">{moment(meeting.startDateTime).format("lll")}</Descriptions.Item>
+                            {
+                                meeting.hasCompleted &&
+                                <Descriptions.Item label="Завершено">{moment(meeting.endDateTime).format("lll")}</Descriptions.Item>
+                            }
+                            <Descriptions.Item label="Наличие голосования">{meeting.hasVoting ? "Существует" : "Не сущeствует"}</Descriptions.Item>
+                        </Descriptions>
 
-                <div className={classes.List}>
-                    <List
-                        locale={{ emptyText: "Решения отсутствуют" }}
-                        size="small"
-                        header={<div>Решения</div>}
-                        dataSource={report.decisions}
-                        renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
-                        footer={
-                            <>
-                                <Form.Item style={{ display: "inline-block", width: "75%" }}>
-                                    <Input value={inputDecision} onChange={e => setInputDecision(e.target.value)} placeholder="Введите вопрос для совещания" />
-                                </Form.Item>
-                                <Form.Item style={{ display: "inline-block", width: "25%" }}>
-                                    <Row justify="end">
-                                        <Button onClick={addDecisionInList}>Добавить</Button>
-                                    </Row>
-                                </Form.Item>
-                            </>
-                        }
-                    />
-                </div>
-
-                {report.hasVoting ?
-                    <>
-                        <p style={{ marginTop: "20px", textAlign: "center" }}>Тема: {report.votingTitle}</p>
-                        <div style={{ height: "350px", marginTop: "10px" }}>
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    width={500}
-                                    height={300}
-                                    data={graphData}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                    maxBarSize={100}
-                                >
-                                    <XAxis dataKey="name" scale="point" padding={{ left: 50, right: 50 }} />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <Bar dataKey="pv" name="Проголосовало" fill="#8884d8" background={{ fill: '#eee' }} />
-                                </BarChart>
-                            </ResponsiveContainer>
+                        <div className={classes.List}>
+                            <List
+                                locale={{ emptyText: "Вопросы отсутствуют" }}
+                                size="small"
+                                header={<div>Вопросы</div>}
+                                dataSource={meeting.questions}
+                                renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
+                            />
                         </div>
-                    </>
-                    :
-                    <div style={{marginTop: "20px"}}>
-                        <p style={{ textAlign: "center", fontSize: "16px" }}>Добавления голосования</p>
-                        <Row justify="center">
-                            <Form style={{ marginTop: "10px", width: "650px" }}>
-                                <Form.Item label="Заголовок">
-                                    <Input placeholder="Введите заголовок голосования" />
-                                </Form.Item>
-                                <Form.Item>
-                                        <List
-                                            locale={{ emptyText: "Варианты голосования отсутствуют" }}
-                                            size="small"
-                                            header={<div>Варианты голосования</div>}
-                                            dataSource={report.decisions}
-                                            renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
-                                            footer={
-                                                <>
-                                                    <Form.Item style={{ display: "inline-block", width: "75%" }}>
-                                                        <Input value={inputDecision} onChange={e => setInputDecision(e.target.value)} placeholder="Введите вариант голосования" />
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: "inline-block", width: "25%" }}>
-                                                        <Row justify="end">
-                                                            <Button onClick={addDecisionInList}>Добавить</Button>
-                                                        </Row>
-                                                    </Form.Item>
-                                                </>
-                                            }
-                                        />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Row justify="start">
-                                        <Button>Добавить голосование</Button>
-                                    </Row>
-                                </Form.Item>
-                            </Form>
-                        </Row>
+
+                        <div className={classes.List}>
+                            <List
+                                locale={{ emptyText: "Решения отсутствуют" }}
+                                size="small"
+                                header={<div>Решения</div>}
+                                dataSource={meeting.decisions}
+                                renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
+                                footer={
+                                    <>
+                                        {!meeting.hasCompleted &&
+                                            <>
+                                                <Form.Item style={{ display: "inline-block", width: "75%" }}>
+                                                    <Input value={inputDecision} onChange={e => setInputDecision(e.target.value)} placeholder="Введите вопрос для совещания" />
+                                                </Form.Item>
+                                                <Form.Item style={{ display: "inline-block", width: "25%" }}>
+                                                    <Row justify="end">
+                                                        <Button loading={isLoadingCreateDecision} onClick={addDecisionInList}>Добавить</Button>
+                                                    </Row>
+                                                </Form.Item>
+                                            </>}
+                                    </>
+                                }
+                            />
+                        </div>
+
+                        {(!meeting.hasCompleted || meeting.hasVoting) &&
+                            <div style={{ marginTop: "20px" }}>
+                                {!meeting.hasVoting && !meeting.hasCompleted && <p style={{ textAlign: "center", fontSize: "16px" }}>Добавления голосования</p>}
+                                <Row justify="center">
+                                    <Form style={{ marginTop: "10px", width: "650px" }}>
+                                        {!meeting.hasVoting && !meeting.hasCompleted && <Form.Item label="Заголовок">
+                                            <Input value={inputVotingTitle} onChange={e => setInputVotingTitle(e.target.value)} placeholder="Введите заголовок голосования" />
+                                        </Form.Item>}
+                                        {meeting.hasVoting && <p style={{ fontSize: "16px", textAlign: "center" }}>{meeting.votingTitle}</p>}
+                                        <div className={classes.List} style={{ marginBottom: "20px" }}>
+                                            <List
+                                                locale={{ emptyText: "Варианты голосования отсутствуют" }}
+                                                size="small"
+                                                header={<div>Варианты голосования</div>}
+                                                dataSource={meeting.votingOptions}
+                                                renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
+                                                footer={
+                                                    <>
+                                                        {!meeting.hasVoting && !meeting.hasCompleted &&
+                                                            <>
+                                                                <Form.Item style={{ display: "inline-block", width: "75%" }}>
+                                                                    <Input value={inputOption} onChange={e => setInputOption(e.target.value)} placeholder="Введите вариант голосования" />
+                                                                </Form.Item>
+                                                                <Form.Item style={{ display: "inline-block", width: "25%" }}>
+                                                                    <Row justify="end">
+                                                                        <Button onClick={addOptionInList}>Добавить</Button>
+                                                                    </Row>
+                                                                </Form.Item>
+                                                            </>
+                                                        }
+                                                    </>
+                                                }
+                                            />
+                                        </div>
+                                        {!meeting.hasVoting && !meeting.hasCompleted && <Form.Item>
+                                            <Row justify="start">
+                                                <Button loading={isCreatingVotingLoading} onClick={createVoting}>Добавить голосование</Button>
+                                            </Row>
+                                        </Form.Item>}
+                                    </Form>
+                                </Row>
+                            </div>}
+                        {!meeting.hasCompleted &&
+                            <Row justify="end" style={{ marginTop: "50px" }}>
+                                <Button loading={isCompleteLoading} onClick={completeMeeting}>Завершить совещание</Button>
+                            </Row>
+                        }
+
+                        <div className={classes.Footer}></div>
                     </div>
-                }
-
-                <Row justify="end" style={{marginTop: "50px"}}>
-                    <Button>Завершить совещание</Button>
-                </Row>
-
-                <div className={classes.Footer}></div>
-            </div>
-        </div>
+                </div>    
+        }
+        </>
     )
 };
 

@@ -25,6 +25,12 @@ namespace Conference.Commands.Decisions.Create
             if (meeting.HasCompleted)
                 return Result.Fail("Совещание уже было завершено");
 
+            foreach (var a in meetingResult.Value.Decisions)
+            {
+                if (a.Value == request.Content)
+                    return Result.Fail("Нельзя создать одинаковые решения");
+            }
+
             meetingResult.Value.Decisions.Add(new Decision
             {
                 Value = request.Content
