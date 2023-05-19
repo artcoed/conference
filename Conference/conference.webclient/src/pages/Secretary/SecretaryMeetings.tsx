@@ -23,7 +23,7 @@ interface IDocumentRequest {
 
 export interface ICreateMeetingRequest {
     title: string,
-    startDateTime: Date,
+    startMeetingDateTime: Date,
     questions: string[],
     documents: IDocumentRequest[],
     usersId: number[]
@@ -186,7 +186,7 @@ const SecretaryMeetings: FC = () => {
             const response = await $api.post("Meetings/CreateMeeting", {
                 documents,
                 questions,
-                startDateTime: dateTime,
+                startMeetingDateTime: dateTime,
                 title,
                 usersId: usersId
             } as ICreateMeetingRequest);

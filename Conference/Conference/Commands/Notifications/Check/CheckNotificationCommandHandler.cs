@@ -36,6 +36,8 @@ namespace Conference.Commands.Notifications.Check
 
             notification.IsChecked = true;
 
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
             return Result.Ok();
         }
     }

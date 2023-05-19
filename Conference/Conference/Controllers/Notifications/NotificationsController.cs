@@ -19,7 +19,7 @@ namespace Conference.Controllers.Notifications
         /// <summary>
         /// Check notification
         /// </summary>
-        [HttpGet]
+        [HttpPost]
         [Authorize(Policy = RolesConstants.Quest)]
         public async Task<IActionResult> CheckNotificationAsync(CheckNotificationCommand checkNotificationCommand, CancellationToken cancellationToken)
         {

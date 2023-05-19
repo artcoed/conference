@@ -57,13 +57,6 @@ namespace Conference.Database.Repository.Meetings
         {
             IReadOnlyList<Meeting> meetings = await _entityFrameworkContext.Meetings
                 .Where(x => x.Users.Any(u => u.Id == id))
-                .Include(x => x.Questions)
-                .Include(x => x.Documents)
-                .Include(x => x.Notes)
-                .Include(x => x.Decisions)
-                .Include(x => x.Users)
-                .Include(x => x.Options)
-                .Include(x => x.Votes)
                 .ToListAsync(cancellationToken);
 
             if (!meetings.Any())
