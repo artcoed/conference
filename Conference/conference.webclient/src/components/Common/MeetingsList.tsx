@@ -18,6 +18,7 @@ const MeetingsList: FC<{ meetings: IAdministratorReportResponse[], isLoading: bo
                 marginTop: "20px",
             }}>
             <List
+                locale={{emptyText: "Совещаний нет"}}
                 loading={isLoading}
                 dataSource={meetings}
                 renderItem={(meeting) => (
