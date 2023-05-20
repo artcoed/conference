@@ -64,13 +64,15 @@ const Report: FC = () => {
         try {
             const response = await $api.get(`Reports/GetByMeetingId?meetingId=${id}`) as IReportResponse;
             setReport(response.data)
-            if (report.votes) {
+
+            if (response.data.votes) {
                 const newGraphData = [] as IGraphDataElement[];
-                for (let i = 0; i < report.votes.length; i++) {
-                    if (report.votes[i].users) {
-                        newGraphData.push({ name: report.votes[i].value, pv: report.votes[i].users.length })
+                for (let i = 0; i < response.data.votes.length; i++) {
+                    if (response.data.votes[i].users) {
+                        newGraphData.push({ name: response.data.votes[i].value, pv: response.data.votes[i].users.length })
                     }
                 }
+                
                 setGraphData(newGraphData)
             }
         } catch (e) {
@@ -162,7 +164,7 @@ const Report: FC = () => {
                                     maxBarSize={100}
                                 >
                                     <XAxis dataKey="name" scale="point" padding={{ left: 50, right: 50 }} />
-                                    <YAxis />
+                                    <YAxis scale="point" />
                                     <Tooltip />
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <Bar dataKey="pv" name="Проголосовало" fill="#8884d8" background={{ fill: '#eee' }} />

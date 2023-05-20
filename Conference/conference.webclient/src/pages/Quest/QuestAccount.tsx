@@ -111,22 +111,22 @@ const QuestAccount: FC = () => {
             <Row justify="center">
                 <div style={{ width: "1200px" }}>
                     <h1 style={{ fontSize: "28px", textAlign: "center", marginTop: "10px" }}>Аккаунт</h1>
-                    <p style={{ fontSize: "16px", textAlign: "center", marginTop: "20px" }}>Уведомления</p>
                     <div
                         style={{
                             height: 200,
                             overflow: 'auto',
                             padding: '0 16px',
                             border: '1px solid rgba(140, 140, 140, 0.35)',
-                            marginTop: "10px",
+                            marginTop: "20px",
                         }}>
                         <List
+                            header={"Уведомления"}
                             loading={isLoadingNotifications}
                             dataSource={notifications}
                             locale={{emptyText: "Уведомлений нет"}}
                             renderItem={(notification) => (
                                 <List.Item key={notification.id}
-                                    actions={[<Button key={"Read"} onClick={() => checkNotification(notification.id)}>Прочитать</Button>]}
+                                    actions={[<Button key={"Read"} loading={isLoadingCheckNotification} onClick={() => checkNotification(notification.id)}>Прочитать</Button>]}
                                 >
                                     <List.Item.Meta
                                         title={"Вы были приглашены на совещание по теме: " + notification.meeting.title}
@@ -135,7 +135,6 @@ const QuestAccount: FC = () => {
                             )}
                         />
                     </div>
-                    <p style={{fontSize: "16px", textAlign: "center", marginTop: "20px"}}>Совещания</p>
                     <div
                         style={{
                             height: 400,
@@ -145,6 +144,7 @@ const QuestAccount: FC = () => {
                             marginTop: "10px",
                         }}>
                         <List
+                            header={"Совещания"}
                             loading={isLoadingMeetings}
                             dataSource={meetings}
                             locale={{emptyText: "Совещаний нет"}}

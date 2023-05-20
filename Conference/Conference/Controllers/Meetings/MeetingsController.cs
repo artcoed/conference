@@ -1,8 +1,11 @@
 ﻿using Conference.Commands.Meetings.Complete;
 using Conference.Commands.Meetings.Create;
+using Conference.Commands.Meetings.DownloadFileById;
 using Conference.Commands.Meetings.Get;
 using Conference.Commands.Meetings.GetById;
 using Conference.Commands.Meetings.GetByInvitedUser;
+using Conference.Commands.Meetings.GetForQuestById;
+using Conference.Database.UnitOfWork;
 using Conference.Services.Roles;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +16,12 @@ namespace Conference.Controllers.Meetings
     public class MeetingsController : BaseController
     {
         private readonly IMediator _mediator;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public MeetingsController(IMediator mediator)
+        public MeetingsController(IMediator mediator, IUnitOfWork unitOfWork)
         {
             _mediator = mediator;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -59,11 +64,44 @@ namespace Conference.Controllers.Meetings
             return ConvertToActionResult(await _mediator.Send(getByInvitedUserMeetingsQuery, cancellationToken));
         }
 
+        /// <summary>
+        /// Get secretary meeting data by id
+        /// </summary>
         [HttpGet]
         [Authorize(Policy = RolesConstants.Secretary)]
         public async Task<IActionResult> GetByIdMeetingAsync([FromQuery] GetByIdMeetingQuery getByIdMeetingQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getByIdMeetingQuery, cancellationToken));
+        }
+
+        /// <summary>
+        /// Get quest meeting data by id
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = RolesConstants.Quest)]
+        public async Task<IActionResult> GetForQuestByIdAsync([FromQuery] GetForQuestByIdQuery getForQuestByIdQuery, CancellationToken cancellationToken)
+        {
+            return ConvertToActionResult(await _mediator.Send(getForQuestByIdQuery, cancellationToken));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DownloadFileByIdAsync([FromQuery] DownloadFileByIdQuery downloadFileByIdQuery, CancellationToken cancellationToken)
+        {
+            var documentResult = await _unitOfWork.DocumentsRepository.GetById(downloadFileByIdQuery.DocumentId, cancellationToken);
+
+            if (documentResult.IsFailed)
+                return NotFound();
+
+            var document = documentResult.Value;
+            var mimeType = "application/octet-stream";
+
+            var s = document.Value.Remove(0, 37);
+            var documentBytes = Convert.FromBase64String(s);
+
+            return new FileContentResult(documentBytes, mimeType)
+            {
+                FileDownloadName = document.Name
+            };
         }
     }
 }

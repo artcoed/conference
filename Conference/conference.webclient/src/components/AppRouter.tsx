@@ -66,7 +66,7 @@ const AppRouter: FC = () => {
         );
     }
 
-    if (role === Roles.Quest) {
+    if (role === Roles.Quest || role === Roles.Worker) {
         return (
             <>
                 <QuestNavbar setRole={setRole} />

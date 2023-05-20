@@ -20,6 +20,7 @@ using System.Text.Json.Serialization;
 using Conference.Database.Repository.Notifications;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Conference.Database.Repository.Documents;
 
 const string corsPolicy = "CorsPolicy";
 
@@ -106,13 +107,14 @@ var config = builder.Configuration;
     builder.Services.AddScoped<IUsersService, UsersService>();
 
     builder.Services.AddDbContext<IEntityFrameworkContext, EntityFrameworkContext>(c =>
-        c.UseSqlServer(builder.Configuration
+        c.UseNpgsql(builder.Configuration
             .GetConnectionString("DefaultConnection")));
 
     builder.Services.AddScoped<IMeetingsRepository, MeetingsEntityFrameworkRepository>();
     builder.Services.AddScoped<IUsersRepository, UsersEntityFrameworkRepository>();
     builder.Services.AddScoped<IRolesRepository, RolesEntityFrameworkRepository>();
     builder.Services.AddScoped<INotificationsRepository, NotificationsEntityFrameworkRepository>();
+    builder.Services.AddScoped<IDocumentsRepository, DocumentsEntityFrameworkRepository>();
 
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 }

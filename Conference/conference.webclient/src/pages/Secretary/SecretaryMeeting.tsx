@@ -81,7 +81,7 @@ const SecretaryMeeting: FC = () => {
         const trimmedInput = inputDecision.trim()
 
         if (trimmedInput.length < 2 || trimmedInput.length > 100) {
-            error("Длина вопроса должна быть от 2 до 100 символов")
+            error("Длина решения должна быть от 2 до 100 символов")
             return;
         }
 

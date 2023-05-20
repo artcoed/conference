@@ -24,7 +24,7 @@ namespace Conference.Commands.Meetings.Complete
                 return Result.Fail("Совещание уже было завершено ранее");
 
             meeting.HasCompleted = true;
-            var date = DateTime.Now;
+            var date = DateTime.UtcNow;
             meeting.EndDate = date.Date;
             meeting.EndTime = date.TimeOfDay;
 
