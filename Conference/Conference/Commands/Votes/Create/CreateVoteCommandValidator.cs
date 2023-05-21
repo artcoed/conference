@@ -7,7 +7,8 @@ namespace Conference.Commands.Votes.Create
         public CreateVoteCommandValidator()
         {
             RuleFor(x => x.OptionName)
-                .Length(1, 50);
+                .Length(1, 50)
+                .WithMessage("Длина варианта голосования должна быть от 1 до 50 символов"); ;
         }
     }
 }

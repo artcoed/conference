@@ -7,13 +7,16 @@ namespace Conference.Commands.Users.Create
         public CreateUserCommandValidator()
         {
             RuleFor(x => x.Login)
-                .Length(3, 50);
+                .Length(3, 50)
+                .WithMessage("Длина логина должна быть от 3 до 50 символов");
 
             RuleFor(x => x.Password)
-                .Length(3, 50);
+                .Length(3, 50)
+                .WithMessage("Длина пароля должна быть от 3 до 50 символов");
 
             RuleFor(x => x.Name)
-                .Length(3, 50);
+                .Length(3, 50)
+                .WithMessage("Длина имени должна быть от 3 до 50 символов");
         }
     }
 }

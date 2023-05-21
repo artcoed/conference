@@ -7,7 +7,8 @@ namespace Conference.Commands.Decisions.Create
         public CreateDecisionCommandValidator()
         {
             RuleFor(x => x.Content)
-                .Length(2, 100);
+                .Length(2, 100)
+                .WithMessage("Длина решения должна быть от 2 до 100 символов");
         }
     }
 }

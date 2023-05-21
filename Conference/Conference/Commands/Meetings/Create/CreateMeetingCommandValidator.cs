@@ -10,13 +10,16 @@ namespace Conference.Commands.Meetings.Create
                 .Must(x => x != null)
                 .Must(x => x.Count > 0)
                 .ForEach(q =>
-                    q.Length(2, 70));
+                    q.Length(2, 70))
+                .WithMessage("У совещания должен быть минимум один вопрос. Вопросы должны быть длиной от 2 до 70 символов"); ;
 
             RuleFor(x => x.UsersId)
-                .Must(x => x.Count > 0);
+                .Must(x => x.Count > 0)
+                .WithMessage("На совещание должен быть приглашен минимум 1 пользователь");
             
             RuleFor(x => x.Title)
-                .Length(3, 50);
+                .Length(3, 50)
+                .WithMessage("Тема совещания должна быть длиной от 3 до 50 символов");
         }
     }
 }
