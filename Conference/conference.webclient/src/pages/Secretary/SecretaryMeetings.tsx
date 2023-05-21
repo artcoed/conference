@@ -86,14 +86,19 @@ const SecretaryMeetings: FC = () => {
     };
 
     const addQuestionInList = () => {
-        setInputQuestion(inputQuestion.trim())
+        const trimmed = inputQuestion.trim();
 
-        if (inputQuestion.length < 2 || inputQuestion.length > 70) {
+        if (trimmed.length < 2 || trimmed.length > 70) {
             error("Длина вопроса должна быть от 2 до 70 символов")
             return;
         }
 
-        setQuestions([...questions, inputQuestion])
+        if (questions.includes(trimmed)) {
+            error("Нельзя создать одинаковые вопросы")
+            return;
+        }
+
+        setQuestions([...questions, trimmed])
         setInputQuestion('')
     }
 

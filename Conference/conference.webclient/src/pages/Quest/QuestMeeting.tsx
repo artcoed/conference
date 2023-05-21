@@ -1,4 +1,4 @@
-import { Button, Form, Input, List, message, Row, Segmented } from 'antd';
+import { Button, Form, Input, List, message, Row, Segmented, Spin } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import $api from '../../http';
@@ -84,6 +84,12 @@ const QuestMeeting: FC = () => {
             return;
         }
 
+        if (meeting.notes.includes(trimmedInput)) {
+            error("Нельзя создать одинаковые заметки")
+            return;
+        }
+
+
         setIsLoadingCreateNote(true);
 
         try {
@@ -160,78 +166,91 @@ const QuestMeeting: FC = () => {
     }, [])
 
     return (
-        <div style={{ minHeight: "calc(100vh - 74px)", display: "flex", justifyContent: "center" }}>
-            {contextHolder}
-            <div style={{ width: "1200px" }}>
-                <h1 style={{ fontSize: "28px", textAlign: "center", marginTop: "10px" }}>{meeting.meetingTitle}</h1>
+        <>
+        {contextHolder}
+        {
+            isLoading &&
+                <div>
+                    <Spin tip="Loading" size="large">
+                        <div className={classes.Content} />
+                    </Spin>
+                </div>
+        }
+        { 
+            !isLoading &&
+            <div style={{ minHeight: "calc(100vh - 74px)", display: "flex", justifyContent: "center" }}>
+                <div style={{ width: "1200px" }}>
+                    <h1 style={{ fontSize: "28px", textAlign: "center", marginTop: "10px" }}>{meeting.meetingTitle}</h1>
 
-                <Form>
-                    <div className={classes.List} style={{marginTop: "20px"}}>
+                    <Form>
+                        <div className={classes.List} style={{ marginTop: "20px" }}>
+                            <List
+                                locale={{ emptyText: "Заметки отсутствуют" }}
+                                size="small"
+                                header={<div>Заметки</div>}
+                                dataSource={meeting.notes}
+                                renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
+                                footer={
+                                    <>
+                                        {!meeting.hasCompleted &&
+                                            <>
+                                                <Form.Item style={{ display: "inline-block", width: "75%" }}>
+                                                    <Input value={inputNote} onChange={e => setInputNote(e.target.value)} placeholder="Введите содержимое заметки" />
+                                                </Form.Item>
+                                                <Form.Item style={{ display: "inline-block", width: "25%" }}>
+                                                    <Row justify="end">
+                                                        <Button loading={isLoadingCreateNote} onClick={addNoteInList}>Добавить</Button>
+                                                    </Row>
+                                                </Form.Item>
+                                            </>}
+                                    </>
+                                }
+                            />
+                        </div>
+                    </Form>
+
+                    <div
+                        style={{
+                            height: 350,
+                            overflow: 'auto',
+                            padding: '0 16px',
+                            border: '1px solid rgba(140, 140, 140, 0.35)',
+                            marginTop: "10px",
+                        }}>
                         <List
-                            locale={{ emptyText: "Заметки отсутствуют" }}
-                            size="small"
-                            header={<div>Заметки</div>}
-                            dataSource={meeting.notes}
-                            renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
-                            footer={
-                                <>
-                                    {!meeting.hasCompleted &&
-                                        <>
-                                            <Form.Item style={{ display: "inline-block", width: "75%" }}>
-                                                <Input value={inputNote} onChange={e => setInputNote(e.target.value)} placeholder="Введите содержимое заметки" />
-                                            </Form.Item>
-                                            <Form.Item style={{ display: "inline-block", width: "25%" }}>
-                                                <Row justify="end">
-                                                    <Button loading={isLoadingCreateNote} onClick={addNoteInList}>Добавить</Button>
-                                                </Row>
-                                            </Form.Item>
-                                        </>}
-                                </>
-                            }
+                            header={"Документы"}
+                            locale={{ emptyText: "Документов нет" }}
+                            loading={isLoading}
+                            dataSource={meeting.documents}
+                            renderItem={(document) => (
+                                <List.Item key={document.id}
+                                    actions={[<Button key={"Download"} onClick={() => { downloadDocument(document) }}>Скачать</Button>]}
+                                >
+                                    <List.Item.Meta
+                                        title={document.title}
+                                    />
+                                </List.Item>
+                            )}
                         />
                     </div>
-                </Form>
 
-                <div
-                    style={{
-                        height: 350,
-                        overflow: 'auto',
-                        padding: '0 16px',
-                        border: '1px solid rgba(140, 140, 140, 0.35)',
-                        marginTop: "10px",
-                    }}>
-                    <List
-                        header={"Документы"}
-                        locale={{ emptyText: "Документов нет" }}
-                        loading={isLoading}
-                        dataSource={meeting.documents}
-                        renderItem={(document) => (
-                            <List.Item key={document.id}
-                                actions={[<Button key={"Download"} onClick={() => { downloadDocument(document) }}>Скачать</Button>]}
-                            >
-                                <List.Item.Meta
-                                    title={document.title}
-                                />
-                            </List.Item>
-                        )}
-                    />
+                    {meeting.hasVoting && role === Roles.Worker &&
+                        <div style={{ marginTop: "20px" }}>
+                            <p style={{ fontSize: "16px", textAlign: "center" }}>{meeting.meetingTitle}</p>
+                            <Row justify="center" style={{ marginTop: "10px" }}>
+                                <Segmented disabled={meeting.hasVoted || meeting.hasCompleted} options={meeting.options} defaultValue={meeting.selectedOption} onChange={changeOption} />
+                            </Row>
+                            <Row justify="center" style={{ marginTop: "10px" }}>
+                                <Button onClick={vote} disabled={meeting.hasVoted || meeting.hasCompleted}>Проголосовать</Button>
+                            </Row>
+                        </div>
+                    }
+
+                    <div style={{ height: "50px" }}></div>
                 </div>
-                
-                {meeting.hasVoting && role === Roles.Worker &&
-                    <div style={{marginTop: "20px"} }>
-                        <p style={{ fontSize: "16px", textAlign: "center" }}>{meeting.meetingTitle}</p>
-                        <Row justify="center" style={{ marginTop: "10px" }}>
-                            <Segmented disabled={meeting.hasVoted || meeting.hasCompleted} options={meeting.options} defaultValue={meeting.selectedOption} onChange={changeOption} />
-                        </Row>
-                        <Row justify="center" style={{marginTop: "10px"}}>
-                            <Button onClick={vote} disabled={meeting.hasVoted || meeting.hasCompleted}>Проголосовать</Button>
-                        </Row>
-                    </div>
-                }
-
-                <div style={{height: "50px"}}></div>
             </div>
-        </div>
+        }
+        </>
     );
 };
 

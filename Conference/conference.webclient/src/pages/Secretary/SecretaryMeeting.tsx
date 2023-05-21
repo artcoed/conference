@@ -85,6 +85,11 @@ const SecretaryMeeting: FC = () => {
             return;
         }
 
+        if (meeting.decisions.includes(trimmedInput)) {
+            error("Нельзя создать одинаковые решения")
+            return;
+        }
+
         setIsLoadingCreateDecision(true);
 
         try {

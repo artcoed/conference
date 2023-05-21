@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Conference.Migrations
 {
     [DbContext(typeof(EntityFrameworkContext))]
-    [Migration("20230520061323_NewDatabase")]
-    partial class NewDatabase
+    [Migration("20230520114009_Conference")]
+    partial class Conference
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
