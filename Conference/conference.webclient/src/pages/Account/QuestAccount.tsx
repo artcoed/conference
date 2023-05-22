@@ -13,56 +13,69 @@ import { INotification } from '../../models/domain/INotification';
 import { IMessagesErrorResponse } from '../../models/response/IMessagesErrorResponse';
 import { getMeetingPath } from '../../routes';
 
-const QuestAccount: FC = () => {
+const QuestAccount: FC<{ fail: (message: string) => void, success: (message: string) => void }> = ({ fail, success }) => {
     const navigate = useNavigate();
-    const [meetings, setMeetings] = useState<IMeeting[]>([] as IMeeting[])
-    const [isLoadingMeetings, setIsLoadingMeetings] = useState(true)
-    const [notifications, setNotifications] = useState<INotification[]>([] as INotification[])
-    const [isLoadingNotifications, setIsLoadingNotifications] = useState(false)
-    const [isLoadingCheckNotification, setIsLoadingCheckNotification] = useState(false)
 
-    const navigateToMeetingPage = (meeting: IMeeting) => {
+    const [meetings, setMeetings] = useState<IMeeting[]>([] as IMeeting[]);
+    const [isLoadingMeetings, setIsLoadingMeetings] = useState<boolean>(true);
 
-    }
+    const [notifications, setNotifications] = useState<INotification[]>([] as INotification[]);
+    const [isLoadingNotifications, setIsLoadingNotifications] = useState<boolean>(false);
 
     const updateMeetings = async () => {
-        setIsLoadingMeetings(true)
+        setIsLoadingMeetings(true);
+
         try {
             const response = await getByInvitedUserMeetings();
             setMeetings(response.data);
-        } catch (e) {
-        }
-        setIsLoadingMeetings(false)
+        } catch (e) { }
+
+        setIsLoadingMeetings(false);
     }
 
     const updateNotifications = async () => {
-        setIsLoadingNotifications(true)
+        setIsLoadingNotifications(true);
+
         try {
             const response = await getByUserNotifications();
-            setNotifications(response.data.filter(x => !x.isChecked));
-        } catch (e) {
+            setNotifications(response.data
+                .filter(x => !x.isChecked));
+        } catch (e) { }
+
+        setIsLoadingNotifications(false);
+    }
+
+    const navigateToMeetingPage = (meeting: IMeeting) => {
+        if (!meeting.id) {
+            fail("Ошибка перехода на совещание");
+            return;
         }
-        setIsLoadingNotifications(false)
+
+        const path = getMeetingPath(meeting.id.toString());
+        navigate(path);
     }
 
     const tryCheckNotification = async (notification: INotification) => {
-        setIsLoadingCheckNotification(true)
         try {
             await checkNotification({ id: notification.id });
-            setNotifications(notifications?.filter(x => x.id !== notification.id))
-            success("Оповещение успешно прочитано")
+            setNotifications(notifications
+                ?.filter(x => x.id !== notification.id));
+            success("Оповещение успешно прочитано");
         } catch (e) {
-            const err = e as IMessagesErrorResponse
-            if (err.response) {
-                error(err.response.data[0].message)
+            const error = e as IMessagesErrorResponse;
+            if (error.response) {
+                fail(error.response.data[0].message);
             }
         }
-        setIsLoadingCheckNotification(false)
+    }
+
+    const updateAccount = () => {
+        updateMeetings();
+        updateNotifications();
     }
 
     useEffect(() => {
-        updateMeetings()
-        updateNotifications()
+        updateAccount();
     }, [])
 
     return (
