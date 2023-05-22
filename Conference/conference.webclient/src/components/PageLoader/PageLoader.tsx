@@ -1,5 +1,5 @@
 import { Spin } from "antd";
-import { FC } from "react";
+import React, { FC } from "react";
 import classes from "./PageLoader.module.css";
 
 const PageLoader: FC = () => {

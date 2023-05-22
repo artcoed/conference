@@ -1,5 +1,5 @@
 import { Button, List } from "antd";
-import { FC } from "react";
+import React, { FC } from "react";
 import { INotification } from "../../models/domain/INotification";
 import { ListButton } from "../../models/domain/ListButton";
 import classes from "./NotificationsList.module.css";
