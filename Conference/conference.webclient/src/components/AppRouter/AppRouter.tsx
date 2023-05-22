@@ -3,7 +3,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IRoute } from '../../models/domain/IRoute';
 import { Roles } from '../../models/domain/Roles';
-import { administratorRoutes, publicRoutes, questRoutes, secretaryRoutes, workerRoutes } from '../../routes';
+import { administratorRoutes, publicRoutes, questAndWorkerRoutes, secretaryRoutes } from '../../routes';
+import { getCurrentRole } from '../../services/RolesService';
 import Navbar from '../Navbar/Navbar';
 import PageLoader from '../PageLoader/PageLoader';
 
@@ -12,9 +13,7 @@ const AppRouter: FC = () => {
     const [currentRoutes, setCurrentRoutes] = useState<IRoute[]>([] as IRoute[]);
 
     useEffect(() => {
-        const savedRole = localStorage.getItem('role') as Roles;
-
-        switch (savedRole) {
+        switch (getCurrentRole()) {
             case Roles.Administrator:
                 setCurrentRoutes(administratorRoutes);
                 break;
@@ -22,10 +21,10 @@ const AppRouter: FC = () => {
                 setCurrentRoutes(secretaryRoutes);
                 break;
             case Roles.Worker:
-                setCurrentRoutes(workerRoutes);
+                setCurrentRoutes(questAndWorkerRoutes);
                 break;
             case Roles.Quest:
-                setCurrentRoutes(questRoutes);
+                setCurrentRoutes(questAndWorkerRoutes);
                 break;
             default:
                 setCurrentRoutes(publicRoutes);

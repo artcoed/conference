@@ -32,13 +32,7 @@ export const secretaryRoutes: IRoute[] = [
     { path: RouteNames.ALL, element: <Navigate to={RouteNames.MEETINGS} /> }
 ];
 
-export const workerRoutes: IRoute[] = [
-    { path: RouteNames.ACCOUNT, element: <QuestAccount /> },
-    { path: RouteNames.MEETING, element: <QuestMeeting /> },
-    { path: RouteNames.ALL, element: <Navigate to={RouteNames.ACCOUNT} /> }
-];
-
-export const questRoutes: IRoute[] = [
+export const questAndWorkerRoutes: IRoute[] = [
     { path: RouteNames.ACCOUNT, element: <QuestAccount /> },
     { path: RouteNames.MEETING, element: <QuestMeeting /> },
     { path: RouteNames.ALL, element: <Navigate to={RouteNames.ACCOUNT} /> }
