@@ -14,7 +14,7 @@ namespace Conference.Commands.Users.Create
                 .Length(3, 50)
                 .WithMessage("Длина пароля должна быть от 3 до 50 символов");
 
-            RuleFor(x => x.Name)
+            RuleFor(x => x.DisplayingName)
                 .Length(3, 50)
                 .WithMessage("Длина имени должна быть от 3 до 50 символов");
         }

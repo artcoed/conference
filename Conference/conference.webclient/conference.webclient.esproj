@@ -12,6 +12,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\build</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="src\components\CreateUserModal\" />
     <Folder Include="src\components\PageLoader\" />
     <Folder Include="src\components\Heading\" />
     <Folder Include="src\components\NotificationsList\" />

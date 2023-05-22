@@ -27,7 +27,7 @@ namespace Conference.Commands.Users.Create
 
             var user = new User
             {
-                DisplayingName = request.Name,
+                DisplayingName = request.DisplayingName,
                 Login = request.Login,
                 Password = request.Password,
                 Role = roleResult.Value

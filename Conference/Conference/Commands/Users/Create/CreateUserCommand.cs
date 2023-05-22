@@ -8,6 +8,6 @@ namespace Conference.Commands.Users.Create
         public string Login { get; init; }
         public string Password { get; init; }
         public string Role { get; init; }
-        public string Name { get; init; }
+        public string DisplayingName { get; init; }
     }
 }

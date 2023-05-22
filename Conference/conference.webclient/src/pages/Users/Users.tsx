@@ -1,102 +1,65 @@
-import React, { FC, useState } from 'react';
-import classes from "./Users.module.css";
+import { Button, Row } from 'antd';
+import React, { FC, useEffect, useState } from 'react';
+import CreateUserModal from '../../components/CreateUserModal/CreateUserModal';
+import Heading from '../../components/Heading/Heading';
+import UsersList from '../../components/UsersList/UsersList';
+import { getUsers } from '../../http/users';
+import { IUser } from '../../models/domain/IUser';
+import { IMessagesErrorResponse } from '../../models/response/IMessagesErrorResponse';
 
-const Users: FC = () => {
-    const [open, setOpen] = useState(false);
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [creatingUser, setCreatingUser] = useState({ login: "", password: "", name: "", role: "quest" });
-    const [creatingError, setCreatingError] = useState('')
+const Users: FC<{ fail: (message: string) => void }> = () => {
+    const [isOpening, setIsOpening] = useState<boolean>(false);
+    const [users, setUsers] = useState<IUser[]>([] as IUser[]);
+    const [isUsersLoading, setIsUsersLoading] = useState<boolean>(true);
+    const [isLoadingDeleting, setIsLoadingDeleting] = useState<boolean>(false);
 
-    const showModal = () => {
-        setOpen(true);
+    const showCreateUserModal = () => {
+        setIsOpening(true);
     };
 
-    const handleOk = async () => {
-        setConfirmLoading(true);
-        setCreatingError('')
+    const updateUsersList = async () => {
+        setIsUsersLoading(true);
+
         try {
-            await $api.post('Users/CreateUser', creatingUser);
-            updateUsersList()
-            setCreatingUser({ login: "", password: "", name: "", role: "quest" })
-            setOpen(false)
+            const response = await getUsers();
+            setUsers(response.data.data);
+        } catch (e) { }
+
+        setIsUsersLoading(false);
+    }
+
+    const deleteUser = async (user: IUser) => {
+        setIsLoadingDeleting(true);
+
+        try {
+            await deleteUser(user);
         } catch (e) {
-            const error = e as IUsersCreateResponseError
-            setCreatingError(error.response.data[0].message)
+            const error = e as IMessagesErrorResponse
+            fail(error.response.data[0].message);
         }
 
-        setConfirmLoading(false);
-    };
-
-    const handleCancel = () => {
-        setCreatingError('')
-        setOpen(false);
-    };
-
-    const [users, setUsers] = useState([] as IUserListRequest[])
-    const [isUsersLoading, setIsUsersLoading] = useState(true)
+        setIsLoadingDeleting(false)
+        updateUsersList();
+    }
 
     useEffect(() => {
         updateUsersList();
     }, [])
 
-    const updateUsersList = async () => {
-        setIsUsersLoading(true)
-        try {
-            const response = await $api.get("Users/GetUsers") as IUsersListSuccessResponse
-            setUsers(response.data);
-        } catch (e) {
-        }
-        setIsUsersLoading(false)
-    }
-
-    const [isLoadingDeleting, setIsLoadingDeleting] = useState(false)
-    const [messageApi, contextHolder] = message.useMessage();
-
-    const errorDelete = (e: string) => {
-        messageApi.open({
-            type: 'error',
-            content: e,
-        });
-    };
-
-    const deleteUser = async (user: IUserListRequest) => {
-        setIsLoadingDeleting(true)
-        try {
-            const response = await $api.delete("Users/DeleteUser", { data: { userId: user.id } })
-        } catch (e) {
-            const error = e as IUsersCreateResponseError
-            errorDelete(error.response.data[0].message);
-        }
-        setIsLoadingDeleting(false)
-        updateUsersList();
-    }
-
     return (
-        <>
-            {contextHolder}
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <div style={{ width: "1200px", minHeight: "calc(100vh - 64px)" }}>
-                    <h1 className={classes.Header}>Пользователи</h1>
-                    <Row justify="end">
-                        <Button type="primary" onClick={showModal} style={{ marginTop: "10px" }}>
-                            Добавить пользователя
-                        </Button>
-                    </Row>
-                    <Modal
-                        title="Добавление пользователя"
-                        open={open}
-                        onOk={handleOk}
-                        confirmLoading={confirmLoading}
-                        onCancel={handleCancel}
-                        okText="Добавить"
-                        cancelText="Отменить"
-                    >
-                        <CreateUserForm creatingUser={creatingUser} setCreatingUser={setCreatingUser} error={creatingError} />
-                    </Modal>
-                    <UsersList isLoadingDeleting={isLoadingDeleting} users={users} deleteUser={deleteUser} isLoading={isUsersLoading} />
-                </div>
-            </div>
-        </>
+        <div>
+            <Heading content="Пользователи" />
+
+            <Row justify="end">
+                <Button type="primary" onClick={showCreateUserModal}>
+                    Добавить пользователя
+                </Button>
+            </Row>
+
+            <CreateUserModal fail={fail} isOpening={isOpening} setIsOpening={setIsOpening} updateUsersList={updateUsersList} />
+
+            <UsersList isLoadingDeleting={isLoadingDeleting} users={users} deleteUser={deleteUser} isLoading={isUsersLoading} />
+        </div>
     );
 };
 
