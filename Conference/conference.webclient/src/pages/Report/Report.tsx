@@ -6,52 +6,6 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 import $api from '../http';
 import classes from "./Report.module.css";
 
-export type ReportParams = {
-    id: string;
-};
-
-export interface IReportVoteResponse {
-    id: number,
-    value: string,
-    users: IReportUserResponse[]
-}
-
-export interface IReportUserResponse {
-    id: number,
-    login: string,
-    displayingName: string
-}
-
-export interface IReportNoteResponse {
-    id: number,
-    value: string,
-    user: IReportUserResponse 
-}
-
-export interface IReport {
-    id: number,
-    meetingTitle: string,
-    meetingCompleted: boolean,
-    startDateTime: Date,
-    endDateTime: Date,
-    decisions: string[],
-    notes: IReportNoteResponse[],
-    questions: string[],
-    users: IReportUserResponse[],
-    hasVoting: boolean,
-    votingTitle: string
-    votes: IReportVoteResponse[]
-}
-
-export interface IReportResponse {
-    data: IReport
-}
-
-export interface IGraphDataElement {
-    name: string,
-    pv: number
-}
-
 const Report: FC = () => {
     const { id } = useParams<ReportParams>();
 

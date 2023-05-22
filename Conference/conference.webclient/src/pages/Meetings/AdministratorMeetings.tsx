@@ -4,20 +4,7 @@ import 'moment/locale/ru'
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import $api from '../../http';
-import { GetReportPath } from '../../routes';
-moment.locale('ru')
-
-export interface IAdministratorReportResponse {
-    id: number,
-    title: string,
-    startDateTime: Date,
-    endDateTime: Date,
-    hasCompleted: boolean
-}
-
-export interface IAdministratorReportsResponse {
-    data: IAdministratorReportResponse[]
-}
+import { getReportPath } from '../../routes';
 
 const AdministratorMeetings: FC = () => {
     const navigate = useNavigate();
@@ -59,7 +46,7 @@ const AdministratorMeetings: FC = () => {
                             dataSource={meetings}
                             renderItem={(meeting) => (
                                 <List.Item key={meeting.id}
-                                    actions={[<Button disabled={!meeting.hasCompleted} key={"Открыть"} onClick={() => navigate(GetReportPath(meeting.id.toString()))}>Открыть</Button>]}
+                                    actions={[<Button disabled={!meeting.hasCompleted} key={"Открыть"} onClick={() => navigate(getReportPath(meeting.id.toString()))}>Открыть</Button>]}
                                 >
                                     <List.Item.Meta
                                         title={meeting.title}

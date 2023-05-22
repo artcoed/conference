@@ -5,52 +5,6 @@ import $api from '../../http';
 import { Roles } from '../../models/Roles';
 import classes from "./QuestMeeting.module.css"
 
-type QuestMeetingParams = {
-    id: string;
-};
-
-interface IDocumentTitle {
-    id: number,
-    title: string
-}
-
-interface IQuestMeeting {
-    id: number,
-    meetingTitle: string,
-    hasCompleted: boolean,
-    notes: string[],
-    documents: IDocumentTitle[],
-    hasVoting: boolean,
-    votingTitle: string,
-    options: string[],
-    hasVoted: boolean,
-    selectedOption: string
-}
-
-interface IErrorCreateNoteMessage {
-    message: string
-}
-
-interface IErrorCreateNote {
-    response: {
-        data: IErrorCreateNoteMessage[]
-    }
-}
-
-interface IQuestMeetingResponse {
-    data: IQuestMeeting
-}
-
-interface IErrorVoteMessage {
-    message: string 
-}
-
-interface IErrorVote {
-    response: {
-        data: IErrorVoteMessage[]
-    }
-}
-
 const QuestMeeting: FC = () => {
     const { id } = useParams<QuestMeetingParams>();
 

@@ -1,49 +1,39 @@
 import React from "react";
-import AdministratorMeetings from "../pages/Administrator/AdministratorMeetings";
-import Login from "../pages/Login";
-import QuestAccount from "../pages/Quest/QuestAccount";
-import QuestMeeting from "../pages/Quest/QuestMeeting";
-import Report from "../pages/Report";
-import SecretaryMeeting from "../pages/Secretary/SecretaryMeeting";
-import SecretaryMeetings from "../pages/Secretary/SecretaryMeetings";
-import Users from "../pages/Users";
+import { IRoute } from "../models/domain/IRoute";
+import { RouteNames } from "../models/domain/RouteNames";
+import QuestAccount from "../pages/Account/QuestAccount";
+import QuestMeeting from "../pages/Meeting/QuestMeeting";
+import SecretaryMeeting from "../pages/Meeting/SecretaryMeeting";
+import AdministratorMeetings from "../pages/Meetings/AdministratorMeetings";
+import SecretaryMeetings from "../pages/Meetings/SecretaryMeetings";
+import Report from "../pages/Report/Report";
+import Users from "../pages/Users/Users";
 
-export interface IRoute {
-    path: string;
-    component: React.ReactElement;
-    exact?: boolean;
-}
-
-export enum PathNames {
-    ALL = '*',
-    LOGIN = 'login',
-    ACCOUNT = 'account',
-    USERS = 'users',
-    MEETINGS = 'meetings',
-    MEETING = 'meetings/:id',
-    REPORT = 'meetings/:id/report',
-}
-
-export const GetReportPath = (id: string) => {
+export const getReportPath = (id: string) => {
     return "/meetings/" + id + "/report";
-}
+};
 
-export const GetMeetingPath = (id: string) => {
+export const getMeetingPath = (id: string) => {
     return "/meetings/" + id;
-}
+};
 
 export const administratorRoutes: IRoute[] = [
-    { path: PathNames.USERS, component: <Users/> },
-    { path: PathNames.MEETINGS, component: <AdministratorMeetings /> },
-    { path: PathNames.REPORT, component: <Report /> }
-]
+    { path: RouteNames.USERS, element: <Users /> },
+    { path: RouteNames.MEETINGS, element: <AdministratorMeetings /> },
+    { path: RouteNames.REPORT, element: <Report /> }
+];
 
 export const secretaryRoutes: IRoute[] = [
-    { path: PathNames.MEETINGS, component: <SecretaryMeetings /> },
-    { path: PathNames.MEETING, component: <SecretaryMeeting /> },
-]
+    { path: RouteNames.MEETINGS, element: <SecretaryMeetings /> },
+    { path: RouteNames.MEETING, element: <SecretaryMeeting /> },
+];
+
+export const workerRoutes: IRoute[] = [
+    { path: RouteNames.ACCOUNT, element: <QuestAccount /> },
+    { path: RouteNames.MEETING, element: <QuestMeeting /> }
+];
 
 export const questRoutes: IRoute[] = [
-    { path: PathNames.ACCOUNT, component: <QuestAccount /> },
-    { path: PathNames.MEETING, component: <QuestMeeting/> }
-]
+    { path: RouteNames.ACCOUNT, element: <QuestAccount /> },
+    { path: RouteNames.MEETING, element: <QuestMeeting /> }
+];

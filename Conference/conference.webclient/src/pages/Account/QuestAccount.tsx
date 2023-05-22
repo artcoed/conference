@@ -3,43 +3,7 @@ import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import $api from '../../http';
-import { GetMeetingPath } from '../../routes';
-
-interface IQuestMeeting {
-    id: number,
-    title: string,
-    startDateTime: Date,
-    endDateTime: Date,
-    hasCompleted: boolean
-}
-
-interface IQuestMeetingResponse {
-    data: IQuestMeeting[]
-}
-
-interface IQuestNotificationMeeting {
-    title: string
-}
-
-interface IQuestNotification {
-    id: number,
-    meeting: IQuestNotificationMeeting,
-    isChecked: boolean
-}
-
-interface IQuestNotificationResponse {
-    data: IQuestNotification[]
-}
-
-interface ICheckErrorMessage {
-    message: string
-}
-
-interface ICheckError {
-    response: {
-        data: ICheckErrorMessage[]
-    }
-}
+import { getMeetingPath } from '../../routes';
 
 const QuestAccount: FC = () => {
     const navigate = useNavigate();
@@ -150,7 +114,7 @@ const QuestAccount: FC = () => {
                             locale={{emptyText: "Совещаний нет"}}
                             renderItem={(meeting) => (
                                 <List.Item key={meeting.id}
-                                    actions={[<Button key={"Join"} onClick={() => navigate(GetMeetingPath(meeting.id.toString()))}>Присоединиться</Button>]}
+                                    actions={[<Button key={"Join"} onClick={() => navigate(getMeetingPath(meeting.id.toString()))}>Присоединиться</Button>]}
                                 >
                                     <List.Item.Meta
                                         title={meeting.title}

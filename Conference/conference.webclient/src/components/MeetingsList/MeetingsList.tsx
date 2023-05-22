@@ -3,7 +3,7 @@ import moment from 'moment';
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IAdministratorReportResponse} from '../../pages/Administrator/AdministratorMeetings';
-import { GetMeetingPath } from '../../routes';
+import { getMeetingPath } from '../../routes';
 
 const MeetingsList: FC<{ meetings: IAdministratorReportResponse[], isLoading: boolean }> = ({ meetings, isLoading }) => {
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ const MeetingsList: FC<{ meetings: IAdministratorReportResponse[], isLoading: bo
                 dataSource={meetings}
                 renderItem={(meeting) => (
                     <List.Item key={meeting.id}
-                        actions={[<Button key={"Открыть"} onClick={() => navigate(GetMeetingPath(meeting.id.toString()))}>Открыть</Button>]}
+                        actions={[<Button key={"Открыть"} onClick={() => navigate(getMeetingPath(meeting.id.toString()))}>Открыть</Button>]}
                     >
                         <List.Item.Meta
                             title={meeting.title}

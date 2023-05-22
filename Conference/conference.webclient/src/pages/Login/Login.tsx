@@ -5,16 +5,6 @@ import { AuthResponse } from '../models/response/AuthResponse';
 import { Roles } from '../models/Roles';
 import classes from "./Login.module.css";
 
-interface ILoginErrorMessage {
-    message: string;
-}
-
-interface ILoginError {
-    response: {
-        data: ILoginErrorMessage[];
-    }
-}
-
 const Login: FC<{setRole: (role: Roles) => void}> = ({setRole}) => {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');

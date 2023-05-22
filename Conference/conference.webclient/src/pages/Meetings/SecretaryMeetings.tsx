@@ -10,35 +10,6 @@ import classes from "./SecretaryMeetings.module.css";
 import { IAdministratorReportResponse, IAdministratorReportsResponse } from '../Administrator/AdministratorMeetings';
 import Password from 'antd/es/input/Password';
 
-interface RecordType {
-    key: string;
-    title: string;
-    description: string;
-}
-
-interface IDocumentRequest {
-    name: string,
-    source: string
-}
-
-export interface ICreateMeetingRequest {
-    title: string,
-    startMeetingDateTime: Date,
-    questions: string[],
-    documents: IDocumentRequest[],
-    usersId: number[]
-}
-
-interface ICreateMeetingRequestErrorMessage {
-    message: string
-}
-
-interface ICreateMeetingRequestError {
-    response: {
-        data: ICreateMeetingRequestErrorMessage[]
-    }
-}
-
 const SecretaryMeetings: FC = () => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);

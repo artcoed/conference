@@ -7,37 +7,6 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from 
 import $api from '../../http';
 import classes from "./SecretaryMeeting.module.css"
 
-type SecretaryMeetingParams = {
-    id: string;
-};
-
-export interface IMeeting {
-    id: number,
-    meetingTitle: string,
-    hasCompleted: boolean,
-    startDateTime: Date,
-    endDateTime: Date,
-    questions: string[],
-    decisions: string[],
-    hasVoting: boolean,
-    votingTitle: string
-    votingOptions: string[],
-}
-
-export interface IMeetingResponse {
-    data: IMeeting
-}
-
-interface IErrorCreateDecisionMessage {
-    message: string
-}
-
-interface IErrorCreateDecision {
-    response: {
-        data: IErrorCreateDecisionMessage[]
-    }
-}
-
 const SecretaryMeeting: FC = () => {
     const { id } = useParams<SecretaryMeetingParams>();
 

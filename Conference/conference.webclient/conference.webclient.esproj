@@ -12,12 +12,8 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\build</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="src\components\Secretary\" />
-    <Folder Include="src\components\Quest\" />
-    <Folder Include="src\components\Common\" />
     <Folder Include="src\http\" />
     <Folder Include="src\models\response\" />
-    <Folder Include="src\pages\Administrator\" />
-    <Folder Include="src\pages\Secretary\" />
+    <Folder Include="src\services\" />
   </ItemGroup>
 </Project>

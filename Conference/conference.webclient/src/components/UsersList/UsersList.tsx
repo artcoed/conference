@@ -1,13 +1,6 @@
 import { Button, List } from 'antd';
 import React, { FC } from 'react';
 
-export interface IUserListRequest {
-    id: number,
-    login: string,
-    name: string,
-    role: string
-}
-
 const UsersList: FC<{ isLoadingDeleting: boolean, isLoading: boolean, users: IUserListRequest[], deleteUser: (user: IUserListRequest) => void }> = ({ isLoadingDeleting, isLoading, users, deleteUser }) => {
     return (
         <div 

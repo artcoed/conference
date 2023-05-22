@@ -1,32 +1,5 @@
-import { Button, Divider, message, Modal, Row } from 'antd';
 import React, { FC, useState } from 'react';
-import { useEffect } from 'react';
-import CreateUserForm from '../components/Common/CreateUserForm';
-import UsersList, { IUserListRequest } from '../components/Common/UsersList';
-import $api from '../http';
-import { IUser } from '../models/IUser';
 import classes from "./Users.module.css";
-
-export interface ICreatingUser {
-    login: string,
-    password: string,
-    name: string,
-    role: string
-}
-
-interface IUsersCreateResponseErrorMessage {
-    message: string
-} 
-
-export interface IUsersCreateResponseError {
-    response: {
-        data: IUsersCreateResponseErrorMessage[]
-    }
-}
-
-export interface IUsersListSuccessResponse {
-    data: IUserListRequest[]
-}
 
 const Users: FC = () => {
     const [open, setOpen] = useState(false);
