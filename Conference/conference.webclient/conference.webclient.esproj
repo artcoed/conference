@@ -16,6 +16,7 @@
     <Folder Include="src\components\Heading\" />
     <Folder Include="src\components\NotificationsList\" />
     <Folder Include="src\http\meetings\" />
+    <Folder Include="src\http\users\" />
     <Folder Include="src\http\notifications\" />
     <Folder Include="src\models\response\" />
   </ItemGroup>

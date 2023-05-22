@@ -1,47 +1,45 @@
 import { Button, Form, Input } from 'antd';
+import Password from 'antd/es/input/Password';
 import React, { FC, useState } from 'react';
-import $api from '../http';
-import { AuthResponse } from '../models/response/AuthResponse';
-import { Roles } from '../models/Roles';
-import classes from "./Login.module.css";
+import Heading from '../../components/Heading/Heading';
+import { loginUser } from '../../http/users';
+import { IUser } from '../../models/domain/IUser';
+import { IMessagesErrorResponse } from '../../models/response/IMessagesErrorResponse';
+import { setAuth } from '../../services/RolesService';
 
-const Login: FC = () => {
-    const [login, setLogin] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState(''); 
-    const [isLoading, setIsLoading] = useState(false)
+const Login: FC<{fail: (message: string) => void}> = () => {
+    const [user, setUser] = useState<IUser>({} as IUser);
+    const [isLoginLoading, setIsLoginLoading] = useState<boolean>(false);
 
     const submit = async () => {
-        setError('')
-        setIsLoading(true)
-        try {
-            const response = await $api.post<AuthResponse>("Users/LoginUser", { login, password });
-            localStorage.setItem('token', response.data.token)
-            localStorage.setItem('role', response.data.role)
-            setRole(response.data.role as Roles)
+        setIsLoginLoading(true);
 
+        try {
+            const response = await loginUser(user);
+            setAuth(response.data);
         } catch (e) {
-            const error: ILoginError = e as ILoginError;
-            setError(error.response.data[0].message)
+            const error = e as IMessagesErrorResponse;
+            fail(error.response.data[0].message);
         }
-        setIsLoading(false)
+
+        setIsLoginLoading(false);
     }
 
     return (
-        <div className={classes.Login}>
-            <div className={classes.Container}>
-                <h1 className={classes.Header}>Вход</h1>
-                <Form>
-                    <Input className={classes.Input} placeholder="Введите логин" value={login} onChange={e => setLogin(e.target.value)} />
-                    <Input.Password className={classes.Input} placeholder="Введите пароль" value={password} onChange={e => setPassword(e.target.value)} />
-                    <div className={classes.ButtonContainer}>
-                        <Button className={classes.Button} onClick={submit} loading={isLoading}>Войти</Button>
-                    </div>
-                </Form>
-                 <div className={classes.ErrorMessageContainer}>
-                    {error && <p className={classes.ErrorMessage}>{error}</p>}
-                </div>
-            </div>
+        <div>
+            <Heading content="Вход" />
+
+            <Form>
+                <Form.Item>
+                    <Input placeholder="Введите логин" value={user.login} onChange={e => setUser({ ...user, login: e.target.value })} />
+                </Form.Item>
+                <Form.Item>
+                    <Password placeholder="Введите пароль" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} />
+                </Form.Item>
+                <Form.Item>
+                    <Button onClick={submit} loading={isLoginLoading}>Войти</Button>
+                </Form.Item>
+            </Form>
         </div>
     );
 };
