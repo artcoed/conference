@@ -5,7 +5,7 @@ import { AuthResponse } from '../models/response/AuthResponse';
 import { Roles } from '../models/Roles';
 import classes from "./Login.module.css";
 
-const Login: FC<{setRole: (role: Roles) => void}> = ({setRole}) => {
+const Login: FC = () => {
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(''); 

@@ -1,97 +1,54 @@
-import { Layout, Spin } from 'antd';
+import { Layout } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { Roles } from '../models/Roles';
-import Login from '../pages/Login';
-import { administratorRoutes, PathNames, questRoutes, secretaryRoutes } from '../routes';
-import AdministratorNavbar from './Administrator/AdministratorNavbar';
-import AnonymousNavbar from './Anonymous/AnonymousNavbar';
-import QuestNavbar from './Quest/QuestNavbar';
-import SecretaryNavbar from './Secretary/SecretaryNavbar';
-import classes from "./AppRouter.module.css";
+import { Routes, Route } from 'react-router-dom';
+import { IRoute } from '../../models/domain/IRoute';
+import { Roles } from '../../models/domain/Roles';
+import { administratorRoutes, publicRoutes, questRoutes, secretaryRoutes, workerRoutes } from '../../routes';
+import Navbar from '../Navbar/Navbar';
+import PageLoader from '../PageLoader/PageLoader';
 
 const AppRouter: FC = () => {
-    const [role, setRole] = useState(Roles.None)
-    const [isLoadingRole, setIsLoadingRole] = useState(true)
+    const [isLoadingRole, setIsLoadingRole] = useState<boolean>(true);
+    const [currentRoutes, setCurrentRoutes] = useState<IRoute[]>([] as IRoute[]);
 
     useEffect(() => {
-        const storageRole = localStorage.getItem('role');
-        if (storageRole) {
-            setRole(storageRole as Roles);
+        const savedRole = localStorage.getItem('role') as Roles;
+
+        switch (savedRole) {
+            case Roles.Administrator:
+                setCurrentRoutes(administratorRoutes);
+                break;
+            case Roles.Secretary:
+                setCurrentRoutes(secretaryRoutes);
+                break;
+            case Roles.Worker:
+                setCurrentRoutes(workerRoutes);
+                break;
+            case Roles.Quest:
+                setCurrentRoutes(questRoutes);
+                break;
+            default:
+                setCurrentRoutes(publicRoutes);
         }
-        setTimeout(() => {
-            setIsLoadingRole(false)
-        }, 1000)
+
+        setIsLoadingRole(false)
     }, [])
 
-    if (isLoadingRole) {
-        return (
-            <div>
-                <Spin tip="Loading" size="large">
-                    <div className={classes.Content} />
-                </Spin>
-            </div>
-        )
-    }
-
-    if (role === Roles.Administrator) {
-        return (
-            <>
-                <AdministratorNavbar setRole={setRole} />
-                <Layout.Content>
-                    <Routes>
-                        {administratorRoutes.map(route =>
-                            <Route path={route.path} element={route.component} key={route.path} />
-                        )}
-                        <Route path={PathNames.ALL} element={<Navigate to={PathNames.MEETINGS} />} />
-                    </Routes>
-                </Layout.Content>
-            </>
-        );
-    }
-
-    if (role === Roles.Secretary) {
-        return (
-            <>
-                <SecretaryNavbar setRole={setRole} />
-                <Layout.Content>
-                    <Routes>
-                        {secretaryRoutes.map(route =>
-                            <Route path={route.path} element={route.component} key={route.path} />
-                        )}
-                        <Route path={PathNames.ALL} element={<Navigate to={PathNames.MEETINGS} />} />
-                    </Routes>
-                </Layout.Content>
-            </>
-        );
-    }
-
-    if (role === Roles.Quest || role === Roles.Worker) {
-        return (
-            <>
-                <QuestNavbar setRole={setRole} />
-                <Layout.Content>
-                    <Routes>
-                        {questRoutes.map(route =>
-                            <Route path={route.path} element={route.component} key={route.path} />
-                        )}
-                        <Route path={PathNames.ALL} element={<Navigate to={PathNames.ACCOUNT} />} />
-                    </Routes>
-                </Layout.Content>
-            </>
-        );
-    }
-
     return (
-        <>
-            <AnonymousNavbar />
-            <Layout.Content>
-                <Routes>
-                    <Route path={PathNames.LOGIN} element={<Login setRole={setRole} />} />
-                    <Route path={PathNames.ALL} element={<Navigate to={PathNames.LOGIN} />} />
-                </Routes>
-            </Layout.Content>
-        </>
+        <div>
+            {isLoadingRole ? <PageLoader /> :
+                <>
+                    <Navbar />
+                    <Layout.Content>
+                        <Routes>
+                            {currentRoutes.map(route =>
+                                <Route path={route.path} element={route.element} key={route.path} />
+                            )}
+                        </Routes>
+                    </Layout.Content>
+                </>
+            }
+        </div>
     );
 };
 

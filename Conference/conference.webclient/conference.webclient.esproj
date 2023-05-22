@@ -12,6 +12,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\build</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="src\components\PageLoader\" />
     <Folder Include="src\http\" />
     <Folder Include="src\models\response\" />
     <Folder Include="src\services\" />
