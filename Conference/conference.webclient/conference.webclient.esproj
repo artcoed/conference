@@ -13,8 +13,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\components\PageLoader\" />
-    <Folder Include="src\http\" />
+    <Folder Include="src\components\Heading\" />
+    <Folder Include="src\components\NotificationsList\" />
+    <Folder Include="src\http\meetings\" />
+    <Folder Include="src\http\notifications\" />
     <Folder Include="src\models\response\" />
-    <Folder Include="src\services\" />
   </ItemGroup>
 </Project>

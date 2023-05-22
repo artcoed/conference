@@ -16,26 +16,26 @@ const Navbar: FC = () => {
         localStorage.removeItem('token');
     };
 
-    const logoutMenuButton: IMenuButton = { label: "Âûéòè", onClick: logout };
+    const logoutMenuButton: IMenuButton = { label: "Ð’Ñ‹Ð¹Ñ‚Ð¸", onClick: logout };
 
     const administratorMenuButtons: IMenuButton[] = [
-        { label: "Ïîëüçîâàòåëè", onClick: () => navigate(RouteNames.USERS) },
-        { label: "Îò÷åòû", onClick: () => navigate(RouteNames.MEETINGS) },
+        { label: "ÐŸÐ¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ð¸", onClick: () => navigate(RouteNames.USERS) },
+        { label: "ÐžÑ‚Ñ‡ÐµÑ‚Ñ‹", onClick: () => navigate(RouteNames.MEETINGS) },
         logoutMenuButton
     ];
 
     const secretaryMenuButtons: IMenuButton[] = [
-        { label: "Ñîâåùàíèÿ", onClick: () => navigate(RouteNames.MEETINGS) },
+        { label: "Ð¡Ð¾Ð²ÐµÑ‰Ð°Ð½Ð¸Ñ", onClick: () => navigate(RouteNames.MEETINGS) },
         logoutMenuButton
     ];
 
     const questAndWorkerMenuButtons: IMenuButton[] = [
-        { label: "Àêêàóíò", onClick: () => navigate(RouteNames.ACCOUNT) },
+        { label: "ÐÐºÐºÐ°ÑƒÐ½Ñ‚", onClick: () => navigate(RouteNames.ACCOUNT) },
         logoutMenuButton
     ];
 
     const anonymousMenuButtons: IMenuButton[] = [
-        { label: "Âõîä", onClick: () => navigate(RouteNames.LOGIN) },
+        { label: "Ð’Ñ…Ð¾Ð´", onClick: () => navigate(RouteNames.LOGIN) },
     ];
 
     useEffect(() => {

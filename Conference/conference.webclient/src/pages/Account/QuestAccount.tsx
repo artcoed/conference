@@ -2,37 +2,33 @@ import { Input, Button, Row, List, notification, message } from 'antd';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Heading from '../../components/Heading/Heading';
+import MeetingsList from '../../components/MeetingsList/MeetingsList';
+import NotificationsList from '../../components/NotificationsList/NotificationsList';
 import $api from '../../http';
+import { getByInvitedUserMeetings } from '../../http/meetings';
+import { checkNotification, getByUserNotifications } from '../../http/notifications';
+import { IMeeting } from '../../models/domain/IMeeting';
+import { INotification } from '../../models/domain/INotification';
+import { IMessagesErrorResponse } from '../../models/response/IMessagesErrorResponse';
 import { getMeetingPath } from '../../routes';
 
 const QuestAccount: FC = () => {
     const navigate = useNavigate();
-    const [meetings, setMeetings] = useState<IQuestMeeting[]>()
+    const [meetings, setMeetings] = useState<IMeeting[]>([] as IMeeting[])
     const [isLoadingMeetings, setIsLoadingMeetings] = useState(true)
-    const [notifications, setNotifications] = useState<IQuestNotification[]>()
+    const [notifications, setNotifications] = useState<INotification[]>([] as INotification[])
     const [isLoadingNotifications, setIsLoadingNotifications] = useState(false)
     const [isLoadingCheckNotification, setIsLoadingCheckNotification] = useState(false)
 
-    const [messageApi, contextHolder] = message.useMessage();
+    const navigateToMeetingPage = (meeting: IMeeting) => {
 
-    const error = (message: string) => {
-        messageApi.open({
-            type: 'error',
-            content: message,
-        });
-    };
-
-    const success = (message: string) => {
-        messageApi.open({
-            type: 'success',
-            content: message,
-        });
-    };
+    }
 
     const updateMeetings = async () => {
         setIsLoadingMeetings(true)
         try {
-            const response = await $api.get("Meetings/GetByInvitedUserMeetings") as IQuestMeetingResponse
+            const response = await getByInvitedUserMeetings();
             setMeetings(response.data);
         } catch (e) {
         }
@@ -42,21 +38,21 @@ const QuestAccount: FC = () => {
     const updateNotifications = async () => {
         setIsLoadingNotifications(true)
         try {
-            const response = await $api.get("Notifications/GetByUserNotifications") as IQuestNotificationResponse
+            const response = await getByUserNotifications();
             setNotifications(response.data.filter(x => !x.isChecked));
         } catch (e) {
         }
         setIsLoadingNotifications(false)
     }
 
-    const checkNotification = async (id: number) => {
+    const tryCheckNotification = async (notification: INotification) => {
         setIsLoadingCheckNotification(true)
         try {
-            await $api.post("Notifications/CheckNotification", { notificationId: id })
-            setNotifications(notifications?.filter(x => x.id !== id))
+            await checkNotification({ id: notification.id });
+            setNotifications(notifications?.filter(x => x.id !== notification.id))
             success("Оповещение успешно прочитано")
         } catch (e) {
-            const err = e as ICheckError
+            const err = e as IMessagesErrorResponse
             if (err.response) {
                 error(err.response.data[0].message)
             }
@@ -70,64 +66,25 @@ const QuestAccount: FC = () => {
     }, [])
 
     return (
-        <div style={{ minHeight: "calc(100vh - 64px)" }}>
-            {contextHolder}
-            <Row justify="center">
-                <div style={{ width: "1200px" }}>
-                    <h1 style={{ fontSize: "28px", textAlign: "center", marginTop: "10px" }}>Аккаунт</h1>
-                    <div
-                        style={{
-                            height: 200,
-                            overflow: 'auto',
-                            padding: '0 16px',
-                            border: '1px solid rgba(140, 140, 140, 0.35)',
-                            marginTop: "20px",
-                        }}>
-                        <List
-                            header={"Уведомления"}
-                            loading={isLoadingNotifications}
-                            dataSource={notifications}
-                            locale={{emptyText: "Уведомлений нет"}}
-                            renderItem={(notification) => (
-                                <List.Item key={notification.id}
-                                    actions={[<Button key={"Read"} loading={isLoadingCheckNotification} onClick={() => checkNotification(notification.id)}>Прочитать</Button>]}
-                                >
-                                    <List.Item.Meta
-                                        title={"Вы были приглашены на совещание по теме: " + notification.meeting.title}
-                                    />
-                                </List.Item>
-                            )}
-                        />
-                    </div>
-                    <div
-                        style={{
-                            height: 400,
-                            overflow: 'auto',
-                            padding: '0 16px',
-                            border: '1px solid rgba(140, 140, 140, 0.35)',
-                            marginTop: "10px",
-                        }}>
-                        <List
-                            header={"Совещания"}
-                            loading={isLoadingMeetings}
-                            dataSource={meetings}
-                            locale={{emptyText: "Совещаний нет"}}
-                            renderItem={(meeting) => (
-                                <List.Item key={meeting.id}
-                                    actions={[<Button key={"Join"} onClick={() => navigate(getMeetingPath(meeting.id.toString()))}>Присоединиться</Button>]}
-                                >
-                                    <List.Item.Meta
-                                        title={meeting.title}
-                                        description={`Начато: ${moment(meeting.startDateTime).format("lll")}, ${meeting.hasCompleted ? "Завершено: " + moment(meeting.endDateTime).format("lll") : "В процессе"}`}
-                                    />
-                                </List.Item>
-                            )}
-                        />
-                    </div>
-                </div>
-            </Row>
-            <div style={{height: "50px"}}></div>
-        </div >
+        <div>
+            <Heading content="Аккаунт" />
+
+            <NotificationsList
+                isLoading={isLoadingNotifications}
+                notifications={notifications}
+                buttons={[
+                    { content: "Прочитать", onClick: tryCheckNotification }
+                ]}
+            />
+
+            <MeetingsList
+                isLoading={isLoadingMeetings}
+                meetings={meetings}
+                buttons={[
+                    { content: "Присоединиться", onClick: navigateToMeetingPage }
+                ]}
+            />
+        </div>
     );
 };
 

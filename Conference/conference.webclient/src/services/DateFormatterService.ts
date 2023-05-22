@@ -2,6 +2,6 @@ import moment from 'moment';
 
 moment.locale('ru')
 
-export const getFromDateTime = (dateTime: Date) => {
+export const getStringFromDateTime = (dateTime: Date = new Date()) => {
     return moment(dateTime).format("lll")
 }
