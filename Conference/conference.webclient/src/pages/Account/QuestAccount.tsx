@@ -1,11 +1,8 @@
-import { Input, Button, Row, List, notification, message } from 'antd';
-import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Heading from '../../components/Heading/Heading';
 import MeetingsList from '../../components/MeetingsList/MeetingsList';
 import NotificationsList from '../../components/NotificationsList/NotificationsList';
-import $api from '../../http';
 import { getByInvitedUserMeetings } from '../../http/meetings';
 import { checkNotification, getByUserNotifications } from '../../http/notifications';
 import { IMeeting } from '../../models/domain/IMeeting';
