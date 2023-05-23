@@ -2,6 +2,7 @@ import { Modal } from 'antd';
 import React, { FC, useState } from 'react';
 import { createUser } from '../../http/users';
 import { IUser } from '../../models/domain/IUser';
+import { Roles } from '../../models/domain/Roles';
 import { IMessagesErrorResponse } from '../../models/response/IMessagesErrorResponse';
 import CreateUserForm from '../CreateUserForm/CreateUserForm';
 
@@ -21,9 +22,14 @@ const CreateUserModal: FC<{
 
     const tryCreateUser = async () => {
         setIsConfirmLoading(true);
-
         try {
-            await createUser(user);
+            const creatingUser = {...user}
+            if (!creatingUser.role) {
+                creatingUser.role = Roles.Quest;
+            }
+
+            await createUser(creatingUser);
+
             updateUsersList()
             setUser({} as IUser);
             close();
