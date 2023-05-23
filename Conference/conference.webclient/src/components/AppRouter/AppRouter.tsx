@@ -1,4 +1,4 @@
-import { Layout, message } from 'antd';
+import { Layout, message, Spin } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IRoute } from '../../models/domain/IRoute';
@@ -7,6 +7,7 @@ import { getAdministratorRoutes, getPublicRoutes, getQuestAndWorkerRoutes, getSe
 import { getCurrentRole } from '../../services/RolesService';
 import Navbar from '../Navbar/Navbar';
 import PageLoader from '../PageLoader/PageLoader';
+import classes from "./AppRouter.module.css";
 
 const AppRouter: FC = () => {
     const [isLoadingRole, setIsLoadingRole] = useState<boolean>(true);
@@ -31,13 +32,14 @@ const AppRouter: FC = () => {
 
     useEffect(() => {
         setRole(getCurrentRole());
-        setIsLoadingRole(false);
     }, [])
 
     useEffect(() => {
+        setIsLoadingRole(true);
+
         switch (role) {
             case Roles.Administrator:
-                setCurrentRoutes(getAdministratorRoutes(fail));
+                setCurrentRoutes(getAdministratorRoutes(fail, success));
                 break;
             case Roles.Secretary:
                 setCurrentRoutes(getSecretaryRoutes(fail, success));
@@ -51,6 +53,10 @@ const AppRouter: FC = () => {
             default:
                 setCurrentRoutes(getPublicRoutes(fail, setRole));
         }
+
+        setTimeout(() => {
+            setIsLoadingRole(false);
+        }, 250)
     }, [role])
 
     return (
@@ -60,12 +66,19 @@ const AppRouter: FC = () => {
                 <>
                     <Navbar setRole={setRole} role={role} />
                     <Layout.Content>
-                        <Routes>
-                            {currentRoutes.map(route =>
-                                <Route path={route.path} element={route.element} key={route.path} />
-                            )}
-                        </Routes>
+                        <div className={classes.Wrapper}>
+                            <div className={classes.Container}>
+                                <Routes>
+                                    {currentRoutes.map(route =>
+                                        <Route path={route.path} element={route.element} key={route.path} />
+                                    )}
+                                </Routes>
+                            </div>
+                        </div>
                     </Layout.Content>
+                    <Layout.Footer>
+                        <div style={{height: "50px"}} />
+                    </Layout.Footer>
                 </>
             }
         </div>

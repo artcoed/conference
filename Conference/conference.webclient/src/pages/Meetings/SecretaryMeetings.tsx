@@ -15,8 +15,9 @@ import { IMeeting } from '../../models/domain/IMeeting';
 import MeetingsList from '../../components/MeetingsList/MeetingsList';
 import { useNavigate } from 'react-router-dom';
 import { getMeetingPath } from '../../routes';
+import Heading from '../../components/Heading/Heading';
 
-const SecretaryMeetings: FC = () => {
+const SecretaryMeetings: FC<{ fail: (message: string) => void, success: (message: string) => void }> = ({ fail, success }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -33,8 +34,6 @@ const SecretaryMeetings: FC = () => {
     const [questPassword, setQuestPassword] = useState('')
     const [questName, setQuestName] = useState('')
 
-    const [messageApi, contextHolder] = message.useMessage();
-
     const [users, setUsers] = useState<ITransferSource[]>()
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
@@ -48,30 +47,16 @@ const SecretaryMeetings: FC = () => {
 
     const [inputQuestion, setInputQuestion] = useState('');
 
-    const error = (message: string) => {
-        messageApi.open({
-            type: 'error',
-            content: message,
-        });
-    };
-
-    const success = (message: string) => {
-        messageApi.open({
-            type: 'success',
-            content: message,
-        });
-    };
-
     const addQuestionInList = () => {
         const trimmed = inputQuestion.trim();
 
         if (trimmed.length < 2 || trimmed.length > 70) {
-            error("Длина вопроса должна быть от 2 до 70 символов")
+            fail("Длина вопроса должна быть от 2 до 70 символов")
             return;
         }
 
         if (questions.includes(trimmed)) {
-            error("Нельзя создать одинаковые вопросы")
+            fail("Нельзя создать одинаковые вопросы")
             return;
         }
 
@@ -109,25 +94,25 @@ const SecretaryMeetings: FC = () => {
 
     const createQuest = async () => {
         if (questLogin.length < 3 || questLogin.length > 50) {
-            error("Логин гостя должен быть от 2 до 50 символов");
+            fail("Логин гостя должен быть от 2 до 50 символов");
             return;
         }
 
         if (questPassword.length < 3 || questPassword.length > 50) {
-            error("Пароль гостя должен быть от 2 до 50 символов");
+            fail("Пароль гостя должен быть от 2 до 50 символов");
             return;
         }
 
         if (questName.length < 3 || questName.length > 50) {
-            error("Имя гостя должно быть от 2 до 50 символов");
+            fail("Имя гостя должно быть от 2 до 50 символов");
             return;
         }
 
         try {
-            const response = await $api.post("Users/CreateQuestUser", {
+            await $api.post("Users/CreateQuestUser", {
                 login: questLogin,
                 password: questPassword,
-                name: questName
+                displayingName: questName
             });
             success('Гость добавлен успешно');
             setQuestLogin('')
@@ -137,7 +122,7 @@ const SecretaryMeetings: FC = () => {
         } catch (e) {
             const errorResponse = e as IMessagesErrorResponse;
             if (errorResponse.response != null) {
-                error(errorResponse.response.data[0].message)
+                fail(errorResponse.response.data[0].message)
             }
         }
     }
@@ -165,7 +150,7 @@ const SecretaryMeetings: FC = () => {
         const dateTime = startDateTime.toDate()
 
         try {
-            const response = await $api.post("Meetings/CreateMeeting", {
+            await $api.post("Meetings/CreateMeeting", {
                 documents,
                 questions,
                 startMeetingDateTime: dateTime,
@@ -188,7 +173,7 @@ const SecretaryMeetings: FC = () => {
         } catch (e) {
             const err = e as IMessagesErrorResponse
             if (err != null) {
-                error(err.response.data[0].message)
+                fail(err.response.data[0].message)
             }
         }
 
@@ -242,116 +227,112 @@ const SecretaryMeetings: FC = () => {
     }
 
     return (
-        <div style={{minHeight: "calc(100vh - 64px)"}}>
-            {contextHolder}
-            <div style={{ display: "flex", justifyContent: "center" }}>
-                <div style={{ width: "1200px" }}>
-                    <h1 style={{ fontSize: "28px", marginTop: "10px", textAlign: "center" }}>Совещания</h1>
-                    <Modal title="Добавление совещания"
-                        width="600px"
-                        open={open}
-                        onOk={handleOk}
-                        okText="Добавить"
-                        confirmLoading={confirmLoading}
-                        onCancel={handleCancel}
-                        cancelText="Отменить"
-                    >
-                        <div>
-                            <Form>
-                                <Form.Item label="Тема">
-                                    <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Введите тему" />
-                                </Form.Item>
-                                <Form.Item label="Начало">
-                                    <DatePicker value={startDateTime} clearIcon onChange={(v) => setStartDateTime(v === null ? dayjs() : v)} showTime placeholder="Выберите дату и время начала" />
-                                </Form.Item>
-                                <Form.Item>
-                                    <div className={classes.List}>
-                                        <List
-                                            locale={{ emptyText: "Вопросы отсутствуют" }}
-                                            size="small"
-                                            header={<div>Вопросы</div>}
-                                            footer={
-                                                <>
-                                                    <Form.Item style={{ display: "inline-block", width: "75%" }}>
-                                                        <Input value={inputQuestion} onChange={e => setInputQuestion(e.target.value)} placeholder="Введите вопрос для совещания" />
-                                                    </Form.Item>
-                                                    <Form.Item style={{ display: "inline-block", width: "25%" }}>
-                                                        <Row justify="end">
-                                                            <Button onClick={addQuestionInList}>Добавить</Button>
-                                                        </Row>
-                                                    </Form.Item>
-                                                </>
-                                            }
-                                            dataSource={questions}
-                                            renderItem={(item, index) => <List.Item actions={[
-                                                <Button onClick={() => deleteQuestionFromList(item)} key="Delete">Удалить</Button>
-                                            ]} key={index}>{item}</List.Item>}
-                                        />
-                                    </div>
-                                </Form.Item>
-                                <Form.Item label="Участники">
-                                    <Row justify="center">
-                                        <Transfer
-                                            dataSource={users}
-                                            titles={['', 'Выбранные']}
-                                            targetKeys={targetKeys}
-                                            selectedKeys={selectedKeys}
-                                            onChange={onChange}
-                                            onSelectChange={onSelectChange}
-                                            render={(item) => item.title}
-                                            locale={{
-                                                selectAll: "Выделить всех",
-                                                itemsUnit: "ч.",
-                                                itemUnit: "ч.",
-                                                selectInvert: "Инвертировать выделение",
-                                                notFoundContent: "Никого"
-                                            }}
-                                        />
-                                    </Row>
-                                </Form.Item>
-                                <Form.Item label="Добавление гостя">
-                                    <Form.Item>
-                                        <Input value={questLogin} onChange={(e) => setQuestLogin(e.target.value)} placeholder="Введите логин" />
-                                    </Form.Item>
-                                    <Form.Item>
-                                        <Password value={questPassword} onChange={(e) => setQuestPassword(e.target.value)} placeholder="Введите пароль" />
-                                    </Form.Item>
-                                    <Form.Item>
-                                        <Input value={questName} onChange={(e) => setQuestName(e.target.value)} placeholder="Введите имя" />
-                                    </Form.Item>
-                                    <Form.Item>
-                                        <Button onClick={createQuest}>Добавить</Button>
-                                    </Form.Item>
-                                </Form.Item>
-                                <Form.Item label="Документы">
-                                    <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
-                                        <Upload.Dragger name="files" beforeUpload={(file: UploadFile) => {
-                                            setFileList((prev) => [...prev, file]);
-                                            return false;
+        <div>
+            <Heading content="Совещания" />
+            <Modal title="Добавление совещания"
+                width="600px"
+                open={open}
+                onOk={handleOk}
+                okText="Добавить"
+                confirmLoading={confirmLoading}
+                onCancel={handleCancel}
+                cancelText="Отменить"
+            >
+                <div style={{marginTop: "20px", marginBottom: "10px"}}>
+                    <Form>
+                        <Form.Item label="Тема">
+                            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Введите тему" />
+                        </Form.Item>
+                        <Form.Item label="Начало">
+                            <DatePicker value={startDateTime} clearIcon onChange={(v) => setStartDateTime(v === null ? dayjs() : v)} showTime placeholder="Выберите дату и время начала" />
+                        </Form.Item>
+                        <Form.Item>
+                            <div className={classes.List}>
+                                <List
+                                    locale={{ emptyText: "Вопросы отсутствуют" }}
+                                    size="small"
+                                    header={<div>Вопросы</div>}
+                                    footer={
+                                        <>
+                                            <Form.Item style={{ display: "inline-block", width: "75%" }}>
+                                                <Input value={inputQuestion} onChange={e => setInputQuestion(e.target.value)} placeholder="Введите вопрос для совещания" />
+                                            </Form.Item>
+                                            <Form.Item style={{ display: "inline-block", width: "25%" }}>
+                                                <Row justify="end">
+                                                    <Button onClick={addQuestionInList}>Добавить</Button>
+                                                </Row>
+                                            </Form.Item>
+                                        </>
+                                    }
+                                    dataSource={questions}
+                                    renderItem={(item, index) => <List.Item actions={[
+                                        <Button onClick={() => deleteQuestionFromList(item)} key="Delete">Удалить</Button>
+                                    ]} key={index}>{item}</List.Item>}
+                                />
+                            </div>
+                        </Form.Item>
+                        <Form.Item label="Участники">
+                            <Row justify="center">
+                                <Transfer
+                                    dataSource={users}
+                                    titles={['', 'Выбранные']}
+                                    targetKeys={targetKeys}
+                                    selectedKeys={selectedKeys}
+                                    onChange={onChange}
+                                    onSelectChange={onSelectChange}
+                                    render={(item) => item.title}
+                                    locale={{
+                                        selectAll: "Выделить всех",
+                                        itemsUnit: "ч.",
+                                        itemUnit: "ч.",
+                                        selectInvert: "Инвертировать выделение",
+                                        notFoundContent: "Никого"
+                                    }}
+                                />
+                            </Row>
+                        </Form.Item>
+                        <Form.Item label="Добавление гостя">
+                            <Form.Item>
+                                <Input value={questLogin} onChange={(e) => setQuestLogin(e.target.value)} placeholder="Введите логин" />
+                            </Form.Item>
+                            <Form.Item>
+                                <Password value={questPassword} onChange={(e) => setQuestPassword(e.target.value)} placeholder="Введите пароль" />
+                            </Form.Item>
+                            <Form.Item>
+                                <Input value={questName} onChange={(e) => setQuestName(e.target.value)} placeholder="Введите имя" />
+                            </Form.Item>
+                            <Form.Item>
+                                <Button onClick={createQuest}>Добавить</Button>
+                            </Form.Item>
+                        </Form.Item>
+                        <Form.Item label="Документы">
+                            <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
+                                <Upload.Dragger name="files" beforeUpload={(file: UploadFile) => {
+                                    setFileList((prev) => [...prev, file]);
+                                    return false;
 
-                                        }} onRemove={(file: UploadFile) => {
-                                            setFileList((prev) => prev.filter((item) => item.uid !== file.uid));
-                                        }}>
-                                            <p className="ant-upload-drag-icon">
-                                                <InboxOutlined />
-                                            </p>
-                                            <p className="ant-upload-text">Нажмите или перетяните для загрузки.</p>
-                                            <p className="ant-upload-hint">Подерживается загрузка несокльких документов.</p>
-                                        </Upload.Dragger>
-                                    </Form.Item>
-                                </Form.Item>
-                            </Form>
-                        </div>
-                    </Modal>
-                    <Row justify="end">
-                        <Button type="primary" style={{marginTop: "10px"}} onClick={showModal}>
-                            Добавить совещание
-                        </Button>
-                    </Row>
-
-                    <MeetingsList buttons={[{ content: "Перейти", onClick: goToMeeting }]} isLoading={isLoading} meetings={meetings} />
+                                }} onRemove={(file: UploadFile) => {
+                                    setFileList((prev) => prev.filter((item) => item.uid !== file.uid));
+                                }}>
+                                    <p className="ant-upload-drag-icon">
+                                        <InboxOutlined />
+                                    </p>
+                                    <p className="ant-upload-text">Нажмите или перетяните для загрузки.</p>
+                                    <p className="ant-upload-hint">Подерживается загрузка несокльких документов.</p>
+                                </Upload.Dragger>
+                            </Form.Item>
+                        </Form.Item>
+                    </Form>
                 </div>
-            </div>
+            </Modal>
+
+            <Row justify="end">
+                <Button type="primary" style={{margin: "20px 0"}} onClick={showModal}>
+                    Добавить совещание
+                </Button>
+            </Row>
+
+            <MeetingsList buttons={[{ content: "Перейти", onClick: goToMeeting }]} isLoading={isLoading} meetings={meetings} />
         </div>
     );
 };

@@ -20,9 +20,9 @@ export const getMeetingPath = (id: string) => {
     return "/meetings/" + id;
 };
 
-export const getAdministratorRoutes = (fail: (message: string) => void) => {
+export const getAdministratorRoutes = (fail: (message: string) => void, success: (message: string) => void) => {
     return [
-        { path: RouteNames.USERS, element: <Users fail={fail} /> },
+        { path: RouteNames.USERS, element: <Users success={success} fail={fail} /> },
         { path: RouteNames.MEETINGS, element: <AdministratorMeetings /> },
         { path: RouteNames.REPORT, element: <Report /> },
         { path: RouteNames.ALL, element: <Navigate to={RouteNames.MEETINGS} /> }
@@ -31,7 +31,7 @@ export const getAdministratorRoutes = (fail: (message: string) => void) => {
 
 export const getSecretaryRoutes = (fail: (message: string) => void, success: (message: string) => void) => {
     return [
-        { path: RouteNames.MEETINGS, element: <SecretaryMeetings /> },
+        { path: RouteNames.MEETINGS, element: <SecretaryMeetings fail={fail} success={success} /> },
         { path: RouteNames.MEETING, element: <SecretaryMeeting fail={fail} success={success} /> },
         { path: RouteNames.ALL, element: <Navigate to={RouteNames.MEETINGS} /> }
     ];

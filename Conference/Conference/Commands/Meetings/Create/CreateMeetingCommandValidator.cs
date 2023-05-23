@@ -7,11 +7,17 @@ namespace Conference.Commands.Meetings.Create
         public CreateMeetingCommandValidator()
         {
             RuleFor(x => x.Questions)
-                .Must(x => x != null)
                 .Must(x => x.Count > 0)
+                .WithMessage("У совещания должен быть минимум один вопрос");
+
+            RuleFor(x => x.Questions)
+                .Must(x => x != null)
+                .WithMessage("У совещания должен быть минимум один вопрос");
+
+            RuleFor(x => x.Questions)
                 .ForEach(q =>
                     q.Length(2, 70))
-                .WithMessage("У совещания должен быть минимум один вопрос. Вопросы должны быть длиной от 2 до 70 символов"); ;
+                .WithMessage("Вопросы должны быть длиной от 2 до 70 символов"); ;
 
             RuleFor(x => x.UsersId)
                 .Must(x => x.Count > 0)

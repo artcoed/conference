@@ -78,7 +78,7 @@ const QuestAccount: FC<{ fail: (message: string) => void, success: (message: str
     return (
         <div>
             <Heading content="Аккаунт" />
-
+            <div style={{height: "20px"}} />
             <NotificationsList
                 isLoading={isLoadingNotifications}
                 notifications={notifications}
@@ -86,7 +86,7 @@ const QuestAccount: FC<{ fail: (message: string) => void, success: (message: str
                     { content: "Прочитать", onClick: tryCheckNotification }
                 ]}
             />
-
+            <div style={{ height: "20px" }} />
             <MeetingsList
                 isLoading={isLoadingMeetings}
                 meetings={meetings}

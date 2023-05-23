@@ -22,13 +22,13 @@ const DecisionsList: FC<{
         const trimmedInput = inputDecision.trim()
 
         if (trimmedInput.length < 2 || trimmedInput.length > 100) {
-            fail("Длина решения должна быть от 2 до 100 символов")
+            fail("Р”Р»РёРЅР° СЂРµС€РµРЅРёСЏ РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РѕС‚ 2 РґРѕ 100 СЃРёРјРІРѕР»РѕРІ")
             return;
         }
 
         if (meeting.decisions) {
             if (meeting.decisions.includes(trimmedInput)) {
-                fail("Нельзя создать одинаковые решения");
+                fail("РќРµР»СЊР·СЏ СЃРѕР·РґР°С‚СЊ РѕРґРёРЅР°РєРѕРІС‹Рµ СЂРµС€РµРЅРёСЏ");
                 return;
             }
         }
@@ -37,7 +37,7 @@ const DecisionsList: FC<{
             await createDecision(meeting.id ?? 0, trimmedInput);
             setMeeting({ ...meeting, decisions: [...(meeting.decisions ?? []), trimmedInput] });
             setInputDecision('');
-            success("Решение успешно добавлено");
+            success("Р РµС€РµРЅРёРµ СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅРѕ");
         } catch (e) {
             const error = e as IMessagesErrorResponse;
             if (error.response) {
@@ -47,11 +47,11 @@ const DecisionsList: FC<{
     }
 
     return (
-        <div className={classes.List}>
+        <div className={classes.ListContainer}>
             <List
-                locale={{ emptyText: "Решения отсутствуют" }}
+                locale={{ emptyText: "Р РµС€РµРЅРёСЏ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚" }}
                 size="small"
-                header={<div>Решения</div>}
+                header={<div>Р РµС€РµРЅРёСЏ</div>}
                 dataSource={meeting.decisions}
                 renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
                 footer={
@@ -59,11 +59,11 @@ const DecisionsList: FC<{
                         {!meeting.hasCompleted &&
                             <>
                                 <Form.Item style={{ display: "inline-block", width: "75%" }}>
-                                    <Input value={inputDecision} onChange={e => setInputDecision(e.target.value)} placeholder="Введите вопрос для совещания" />
+                                    <Input value={inputDecision} onChange={e => setInputDecision(e.target.value)} placeholder="Р’РІРµРґРёС‚Рµ РІРѕРїСЂРѕСЃ РґР»СЏ СЃРѕРІРµС‰Р°РЅРёСЏ" />
                                 </Form.Item>
                                 <Form.Item style={{ display: "inline-block", width: "25%" }}>
                                     <Row justify="end">
-                                        <Button onClick={addDecisionInList}>Добавить</Button>
+                                        <Button onClick={addDecisionInList}>Р”РѕР±Р°РІРёС‚СЊ</Button>
                                     </Row>
                                 </Form.Item>
                             </>}

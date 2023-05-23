@@ -3,7 +3,7 @@
     public class Meeting
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string MeetingTitle { get; set; }
         public DateTime StartDate { get; set; }
         public TimeSpan StartTime { get; set; }
         public DateTime StartDateTime => StartDate + StartTime;

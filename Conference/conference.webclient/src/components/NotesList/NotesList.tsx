@@ -12,14 +12,14 @@ const NotesList: FC<{ meeting: IMeeting, setMeeting: (meeting: IMeeting) => void
         const trimmedNote = inputNote.trim()
 
         if (trimmedNote.length < 2 || trimmedNote.length > 100) {
-            fail("Длина заметки должна быть от 2 до 100 символов");
+            fail("Р”Р»РёРЅР° Р·Р°РјРµС‚РєРё РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РѕС‚ 2 РґРѕ 100 СЃРёРјРІРѕР»РѕРІ");
             return;
         }
 
         if (meeting.notes) {
             for (let i = 0; i < meeting.notes.length; i++) {
                 if (meeting.notes[i] === trimmedNote) {
-                    fail("Нельзя создать одинаковые заметки")
+                    fail("РќРµР»СЊР·СЏ СЃРѕР·РґР°С‚СЊ РѕРґРёРЅР°РєРѕРІС‹Рµ Р·Р°РјРµС‚РєРё")
                     return;
                 }
             }
@@ -29,7 +29,7 @@ const NotesList: FC<{ meeting: IMeeting, setMeeting: (meeting: IMeeting) => void
             await createNote(meeting.id ?? 0, trimmedNote);
             setMeeting({ ...meeting, notes: [...meeting.notes ?? [], trimmedNote] })
             setInputNote('')
-            success("Заметка успешно добавлена")
+            success("Р—Р°РјРµС‚РєР° СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅР°")
         } catch (e) {
             const error = e as IMessagesErrorResponse;
             if (error.response) {
@@ -42,9 +42,9 @@ const NotesList: FC<{ meeting: IMeeting, setMeeting: (meeting: IMeeting) => void
         <Form>
             <div className={classes.ListContainer}>
                 <List
-                    locale={{ emptyText: "Заметки отсутствуют" }}
+                    locale={{ emptyText: "Р—Р°РјРµС‚РєРё РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚" }}
                     size="small"
-                    header={<div>Заметки</div>}
+                    header={<div>Р—Р°РјРµС‚РєРё</div>}
                     dataSource={meeting.notes}
                     renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
                     footer={
@@ -52,11 +52,11 @@ const NotesList: FC<{ meeting: IMeeting, setMeeting: (meeting: IMeeting) => void
                             {!meeting.hasCompleted &&
                                 <>
                                 <Form.Item style={{ display: "inline-block", width: "75%" }}>
-                                    <Input value={inputNote} onChange={e => setInputNote(e.target.value)} placeholder="Введите содержимое заметки" />
+                                    <Input value={inputNote} onChange={e => setInputNote(e.target.value)} placeholder="Р’РІРµРґРёС‚Рµ СЃРѕРґРµСЂР¶РёРјРѕРµ Р·Р°РјРµС‚РєРё" />
                                 </Form.Item>
                                 <Form.Item style={{ display: "inline-block", width: "25%" }}>
                                     <Row justify="end">
-                                        <Button onClick={addNoteInList}>Добавить</Button>
+                                        <Button onClick={addNoteInList}>Р”РѕР±Р°РІРёС‚СЊ</Button>
                                     </Row>
                                 </Form.Item>
                                 </>

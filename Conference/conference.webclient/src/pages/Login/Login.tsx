@@ -1,4 +1,4 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Row } from 'antd';
 import Password from 'antd/es/input/Password';
 import React, { FC, useState } from 'react';
 import Heading from '../../components/Heading/Heading';
@@ -33,7 +33,7 @@ const Login: FC<{ fail: (message: string) => void, setRole: (role: Roles) => voi
         <div>
             <Heading content="Вход" />
 
-            <Form>
+            <Form style={{maxWidth: "500px", margin: "0 auto", marginTop: "20px"}}>
                 <Form.Item>
                     <Input placeholder="Введите логин" value={user.login} onChange={e => setUser({ ...user, login: e.target.value })} />
                 </Form.Item>
@@ -41,7 +41,9 @@ const Login: FC<{ fail: (message: string) => void, setRole: (role: Roles) => voi
                     <Password placeholder="Введите пароль" value={user.password} onChange={e => setUser({ ...user, password: e.target.value })} />
                 </Form.Item>
                 <Form.Item>
-                    <Button onClick={submit} loading={isLoginLoading}>Войти</Button>
+                    <Row justify="end">
+                        <Button onClick={submit} loading={isLoginLoading}>Войти</Button>
+                    </Row>
                 </Form.Item>
             </Form>
         </div>

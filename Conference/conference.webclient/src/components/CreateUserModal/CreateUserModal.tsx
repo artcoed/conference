@@ -10,11 +10,13 @@ const CreateUserModal: FC<{
     isOpening: boolean,
     setIsOpening: (state: boolean) => void,
     fail: (message: string) => void,
+    success: (message: string) => void,
     updateUsersList: () => void
 }> = ({
     isOpening,
     setIsOpening,
     fail,
+    success,
     updateUsersList
 }) => {
     const [user, setUser] = useState<IUser>({} as IUser);
@@ -32,6 +34,7 @@ const CreateUserModal: FC<{
 
             updateUsersList()
             setUser({} as IUser);
+            success("Пользователь создан");
             close();
         } catch (e) {
             const error = e as IMessagesErrorResponse;

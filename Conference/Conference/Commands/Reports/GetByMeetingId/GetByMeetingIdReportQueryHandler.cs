@@ -46,7 +46,7 @@ namespace Conference.Commands.Reports.GetByMeetingId
             var reportDto = new ReportDto
             {
                 Id = request.MeetingId,
-                MeetingTitle = meeting.Title,
+                MeetingTitle = meeting.MeetingTitle,
                 MeetingCompleted = meeting.HasCompleted,
                 StartDateTime = meeting.StartDateTime,
                 EndDateTime = meeting.EndDateTime,

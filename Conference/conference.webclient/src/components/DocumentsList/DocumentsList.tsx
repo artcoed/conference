@@ -12,12 +12,12 @@ const DocumentsList: FC<{ documents: IDocument[] }> = ({ documents }) => {
     return (
         <div className={classes.ListContainer}>
             <List
-                header={"Документы"}
-                locale={{ emptyText: "Документов нет" }}
+                header={"Р”РѕРєСѓРјРµРЅС‚С‹"}
+                locale={{ emptyText: "Р”РѕРєСѓРјРµРЅС‚РѕРІ РЅРµС‚" }}
                 dataSource={documents}
                 renderItem={(document) => (
                     <List.Item key={document.id}
-                        actions={[<Button key={"Download"} onClick={() => { tryDownloadDocument(document) }}>Скачать</Button>]}
+                        actions={[<Button key={"Download"} onClick={() => { tryDownloadDocument(document) }}>РЎРєР°С‡Р°С‚СЊ</Button>]}
                     >
                         <List.Item.Meta
                             title={document.name}

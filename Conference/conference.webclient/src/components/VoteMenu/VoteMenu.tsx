@@ -19,7 +19,7 @@ const VoteMenu: FC<{
         try {
             await createVote(meeting.id ?? 0, meeting.selectedOption ?? '');
             setMeeting({ ...meeting, hasVoted: true })
-            success("Вы успешно проголосовали")
+            success("Р’С‹ СѓСЃРїРµС€РЅРѕ РїСЂРѕРіРѕР»РѕСЃРѕРІР°Р»Рё")
         } catch (e) {
             const error = e as IMessagesErrorResponse
             if (error.response) {
@@ -34,12 +34,12 @@ const VoteMenu: FC<{
 
     return (
         <div style={{ marginTop: "20px" }}>
-            <p style={{ fontSize: "16px", textAlign: "center" }}>{meeting.meetingTitle}</p>
+            <p style={{ fontSize: "16px", textAlign: "center" }}>{meeting.votingTitle}</p>
             <Row justify="center" style={{ marginTop: "10px" }}>
                 <Segmented disabled={meeting.hasVoted || meeting.hasCompleted} options={meeting.votingOptions ?? []} defaultValue={meeting.selectedOption} onChange={changeOption} />
             </Row>
             <Row justify="center" style={{ marginTop: "10px" }}>
-                <Button onClick={vote} disabled={meeting.hasVoted || meeting.hasCompleted}>Проголосовать</Button>
+                <Button onClick={vote} disabled={meeting.hasVoted || meeting.hasCompleted}>РџСЂРѕРіРѕР»РѕСЃРѕРІР°С‚СЊ</Button>
             </Row>
         </div>
     );

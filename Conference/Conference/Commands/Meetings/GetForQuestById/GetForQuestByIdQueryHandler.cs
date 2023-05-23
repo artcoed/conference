@@ -51,13 +51,14 @@ namespace Conference.Commands.Meetings.GetForQuestById
                 Id = meeting.Id,
                 HasCompleted = meeting.HasCompleted,
                 HasVoting = meeting.HasVoting,
-                MeetingTitle = meeting.Title,
+                MeetingTitle = meeting.MeetingTitle,
                 VotingTitle = meeting.VotingTitle,
                 Notes = notes,
-                Options = meeting.Options.Select(x => x.Value).ToList(),
-                Documents = meeting.Documents.Select(x => new QuestDocumentDto { Id = x.Id, Title = x.Name }).ToList(),
+                VotingOptions = meeting.Options.Select(x => x.Value).ToList(),
+                Documents = meeting.Documents.Select(x => new QuestDocumentDto { Id = x.Id, Name = x.Name }).ToList(),
                 HasVoted = hasVoted,
-                SelectedOption = selectedOption
+                SelectedOption = selectedOption,
+                Questions = meeting.Questions.Select(x => x.Value).ToList()
             };
 
             return Result.Ok(meetingDto);

@@ -8,10 +8,10 @@ const NotificationsList: FC<{ isLoading: boolean, notifications: INotification[]
     return (
         <div className={classes.ListContainer}>
             <List
-                header={"Óâåäîìëåíèÿ"}
+                header={"Ð£Ð²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ñ"}
                 loading={isLoading}
                 dataSource={notifications}
-                locale={{ emptyText: "Óâåäîìëåíèé íåò" }}
+                locale={{ emptyText: "Ð£Ð²ÐµÐ´Ð¾Ð¼Ð»ÐµÐ½Ð¸Ð¹ Ð½ÐµÑ‚" }}
                 renderItem={(notification) => (
                     <List.Item key={notification.id}
                         actions={buttons.map(button =>
@@ -24,7 +24,7 @@ const NotificationsList: FC<{ isLoading: boolean, notifications: INotification[]
                         )}
                     >
                         <List.Item.Meta
-                            title={"Âû áûëè ïðèãëàøåíû íà ñîâåùàíèå ïî òåìå: " + notification.meeting?.meetingTitle}
+                            title={"Ð’Ñ‹ Ð±Ñ‹Ð»Ð¸ Ð¿Ñ€Ð¸Ð³Ð»Ð°ÑˆÐµÐ½Ñ‹ Ð½Ð° ÑÐ¾Ð²ÐµÑ‰Ð°Ð½Ð¸Ðµ Ð¿Ð¾ Ñ‚ÐµÐ¼Ðµ: " + notification.meeting?.meetingTitle}
                         />
                     </List.Item>
                 )}

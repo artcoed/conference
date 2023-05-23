@@ -26,7 +26,7 @@ namespace Conference.Commands.Meetings.Create
             var users = invitedUsersResult.Value.ToList();
             var meeting = new Meeting
             {
-                Title = request.Title,
+                MeetingTitle = request.Title,
                 StartDate = request.StartMeetingDateTime.Date,
                 StartTime = request.StartMeetingDateTime.TimeOfDay,
                 Questions = request.Questions.Select(x => new Question { Value = x }).ToList(),

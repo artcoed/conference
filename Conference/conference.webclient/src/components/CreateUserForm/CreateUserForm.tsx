@@ -9,7 +9,7 @@ const CreateUserForm: FC<{ user: IUser, setUser: (user: IUser) => void }> = ({ u
     };
 
     return (
-        <Form>
+        <Form style={{ paddingTop: "20px", paddingBottom: "10px" }}>
             <Form.Item label="Логин">
                 <Input placeholder="Введите логин" value={user.login} onChange={(e) => setUser({ ...user, login: e.target.value })} />
             </Form.Item>

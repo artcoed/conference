@@ -31,7 +31,7 @@ namespace Conference.Commands.Meetings.GetById
                 EndDateTime = meeting.EndDateTime,
                 HasCompleted = meeting.HasCompleted,
                 HasVoting = meeting.HasVoting,
-                MeetingTitle = meeting.Title,
+                MeetingTitle = meeting.MeetingTitle,
                 StartDateTime = meeting.StartDateTime,
                 VotingOptions = meeting.Options.Select(x => x.Value).ToList(),
                 VotingTitle = meeting.VotingTitle

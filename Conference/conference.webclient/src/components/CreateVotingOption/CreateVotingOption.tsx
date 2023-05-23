@@ -19,30 +19,35 @@ const CreateVotingOption: FC<{
         const trimOption = inputOption.trim()
 
         if (trimOption.length < 1 || trimOption.length > 50) {
-            fail("Вариант голосования должен содержать от 1 до 50 символов")
+            fail("Р’Р°СЂРёР°РЅС‚ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ РґРѕР»Р¶РµРЅ СЃРѕРґРµСЂР¶Р°С‚СЊ РѕС‚ 1 РґРѕ 50 СЃРёРјРІРѕР»РѕРІ")
             return;
         }
 
         if (meeting.votingOptions) {
             if (meeting.votingOptions.includes(trimOption)) {
-                fail("Нельзя создать одинаковые варианты голосования")
+                fail("РќРµР»СЊР·СЏ СЃРѕР·РґР°С‚СЊ РѕРґРёРЅР°РєРѕРІС‹Рµ РІР°СЂРёР°РЅС‚С‹ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ")
+                return;
+            }
+
+            if (meeting.votingOptions.length >= 8) {
+                fail("РќРµР»СЊР·СЏ СЃРѕР·РґР°С‚СЊ Р±РѕР»СЊС€Рµ 8 РІР°СЂРёР°РЅС‚РѕРІ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ")
                 return;
             }
         }
 
         setMeeting({ ...meeting, votingOptions: [...(meeting.votingOptions ?? []), trimOption] })
-        success('Вариант голосования успешно добавлен')
+        success('Р’Р°СЂРёР°РЅС‚ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅ')
         setInputOption('')
     }
 
     return (
         <div>
             <Form.Item style={{ display: "inline-block", width: "75%" }}>
-                <Input value={inputOption} onChange={e => setInputOption(e.target.value)} placeholder="Введите вариант голосования" />
+                <Input value={inputOption} onChange={e => setInputOption(e.target.value)} placeholder="Р’РІРµРґРёС‚Рµ РІР°СЂРёР°РЅС‚ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ" />
             </Form.Item>
             <Form.Item style={{ display: "inline-block", width: "25%" }}>
                 <Row justify="end">
-                    <Button onClick={addOptionInList}>Добавить</Button>
+                    <Button onClick={addOptionInList}>Р”РѕР±Р°РІРёС‚СЊ</Button>
                 </Row>
             </Form.Item>
         </div>

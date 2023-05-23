@@ -1,0 +1,8 @@
+.Wrapper {
+    width: 100%;
+}
+
+.Container {
+    max-width: 1200px;
+    margin: 0 auto;
+}

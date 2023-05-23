@@ -6,9 +6,9 @@ const QuestionsList: FC<{ questions: string[] }> = ({ questions }) => {
     return (
         <div className={classes.List}>
             <List
-                locale={{ emptyText: "Вопросы отсутствуют" }}
+                locale={{ emptyText: "Р’РѕРїСЂРѕСЃС‹ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚" }}
                 size="small"
-                header={<div>Вопросы</div>}
+                header={<div>Р’РѕРїСЂРѕСЃС‹</div>}
                 dataSource={questions}
                 renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
             />

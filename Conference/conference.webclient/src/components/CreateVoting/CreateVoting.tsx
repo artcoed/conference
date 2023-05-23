@@ -23,20 +23,22 @@ const CreateVoting: FC<{
         const trimTitle = inputVotingTitle.trim()
 
         if (trimTitle.length < 3 || trimTitle.length > 100) {
-            fail("Заголовок голосования должен содержать от 3 до 100 символов")
+            fail("Р—Р°РіРѕР»РѕРІРѕРє РіРѕР»РѕСЃРѕРІР°РЅРёСЏ РґРѕР»Р¶РµРЅ СЃРѕРґРµСЂР¶Р°С‚СЊ РѕС‚ 3 РґРѕ 100 СЃРёРјРІРѕР»РѕРІ")
             return;
         }
 
         if ((meeting.votingOptions ?? []).length < 2 || (meeting.votingOptions ?? []).length > 8) {
-            fail("Голосование должно содержать от 2 до 8 вариантов голосования")
+            fail("Р“РѕР»РѕСЃРѕРІР°РЅРёРµ РґРѕР»Р¶РЅРѕ СЃРѕРґРµСЂР¶Р°С‚СЊ РѕС‚ 2 РґРѕ 8 РІР°СЂРёР°РЅС‚РѕРІ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ")
             return;
         }
 
         try {
             await createVoting(meeting.id ?? 0, trimTitle, meeting.votingOptions ?? []);
-            meeting.votingTitle = trimTitle
-            meeting.hasVoting = true;
-            success("Голосование успешно добавлено")
+            const newMeeting = {...meeting}
+            newMeeting.votingTitle = trimTitle
+            newMeeting.hasVoting = true;
+            setMeeting(newMeeting);
+            success("Р“РѕР»РѕСЃРѕРІР°РЅРёРµ СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅРѕ")
         } catch (e) {
             const error = e as IMessagesErrorResponse
             if (error.response) {
@@ -48,15 +50,15 @@ const CreateVoting: FC<{
     return (
         <div style={{ marginTop: "20px" }}>
             {!meeting.hasVoting && !meeting.hasCompleted &&
-                <p style={{ textAlign: "center", fontSize: "16px" }}>Добавления голосования</p>
+                <p style={{ textAlign: "center", fontSize: "16px" }}>Р”РѕР±Р°РІР»РµРЅРёСЏ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ</p>
             }
 
             <Row justify="center">
                 <Form style={{ marginTop: "10px", width: "650px" }}>
 
                     {!meeting.hasVoting && !meeting.hasCompleted &&
-                        <Form.Item label="Заголовок">
-                            <Input value={inputVotingTitle} onChange={e => setInputVotingTitle(e.target.value)} placeholder="Введите заголовок голосования" />
+                        <Form.Item label="Р—Р°РіРѕР»РѕРІРѕРє">
+                            <Input value={inputVotingTitle} onChange={e => setInputVotingTitle(e.target.value)} placeholder="Р’РІРµРґРёС‚Рµ Р·Р°РіРѕР»РѕРІРѕРє РіРѕР»РѕСЃРѕРІР°РЅРёСЏ" />
                         </Form.Item>
                     }
 
@@ -66,9 +68,9 @@ const CreateVoting: FC<{
 
                     <div className={classes.ListContainer} style={{ marginBottom: "20px" }}>
                         <List
-                            locale={{ emptyText: "Варианты голосования отсутствуют" }}
+                            locale={{ emptyText: "Р’Р°СЂРёР°РЅС‚С‹ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚" }}
                             size="small"
-                            header={<div>Варианты голосования</div>}
+                            header={<div>Р’Р°СЂРёР°РЅС‚С‹ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ</div>}
                             dataSource={meeting.votingOptions}
                             renderItem={(item, index) => <List.Item key={index}>{item}</List.Item>}
                             footer={
@@ -84,7 +86,7 @@ const CreateVoting: FC<{
                     {!meeting.hasVoting && !meeting.hasCompleted &&
                         <Form.Item>
                             <Row justify="start">
-                                <Button onClick={tryCreateVoting}>Добавить голосование</Button>
+                                <Button onClick={tryCreateVoting}>Р”РѕР±Р°РІРёС‚СЊ РіРѕР»РѕСЃРѕРІР°РЅРёРµ</Button>
                             </Row>
                         </Form.Item>
                     }

@@ -6,14 +6,14 @@ import { getStringFromDateTime } from "../../services/DateFormatterService";
 const MeetingDescription: FC<{ meeting: IMeeting }> = ({ meeting }) => {
     return (
 
-        <Descriptions title="Основная информация" layout="horizontal" style={{ marginTop: "10px" }}>
-            <Descriptions.Item label="Тема">{meeting.meetingTitle}</Descriptions.Item>
-            <Descriptions.Item label="Начато">{getStringFromDateTime(meeting.startDateTime)}</Descriptions.Item>
+        <Descriptions title="РћСЃРЅРѕРІРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ" layout="horizontal" style={{ marginTop: "10px" }}>
+            <Descriptions.Item label="РўРµРјР°">{meeting.meetingTitle}</Descriptions.Item>
+            <Descriptions.Item label="РќР°С‡Р°С‚Рѕ">{getStringFromDateTime(meeting.startDateTime)}</Descriptions.Item>
             {
                 meeting.hasCompleted &&
-                <Descriptions.Item label="Завершено">{getStringFromDateTime(meeting.endDateTime)}</Descriptions.Item>
+                <Descriptions.Item label="Р—Р°РІРµСЂС€РµРЅРѕ">{getStringFromDateTime(meeting.endDateTime)}</Descriptions.Item>
             }
-            <Descriptions.Item label="Наличие голосования">{meeting.hasVoting ? "Существует" : "Не сущeствует"}</Descriptions.Item>
+            <Descriptions.Item label="РќР°Р»РёС‡РёРµ РіРѕР»РѕСЃРѕРІР°РЅРёСЏ">{meeting.hasVoting ? "РЎСѓС‰РµСЃС‚РІСѓРµС‚" : "РќРµ СЃСѓС‰eСЃС‚РІСѓРµС‚"}</Descriptions.Item>
         </Descriptions>
     );
 };

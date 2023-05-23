@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 import DocumentsList from '../../components/DocumentsList/DocumentsList';
 import Heading from '../../components/Heading/Heading';
 import NotesList from '../../components/NotesList/NotesList';
+import PageLoader from '../../components/PageLoader/PageLoader';
+import QuestionsList from '../../components/QuestionsList/QuestionsList';
 import VoteMenu from '../../components/VoteMenu/VoteMenu';
 import { getForQuestById } from '../../http/meetings';
 import { IMeeting } from '../../models/domain/IMeeting';
@@ -11,6 +13,7 @@ import { IIdParameter } from '../../models/tools/IIdParameter';
 
 const QuestMeeting: FC<{ fail: (message: string) => void, success: (message: string) => void }> = ({ fail, success }) => {
     const { id } = useParams<IIdParameter>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [role, setRole] = useState(Roles.Quest);
     const [meeting, setMeeting] = useState<IMeeting>({} as IMeeting);
 
@@ -34,9 +37,10 @@ const QuestMeeting: FC<{ fail: (message: string) => void, success: (message: str
         } catch (e) { }
     }
 
-    const updateQuestMeeting = () => {
+    const updateQuestMeeting = async () => {
         updateRole();
-        updateMeeting();
+        await updateMeeting();
+        setIsLoading(false);
     }
 
     useEffect(() => {
@@ -45,11 +49,19 @@ const QuestMeeting: FC<{ fail: (message: string) => void, success: (message: str
 
     return (
         <div>
-            <Heading content={meeting.meetingTitle ?? ""} />
-            <NotesList meeting={meeting} setMeeting={setMeeting} fail={fail} success={success} />
-            <DocumentsList documents={meeting.documents ?? []} />
-            {meeting.hasVoting && role === Roles.Worker &&
-                <VoteMenu fail={fail} meeting={meeting} setMeeting={setMeeting} success={success} />    
+            {isLoading ? <PageLoader /> :
+                <>
+                    <Heading content={meeting.meetingTitle ?? ""} />
+                    <div style={{ height: "20px" }} />
+                    <QuestionsList questions={meeting.questions ?? []} /> 
+                    <div style={{height: "10px"}} />
+                    <NotesList meeting={meeting} setMeeting={setMeeting} fail={fail} success={success} />
+                    <div style={{height: "10px"}} />
+                    <DocumentsList documents={meeting.documents ?? []} />
+                    {meeting.hasVoting && role === Roles.Worker &&
+                        <VoteMenu fail={fail} meeting={meeting} setMeeting={setMeeting} success={success} />
+                    }
+                </>
             }
         </div>
     );

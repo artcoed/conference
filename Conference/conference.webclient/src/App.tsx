@@ -7,7 +7,7 @@ const App: FC = () => {
 
 
     return (
-        <Layout>
+        <Layout className="Layout">
             <AppRouter/>
         </Layout>
     );

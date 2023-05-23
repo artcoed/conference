@@ -7,7 +7,7 @@ import { deleteUser, getUsers } from '../../http/users';
 import { IUser } from '../../models/domain/IUser';
 import { IMessagesErrorResponse } from '../../models/response/IMessagesErrorResponse';
 
-const Users: FC<{ fail: (message: string) => void }> = ({ fail }) => {
+const Users: FC<{ fail: (message: string) => void, success: (message: string) => void }> = ({ fail, success }) => {
     const [isOpening, setIsOpening] = useState<boolean>(false);
     const [users, setUsers] = useState<IUser[]>([] as IUser[]);
     const [isUsersLoading, setIsUsersLoading] = useState<boolean>(true);
@@ -33,12 +33,12 @@ const Users: FC<{ fail: (message: string) => void }> = ({ fail }) => {
 
         try {
             await deleteUser(user);
+            success("Пользователь удален")
         } catch (e) {
             const error = e as IMessagesErrorResponse
             if (error.response) {
                 fail(error.response.data[0].message);
             }
-            console.log(error)
         }
 
         setIsLoadingDeleting(false)
@@ -53,12 +53,12 @@ const Users: FC<{ fail: (message: string) => void }> = ({ fail }) => {
         <div>
             <Heading content="Пользователи" />
 
-            <Row justify="end">
+            <Row justify="end" style={{margin: "20px 0"}}>
                 <Button type="primary" onClick={showCreateUserModal}>
                     Добавить пользователя
                 </Button>
             </Row>
-            <CreateUserModal fail={fail} isOpening={isOpening} setIsOpening={setIsOpening} updateUsersList={updateUsersList} />
+            <CreateUserModal success={success} fail={fail} isOpening={isOpening} setIsOpening={setIsOpening} updateUsersList={updateUsersList} />
             <UsersList isLoadingDeleting={isLoadingDeleting} users={users} deleteUser={tryDeleteUser} isLoading={isUsersLoading} />
         </div>
     );

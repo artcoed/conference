@@ -20,6 +20,7 @@ const MeetingsList: FC<{ meetings: IMeeting[], isLoading: boolean, buttons: List
     return (
         <div className={classes.ListContainer}>
             <List
+                header="Совещания"
                 locale={{emptyText: "Совещаний нет"}}
                 loading={isLoading}
                 dataSource={meetings}

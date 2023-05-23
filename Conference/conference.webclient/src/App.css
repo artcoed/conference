@@ -8,3 +8,7 @@ h1 {
     margin-block-start: 0;
     margin-block-end: 0;
 }
+
+.Layout {
+    min-height: 100vh;
+}
