@@ -18,14 +18,10 @@ const Navbar: FC<{ role: Roles, setRole: (role: Roles) => void }> = ({ role, set
 
     const logoutMenuButton: IMenuButton = { label: "Выйти", onClick: logout };
 
-    const administratorMenuButtons: IMenuButton[] = [
-        { label: "Отчеты", onClick: () => navigate(RouteNames.MEETINGS) },
-        { label: "Пользователи", onClick: () => navigate(RouteNames.USERS) },
-        logoutMenuButton
-    ];
-
     const secretaryMenuButtons: IMenuButton[] = [
         { label: "Совещания", onClick: () => navigate(RouteNames.MEETINGS) },
+        { label: "Отчеты", onClick: () => navigate(RouteNames.REPORTS) },
+        { label: "Пользователи", onClick: () => navigate(RouteNames.USERS) },
         logoutMenuButton
     ];
 
@@ -40,9 +36,6 @@ const Navbar: FC<{ role: Roles, setRole: (role: Roles) => void }> = ({ role, set
 
     useEffect(() => {
         switch (role) {
-            case Roles.Administrator:
-                setCurrentMenuButtons(administratorMenuButtons);
-                break;
             case Roles.Secretary:
                 setCurrentMenuButtons(secretaryMenuButtons);
                 break;

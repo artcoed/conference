@@ -25,7 +25,7 @@ const UsersList: FC<{
                             <Button
                                 key={"Удалить"}
                                 loading={isLoadingDeleting}
-                                disabled={user.role === "Администратор"}
+                                disabled={user.role === "Секретарь"}
                                 onClick={() => deleteUser(user)}
                             >
                                 Удалить

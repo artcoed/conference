@@ -24,7 +24,7 @@ namespace Conference.Controllers.Users
         /// Get all users list
         /// </summary>
         [HttpGet]
-        [Authorize(Policy = RolesConstants.Administrator)]
+        [Authorize(Policy = RolesConstants.Secretary)]
         public async Task<IActionResult> GetUsersAsync([FromQuery] GetUsersQuery getUsersQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getUsersQuery, cancellationToken));
@@ -44,7 +44,7 @@ namespace Conference.Controllers.Users
         /// Create new user with role
         /// </summary>
         [HttpPost]
-        [Authorize(Policy = RolesConstants.Administrator)]
+        [Authorize(Policy = RolesConstants.Secretary)]
         public async Task<IActionResult> CreateUserAsync(CreateUserCommand createUserCommand, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(createUserCommand, cancellationToken));
@@ -64,7 +64,7 @@ namespace Conference.Controllers.Users
         /// Delete user
         /// </summary>
         [HttpDelete]
-        [Authorize(Policy = RolesConstants.Administrator)]
+        [Authorize(Policy = RolesConstants.Secretary)]
         public async Task<IActionResult> DeleteUserAsync(DeleteUserCommand deleteUserCommand, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(deleteUserCommand, cancellationToken));

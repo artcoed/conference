@@ -19,7 +19,7 @@ namespace Conference.Controllers.Reports
         /// Get report
         /// </summary>
         [HttpGet]
-        [Authorize(Policy = RolesConstants.Administrator)]
+        [Authorize(Policy = RolesConstants.Secretary)]
         public async Task<IActionResult> GetByMeetingIdAsync([FromQuery] GetByMeetingIdReportQuery getReportByMeetingIdQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getReportByMeetingIdQuery, cancellationToken));

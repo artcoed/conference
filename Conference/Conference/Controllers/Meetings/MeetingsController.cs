@@ -48,7 +48,7 @@ namespace Conference.Controllers.Meetings
         /// Get list with all meetings
         /// </summary>
         [HttpGet]
-        [Authorize(Policy = RolesConstants.AdministratorSecretary)]
+        [Authorize(Policy = RolesConstants.Secretary)]
         public async Task<IActionResult> GetMeetingsAsync([FromQuery] GetMeetingsQuery getMeetingsQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getMeetingsQuery, cancellationToken));

@@ -31,7 +31,6 @@ const CreateUserForm: FC<{ user: IUser, setUser: (user: IUser) => void }> = ({ u
                     <Select.Option value="quest">Гость</Select.Option>
                     <Select.Option value="worker">Работник</Select.Option>
                     <Select.Option value="secretary">Секретарь</Select.Option>
-                    <Select.Option value="administrator">Администратор</Select.Option>
                 </Select>
             </Form.Item>
         </Form>

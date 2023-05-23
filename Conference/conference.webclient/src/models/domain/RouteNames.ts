@@ -5,5 +5,6 @@ export enum RouteNames {
     USERS = 'users',
     MEETINGS = 'meetings',
     MEETING = 'meetings/:id',
-    REPORT = 'meetings/:id/report',
+    REPORTS = 'reports',
+    REPORT = 'reports/:id',
 }

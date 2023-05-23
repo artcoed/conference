@@ -19,7 +19,7 @@ namespace Conference.Controllers.Roles
         /// Get all existed roles
         /// </summary>
         [HttpGet]
-        [Authorize(Policy = RolesConstants.Administrator)]
+        [Authorize(Policy = RolesConstants.Secretary)]
         public async Task<IActionResult> GetRolesAsync([FromQuery] GetRolesQuery getRolesQuery, CancellationToken cancellationToken)
         {
             return ConvertToActionResult(await _mediator.Send(getRolesQuery, cancellationToken));

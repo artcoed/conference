@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IRoute } from '../../models/domain/IRoute';
 import { Roles } from '../../models/domain/Roles';
-import { getAdministratorRoutes, getPublicRoutes, getQuestAndWorkerRoutes, getSecretaryRoutes } from '../../routes';
+import { getPublicRoutes, getQuestAndWorkerRoutes, getSecretaryRoutes } from '../../routes';
 import { getCurrentRole } from '../../services/RolesService';
 import Navbar from '../Navbar/Navbar';
 import PageLoader from '../PageLoader/PageLoader';
@@ -38,9 +38,6 @@ const AppRouter: FC = () => {
         setIsLoadingRole(true);
 
         switch (role) {
-            case Roles.Administrator:
-                setCurrentRoutes(getAdministratorRoutes(fail, success));
-                break;
             case Roles.Secretary:
                 setCurrentRoutes(getSecretaryRoutes(fail, success));
                 break;
