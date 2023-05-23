@@ -1,9 +1,9 @@
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IRoute } from '../../models/domain/IRoute';
 import { Roles } from '../../models/domain/Roles';
-import { administratorRoutes, publicRoutes, questAndWorkerRoutes, secretaryRoutes } from '../../routes';
+import { getAdministratorRoutes, getPublicRoutes, getQuestAndWorkerRoutes, getSecretaryRoutes } from '../../routes';
 import { getCurrentRole } from '../../services/RolesService';
 import Navbar from '../Navbar/Navbar';
 import PageLoader from '../PageLoader/PageLoader';
@@ -11,33 +11,46 @@ import PageLoader from '../PageLoader/PageLoader';
 const AppRouter: FC = () => {
     const [isLoadingRole, setIsLoadingRole] = useState<boolean>(true);
     const [currentRoutes, setCurrentRoutes] = useState<IRoute[]>([] as IRoute[]);
+    const [role, setRole] = useState(Roles.None);
+
+    const fail = (message: string) => {
+
+    }
+
+    const success = (message: string) => {
+
+    }
 
     useEffect(() => {
-        switch (getCurrentRole()) {
+        setRole(getCurrentRole());
+        setIsLoadingRole(false);
+    }, [])
+
+    useEffect(() => {
+        switch (role) {
             case Roles.Administrator:
-                setCurrentRoutes(administratorRoutes);
+                setCurrentRoutes(getAdministratorRoutes(fail));
                 break;
             case Roles.Secretary:
-                setCurrentRoutes(secretaryRoutes);
+                setCurrentRoutes(getSecretaryRoutes(fail, success));
                 break;
             case Roles.Worker:
-                setCurrentRoutes(questAndWorkerRoutes);
+                setCurrentRoutes(getQuestAndWorkerRoutes(fail, success));
                 break;
             case Roles.Quest:
-                setCurrentRoutes(questAndWorkerRoutes);
+                setCurrentRoutes(getQuestAndWorkerRoutes(fail, success));
                 break;
             default:
-                setCurrentRoutes(publicRoutes);
+                setCurrentRoutes(getPublicRoutes(fail, setRole));
         }
-
-        setIsLoadingRole(false)
-    }, [])
+    }, [role])
 
     return (
         <div>
+
             {isLoadingRole ? <PageLoader /> :
                 <>
-                    <Navbar />
+                    <Navbar setRole={setRole} role={role} />
                     <Layout.Content>
                         <Routes>
                             {currentRoutes.map(route =>

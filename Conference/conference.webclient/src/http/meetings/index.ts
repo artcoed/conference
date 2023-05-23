@@ -7,11 +7,11 @@ import { IGetSingleResponse } from "../../models/response/IGetSingleResponse";
 export const MEETINGS = 'Meetings/';
 
 export const getByInvitedUserMeetings = async () => {
-    return await $api.get<IGetFewResponse<IMeeting>>(MEETINGS + 'GetByInvitedUserMeetings');
+    return await $api.get(MEETINGS + 'GetByInvitedUserMeetings') as IGetFewResponse<IMeeting>;
 }
 
 export const getForQuestById = async (meeting: IMeeting) => {
-    return await $api.get<IGetSingleResponse<IMeeting>>(MEETINGS + 'GetForQuestById?meetingId=' + meeting.id);
+    return await $api.get(MEETINGS + 'GetForQuestById?meetingId=' + meeting.id) as IGetSingleResponse<IMeeting>;
 } 
 
 export const downloadDocument = async (myDocument: IDocument) => {
@@ -34,7 +34,7 @@ export const downloadDocument = async (myDocument: IDocument) => {
 } 
 
 export const getByIdMeeting = async (id: number) => {
-    return await $api.get<IGetSingleResponse<IMeeting>>(MEETINGS + 'GetByIdMeeting?meetingId=' + id);
+    return await $api.get(MEETINGS + 'GetByIdMeeting?meetingId=' + id) as IGetSingleResponse<IMeeting>;
 }
 
 export const completeMeeting = async (meetingId: number) => {

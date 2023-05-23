@@ -24,7 +24,7 @@ const QuestAccount: FC<{ fail: (message: string) => void, success: (message: str
 
         try {
             const response = await getByInvitedUserMeetings();
-            setMeetings(response.data.data);
+            setMeetings(response.data);
         } catch (e) { }
 
         setIsLoadingMeetings(false);
@@ -35,7 +35,7 @@ const QuestAccount: FC<{ fail: (message: string) => void, success: (message: str
 
         try {
             const response = await getByUserNotifications();
-            setNotifications(response.data.data
+            setNotifications(response.data
                 .filter(x => !x.isChecked));
         } catch (e) { }
 

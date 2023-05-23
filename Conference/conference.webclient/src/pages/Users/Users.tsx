@@ -3,11 +3,11 @@ import React, { FC, useEffect, useState } from 'react';
 import CreateUserModal from '../../components/CreateUserModal/CreateUserModal';
 import Heading from '../../components/Heading/Heading';
 import UsersList from '../../components/UsersList/UsersList';
-import { getUsers } from '../../http/users';
+import { deleteUser, getUsers } from '../../http/users';
 import { IUser } from '../../models/domain/IUser';
 import { IMessagesErrorResponse } from '../../models/response/IMessagesErrorResponse';
 
-const Users: FC<{ fail: (message: string) => void }> = () => {
+const Users: FC<{ fail: (message: string) => void }> = ({ fail }) => {
     const [isOpening, setIsOpening] = useState<boolean>(false);
     const [users, setUsers] = useState<IUser[]>([] as IUser[]);
     const [isUsersLoading, setIsUsersLoading] = useState<boolean>(true);
@@ -22,20 +22,23 @@ const Users: FC<{ fail: (message: string) => void }> = () => {
 
         try {
             const response = await getUsers();
-            setUsers(response.data.data);
+            setUsers(response.data)
         } catch (e) { }
 
         setIsUsersLoading(false);
     }
 
-    const deleteUser = async (user: IUser) => {
+    const tryDeleteUser = async (user: IUser) => {
         setIsLoadingDeleting(true);
 
         try {
             await deleteUser(user);
         } catch (e) {
             const error = e as IMessagesErrorResponse
-            fail(error.response.data[0].message);
+            if (error.response) {
+                fail(error.response.data[0].message);
+            }
+            console.log(error)
         }
 
         setIsLoadingDeleting(false)
@@ -55,10 +58,8 @@ const Users: FC<{ fail: (message: string) => void }> = () => {
                     Добавить пользователя
                 </Button>
             </Row>
-
             <CreateUserModal fail={fail} isOpening={isOpening} setIsOpening={setIsOpening} updateUsersList={updateUsersList} />
-
-            <UsersList isLoadingDeleting={isLoadingDeleting} users={users} deleteUser={deleteUser} isLoading={isUsersLoading} />
+            <UsersList isLoadingDeleting={isLoadingDeleting} users={users} deleteUser={tryDeleteUser} isLoading={isUsersLoading} />
         </div>
     );
 };

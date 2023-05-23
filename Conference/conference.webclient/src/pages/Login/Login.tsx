@@ -4,10 +4,11 @@ import React, { FC, useState } from 'react';
 import Heading from '../../components/Heading/Heading';
 import { loginUser } from '../../http/users';
 import { IUser } from '../../models/domain/IUser';
+import { Roles } from '../../models/domain/Roles';
 import { IMessagesErrorResponse } from '../../models/response/IMessagesErrorResponse';
 import { setAuth } from '../../services/RolesService';
 
-const Login: FC<{fail: (message: string) => void}> = () => {
+const Login: FC<{ fail: (message: string) => void, setRole: (role: Roles) => void }> = ({ fail, setRole }) => {
     const [user, setUser] = useState<IUser>({} as IUser);
     const [isLoginLoading, setIsLoginLoading] = useState<boolean>(false);
 
@@ -16,10 +17,13 @@ const Login: FC<{fail: (message: string) => void}> = () => {
 
         try {
             const response = await loginUser(user);
-            setAuth(response.data);
+            setAuth(response);
+            setRole(response.role as Roles);
         } catch (e) {
             const error = e as IMessagesErrorResponse;
-            fail(error.response.data[0].message);
+            if (error.response) {
+                fail(error.response.data[0].message);
+            }
         }
 
         setIsLoginLoading(false);

@@ -21,7 +21,7 @@ const SecretaryMeeting: FC<{ fail: (message: string) => void, success: (message:
     const updateMeeting = async () => {
         try {
             const response = await getByIdMeeting(+(id ?? ""));
-            setMeeting(response.data.data);
+            setMeeting(response.data);
         } catch (e) { }
     }
 
@@ -49,11 +49,8 @@ const SecretaryMeeting: FC<{ fail: (message: string) => void, success: (message:
     return (
         <div>
             <Heading content="Отчет" />
-
             <MeetingDescription meeting={meeting} />
-
             <QuestionsList questions={meeting.questions ?? []} />
-
             <DecisionsList fail={fail} success={success} meeting={meeting} setMeeting={setMeeting} />
 
             {(!meeting.hasCompleted || meeting.hasVoting) &&

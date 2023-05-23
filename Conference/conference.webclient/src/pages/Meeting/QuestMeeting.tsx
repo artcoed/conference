@@ -25,7 +25,7 @@ const QuestMeeting: FC<{ fail: (message: string) => void, success: (message: str
 
         try {
             const response = await getForQuestById({ id: +id });
-            const meetingData = response.data.data;
+            const meetingData = response.data;
             if (meetingData.votingOptions) {
                 if (meetingData.selectedOption === "")
                     meetingData.selectedOption = meetingData.votingOptions[0];

@@ -22,7 +22,7 @@ namespace Conference.Commands.Users.Get
             IReadOnlyList<UserDto> users = getUsers.Value.Select(user => new UserDto { 
                 Id = user.Id,
                 Login = user.Login,
-                Name = user.DisplayingName,
+                DisplayingName = user.DisplayingName,
                 Role = user.Role.RussianName,
             }).ToList();
 

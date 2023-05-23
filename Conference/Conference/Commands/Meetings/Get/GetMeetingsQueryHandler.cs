@@ -22,7 +22,7 @@ namespace Conference.Commands.Meetings.Get
             IReadOnlyList<MeetingDto> meetings = getAllMeetingsResult.Value.Select(x => new MeetingDto
             {
                 Id = x.Id,
-                Title = x.Title,
+                MeetingTitle = x.Title,
                 StartDateTime = x.StartDateTime,
                 HasCompleted = x.HasCompleted,
                 EndDateTime = x.EndDateTime,

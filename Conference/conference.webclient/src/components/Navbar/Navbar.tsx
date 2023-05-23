@@ -5,15 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { IMenuButton } from "../../models/domain/IMenuButton";
 import { Roles } from "../../models/domain/Roles";
 import { RouteNames } from "../../models/domain/RouteNames";
-import { getCurrentRole } from "../../services/RolesService";
 
-const Navbar: FC = () => {
+const Navbar: FC<{ role: Roles, setRole: (role: Roles) => void }> = ({ role, setRole }) => {
     const navigate = useNavigate();
     const [currentMenuButtons, setCurrentMenuButtons] = useState<IMenuButton[]>([] as IMenuButton[]);
 
     const logout = () => {
         localStorage.removeItem('role');
         localStorage.removeItem('token');
+        setRole(Roles.None);
     };
 
     const logoutMenuButton: IMenuButton = { label: "Выйти", onClick: logout };
@@ -39,7 +39,7 @@ const Navbar: FC = () => {
     ];
 
     useEffect(() => {
-        switch (getCurrentRole()) {
+        switch (role) {
             case Roles.Administrator:
                 setCurrentMenuButtons(administratorMenuButtons);
                 break;
@@ -55,7 +55,7 @@ const Navbar: FC = () => {
             default:
                 setCurrentMenuButtons(anonymousMenuButtons);
         }
-    }, []);
+    }, [role]);
 
     return (
         <Header>

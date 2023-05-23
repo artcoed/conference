@@ -41,13 +41,13 @@ const CreateUserModal: FC<{
 
     return (
         <Modal
-            title="Äîáàâëåíèå ïîëüçîâàòåëÿ"
+            title="Ð”Ð¾Ð±Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ"
             open={isOpening}
             onOk={tryCreateUser}
             confirmLoading={isConfirmLoading}
             onCancel={close}
-            okText="Äîáàâèòü"
-            cancelText="Îòìåíèòü"
+            okText="Ð”Ð¾Ð±Ð°Ð²Ð¸Ñ‚ÑŒ"
+            cancelText="ÐžÑ‚Ð¼ÐµÐ½Ð¸Ñ‚ÑŒ"
         >
             <CreateUserForm user={user} setUser={setUser} />
         </Modal>

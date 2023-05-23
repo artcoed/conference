@@ -4,7 +4,7 @@ import 'moment/locale/ru'
 import React, { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import $api from '../../http';
-import { IReport } from '../../models/domain/IReport';
+import { IMeeting } from '../../models/domain/IMeeting';
 import { IGetFewResponse } from '../../models/response/IGetFewResponse';
 import { getReportPath } from '../../routes';
 
@@ -12,7 +12,7 @@ const AdministratorMeetings: FC = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true)
 
-    const [reports, setReports] = useState([] as IReport[])
+    const [meetings, setMeetings] = useState([] as IMeeting[])
 
     useEffect(() => {
         updateMeetingsList();
@@ -22,8 +22,8 @@ const AdministratorMeetings: FC = () => {
         setIsLoading(true)
 
         try {
-            const response = await $api.get("Meetings/GetMeetings") as IGetFewResponse<IReport>;
-            setReports(response.data)
+            const response = await $api.get("Meetings/GetMeetings") as IGetFewResponse<IMeeting>;
+            setMeetings(response.data)
         } catch (e) { }
 
         setIsLoading(false)
@@ -46,14 +46,14 @@ const AdministratorMeetings: FC = () => {
                         <List
                             locale={{emptyText: "Отчетов нет"} }
                             loading={isLoading}
-                            dataSource={reports}
+                            dataSource={meetings}
                             renderItem={(meeting) => (
                                 <List.Item key={meeting.id}
-                                    actions={[<Button disabled={!meeting.meetingCompleted} key={"Открыть"} onClick={() => navigate(getReportPath(meeting.id.toString()))}>Открыть</Button>]}
+                                    actions={[<Button disabled={!meeting.hasCompleted} key={"Открыть"} onClick={() => navigate(getReportPath((meeting.id??0).toString()))}>Открыть</Button>]}
                                 >
                                     <List.Item.Meta
                                         title={meeting.meetingTitle}
-                                        description={`Начато: ${moment(meeting.startDateTime).format("lll")}, ${meeting.meetingCompleted ? "Завершено: " + moment(meeting.endDateTime).format("lll") : "В процессе"}`}
+                                        description={`Начато: ${moment(meeting.startDateTime).format("lll")}, ${meeting.hasCompleted ? "Завершено: " + moment(meeting.endDateTime).format("lll") : "В процессе"}`}
                                     />
                                 </List.Item>
                             )}

@@ -27,7 +27,7 @@ namespace Conference.Commands.Users.GetCanInvite
             {
                 Id = user.Id,
                 Login = user.Login,
-                Name = user.DisplayingName,
+                DisplayingName = user.DisplayingName,
                 Role = user.Role.RussianName,
             }).ToList();
 
