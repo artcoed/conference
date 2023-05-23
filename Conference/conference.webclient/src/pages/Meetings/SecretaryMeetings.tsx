@@ -1,20 +1,24 @@
 import { Button, DatePicker, Form, Input, List, message, Modal, Row, Upload, UploadFile } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
-import MeetingsList from '../../components/Common/MeetingsList';
 import dayjs from 'dayjs';
 import Transfer, { TransferDirection } from 'antd/es/transfer';
-import { IUsersCreateResponseError, IUsersListSuccessResponse } from '../Users';
 import $api from '../../http';
 import { InboxOutlined } from '@ant-design/icons';
 import classes from "./SecretaryMeetings.module.css";
-import { IAdministratorReportResponse, IAdministratorReportsResponse } from '../Administrator/AdministratorMeetings';
 import Password from 'antd/es/input/Password';
+import { ITransferSource } from '../../models/tools/ITransferSource';
+import { IDocument } from '../../models/domain/IDocument';
+import { IMessagesErrorResponse } from '../../models/response/IMessagesErrorResponse';
+import { IGetFewResponse } from '../../models/response/IGetFewResponse';
+import { IUser } from '../../models/domain/IUser';
+import { IMeeting } from '../../models/domain/IMeeting';
+import MeetingsList from '../../components/MeetingsList/MeetingsList';
 
 const SecretaryMeetings: FC = () => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
-    const [meetings, setMeetings] = useState([] as IAdministratorReportResponse[])
+    const [meetings, setMeetings] = useState([] as IMeeting[])
     const [isLoading, setIsLoading] = useState(true)
 
     const [title, setTitle] = useState('')
@@ -29,7 +33,7 @@ const SecretaryMeetings: FC = () => {
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    const [users, setUsers] = useState<RecordType[]>()
+    const [users, setUsers] = useState<ITransferSource[]>()
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
     const onChange = (nextTargetKeys: string[], direction: TransferDirection, moveKeys: string[]) => {
@@ -87,12 +91,12 @@ const SecretaryMeetings: FC = () => {
 
     const updateUsers = async () => {
         try {
-            const response = await $api.get('Users/GetCanInviteUsers') as IUsersListSuccessResponse;
+            const response = await $api.get('Users/GetCanInviteUsers') as IGetFewResponse<IUser>;
 
-            const recordTypeUsers = [] as RecordType[];
+            const recordTypeUsers = [] as ITransferSource[];
             for (let i = 0; i < response.data.length; i++) {
                 const user = response.data[i]
-                recordTypeUsers.push({ key: user.id.toString(), title: user.login, description: user.name })
+                recordTypeUsers.push({ key: (user.id ?? 0).toString(), title: user.login, description: user.displayingName })
             }
 
             setUsers(recordTypeUsers)
@@ -129,7 +133,7 @@ const SecretaryMeetings: FC = () => {
             setQuestName('')
             updateUsers()
         } catch (e) {
-            const errorResponse = e as IUsersCreateResponseError;
+            const errorResponse = e as IMessagesErrorResponse;
             if (errorResponse.response != null) {
                 error(errorResponse.response.data[0].message)
             }
@@ -142,7 +146,7 @@ const SecretaryMeetings: FC = () => {
 
     const onSubmit = async () => {
         setConfirmLoading(true);
-        const documents = [] as IDocumentRequest[]
+        const documents = [] as IDocument[]
 
         if (fileList.length) {
             for (const item of fileList) {
@@ -165,7 +169,7 @@ const SecretaryMeetings: FC = () => {
                 startMeetingDateTime: dateTime,
                 title,
                 usersId: usersId
-            } as ICreateMeetingRequest);
+            });
 
             setFileList([])
             setQuestions([])
@@ -180,7 +184,7 @@ const SecretaryMeetings: FC = () => {
             success('Совещание успешно добавлено')
             updateMeetingsList();
         } catch (e) {
-            const err = e as ICreateMeetingRequestError
+            const err = e as IMessagesErrorResponse
             if (err != null) {
                 error(err.response.data[0].message)
             }
@@ -222,7 +226,7 @@ const SecretaryMeetings: FC = () => {
     const updateMeetingsList = async () => {
         setIsLoading(true)
         try {
-            const response = await $api.get("Meetings/GetMeetings") as IAdministratorReportsResponse;
+            const response = await $api.get("Meetings/GetMeetings") as IGetFewResponse<IMeeting>;
             setMeetings(response.data)
         } catch (e) {
         }
@@ -336,7 +340,8 @@ const SecretaryMeetings: FC = () => {
                             Добавить совещание
                         </Button>
                     </Row>
-                    <MeetingsList isLoading={isLoading} meetings={meetings} />
+
+                    <MeetingsList buttons={[]} isLoading={isLoading} meetings={meetings} />
                 </div>
             </div>
         </div>

@@ -36,7 +36,7 @@ const NotesList: FC<{ meeting: IMeeting, setMeeting: (meeting: IMeeting) => void
                 fail(error.response.data[0].message);
             }
         }
-    }S
+    }
 
     return (
         <Form>

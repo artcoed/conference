@@ -1,26 +1,30 @@
-import { Descriptions, Form, Input, List, Spin } from 'antd';
+import { Descriptions, List, Spin } from 'antd';
 import moment from 'moment';
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import $api from '../http';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import $api from '../../http';
+import { IReport } from '../../models/domain/IReport';
+import { IGetSingleResponse } from '../../models/response/IGetSingleResponse';
+import { IGraphElement } from '../../models/tools/IGraphElement';
+import { IIdParameter } from '../../models/tools/IIdParameter';
 import classes from "./Report.module.css";
 
 const Report: FC = () => {
-    const { id } = useParams<ReportParams>();
+    const { id } = useParams<IIdParameter>();
 
     const [report, setReport] = useState({} as IReport); 
-    const [graphData, setGraphData] = useState([] as IGraphDataElement[]);
+    const [graphData, setGraphData] = useState([] as IGraphElement[]);
     const [isLoading, setIsLoading] = useState(true);
 
     const updateReport = async () => {
         setIsLoading(true)
         try {
-            const response = await $api.get(`Reports/GetByMeetingId?meetingId=${id}`) as IReportResponse;
+            const response = await $api.get(`Reports/GetByMeetingId?meetingId=${id}`) as IGetSingleResponse<IReport>;
             setReport(response.data)
 
             if (response.data.votes) {
-                const newGraphData = [] as IGraphDataElement[];
+                const newGraphData = [] as IGraphElement[];
                 for (let i = 0; i < response.data.votes.length; i++) {
                     if (response.data.votes[i].users) {
                         newGraphData.push({ name: response.data.votes[i].value, pv: response.data.votes[i].users.length })
@@ -29,8 +33,7 @@ const Report: FC = () => {
                 
                 setGraphData(newGraphData)
             }
-        } catch (e) {
-        }
+        } catch (e) { }
         setIsLoading(false)
     }
 
