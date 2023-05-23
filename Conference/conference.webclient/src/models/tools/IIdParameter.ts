@@ -1,3 +1,3 @@
-export interface IIdParameter {
-    id: number;
+export type IIdParameter = {
+    id: string;
 };

@@ -16,9 +16,21 @@
     <Folder Include="src\components\PageLoader\" />
     <Folder Include="src\components\Heading\" />
     <Folder Include="src\components\NotificationsList\" />
+    <Folder Include="src\components\NotesList\" />
+    <Folder Include="src\components\DocumentsList\" />
+    <Folder Include="src\components\VoteMenu\" />
+    <Folder Include="src\components\MeetingDescription\" />
+    <Folder Include="src\components\QuestionsList\" />
+    <Folder Include="src\components\DecisionsList\" />
+    <Folder Include="src\components\CreateVoting\" />
+    <Folder Include="src\components\CreateVotingOption\" />
     <Folder Include="src\http\meetings\" />
     <Folder Include="src\http\users\" />
     <Folder Include="src\http\notifications\" />
+    <Folder Include="src\http\notes\" />
+    <Folder Include="src\http\votes\" />
+    <Folder Include="src\http\decisions\" />
+    <Folder Include="src\http\votings\" />
     <Folder Include="src\models\response\" />
   </ItemGroup>
 </Project>
