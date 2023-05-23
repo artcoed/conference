@@ -94,7 +94,7 @@ var config = builder.Configuration;
     builder.Services.AddScoped<IUsersService, UsersService>();
 
     builder.Services.AddDbContext<IEntityFrameworkContext, EntityFrameworkContext>(c =>
-        c.UseNpgsql(builder.Configuration
+        c.UseSqlServer(builder.Configuration
             .GetConnectionString("DefaultConnection")));
 
     builder.Services.AddScoped<IMeetingsRepository, MeetingsEntityFrameworkRepository>();

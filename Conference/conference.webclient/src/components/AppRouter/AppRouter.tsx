@@ -1,4 +1,4 @@
-import { Layout, message, Spin } from 'antd';
+import { Layout, message } from 'antd';
 import React, { FC, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { IRoute } from '../../models/domain/IRoute';
@@ -16,25 +16,25 @@ const AppRouter: FC = () => {
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    const fail = (message: string) => {
-        messageApi.open({
-            type: 'error',
-            content: message,
-        });
-    }
-
-    const success = (message: string) => {
-        messageApi.open({
-            type: 'success',
-            content: message,
-        }); 
-    }
-
     useEffect(() => {
         setRole(getCurrentRole());
     }, [])
 
     useEffect(() => {
+        const fail = (message: string) => {
+            messageApi.open({
+                type: 'error',
+                content: message,
+            });
+        }
+
+        const success = (message: string) => {
+            messageApi.open({
+                type: 'success',
+                content: message,
+            });
+        }
+
         setIsLoadingRole(true);
 
         switch (role) {
@@ -54,7 +54,7 @@ const AppRouter: FC = () => {
         setTimeout(() => {
             setIsLoadingRole(false);
         }, 250)
-    }, [role])
+    }, [role, messageApi])
 
     return (
         <div>
