@@ -48,7 +48,7 @@ const SecretaryMeeting: FC<{ fail: (message: string) => void, success: (message:
 
     return (
         <div>
-            <Heading content="Отчет" />
+            <Heading content="Совещание" />
             <MeetingDescription meeting={meeting} />
             <QuestionsList questions={meeting.questions ?? []} />
             <DecisionsList fail={fail} success={success} meeting={meeting} setMeeting={setMeeting} />

@@ -13,6 +13,8 @@ import { IGetFewResponse } from '../../models/response/IGetFewResponse';
 import { IUser } from '../../models/domain/IUser';
 import { IMeeting } from '../../models/domain/IMeeting';
 import MeetingsList from '../../components/MeetingsList/MeetingsList';
+import { useNavigate } from 'react-router-dom';
+import { getMeetingPath } from '../../routes';
 
 const SecretaryMeetings: FC = () => {
     const [open, setOpen] = useState(false);
@@ -233,6 +235,12 @@ const SecretaryMeetings: FC = () => {
         setIsLoading(false)
     }
 
+    const navigate = useNavigate();
+
+    const goToMeeting = (meeting: IMeeting) => {
+        navigate(getMeetingPath((meeting.id ?? 0).toString()));
+    }
+
     return (
         <div style={{minHeight: "calc(100vh - 64px)"}}>
             {contextHolder}
@@ -341,7 +349,7 @@ const SecretaryMeetings: FC = () => {
                         </Button>
                     </Row>
 
-                    <MeetingsList buttons={[]} isLoading={isLoading} meetings={meetings} />
+                    <MeetingsList buttons={[{ content: "Перейти", onClick: goToMeeting }]} isLoading={isLoading} meetings={meetings} />
                 </div>
             </div>
         </div>

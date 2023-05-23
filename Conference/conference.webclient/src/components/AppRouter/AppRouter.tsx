@@ -13,12 +13,20 @@ const AppRouter: FC = () => {
     const [currentRoutes, setCurrentRoutes] = useState<IRoute[]>([] as IRoute[]);
     const [role, setRole] = useState(Roles.None);
 
-    const fail = (message: string) => {
+    const [messageApi, contextHolder] = message.useMessage();
 
+    const fail = (message: string) => {
+        messageApi.open({
+            type: 'error',
+            content: message,
+        });
     }
 
     const success = (message: string) => {
-
+        messageApi.open({
+            type: 'success',
+            content: message,
+        }); 
     }
 
     useEffect(() => {
@@ -47,7 +55,7 @@ const AppRouter: FC = () => {
 
     return (
         <div>
-
+            {contextHolder}
             {isLoadingRole ? <PageLoader /> :
                 <>
                     <Navbar setRole={setRole} role={role} />

@@ -132,9 +132,6 @@ const Report: FC = () => {
                     :
                     <p style={{ marginTop: "20px", textAlign: "center" }}>Голосование не проводилось</p>
                 }
-                
-
-                <div className={classes.Footer}></div>
             </div>
         </div>
     );
