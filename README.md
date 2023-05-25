@@ -2,7 +2,8 @@
 <p>Bad code project</p> 
 
 
-Uploading 2023-05-25 09-52-46.mp4…
+https://github.com/artcoed/conference/assets/90335472/dd43315d-f2f2-4e3b-957a-4e2ab3d95361
+
 
 
 <p>First ASP.NET project and first TypeScript React project</p>
