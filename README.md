@@ -1,6 +1,17 @@
 # Conference
-<p>Bad code project</p> 
-<p>First ASP.NET project and first TypeScript React project</p>
-<p>Oriented on fast development</p>
-<p>Testing the performance of sometimes the craziest patterns, work aimed at pumping skills to adapt to new technologies, which almost always do not correspond to my vision of clean code</p>
-<p>Lots of repetitive code, refactoring planned</p>
+<div>Backend stack:</div>
+<ul>
+  <li>.Net</li>
+  <li>C#</li>
+  <li>ASP.NET</li>
+  <li>Entity Framework Core</li>
+  <li>MediatR</li>
+  <li>Swagger</li>
+</ul>
+<div>Frontend stack:</div>
+<ul>
+  <li>Node JS</li>
+  <li>TypeScript</li>
+  <li>React</li>
+  <li>Ant Design</li>
+</ul>
