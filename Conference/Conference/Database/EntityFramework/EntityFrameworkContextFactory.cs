@@ -8,7 +8,7 @@ namespace Conference.Database.EntityFramework
         public EntityFrameworkContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<EntityFrameworkContext>();
-            optionsBuilder.UseSqlServer("Server=192.168.147.58;User Id=ws;Password=Qwerty123$;Database=BestConference;Encrypt=false");
+            optionsBuilder.UseSqlServer("");
             return new EntityFrameworkContext(optionsBuilder.Options);
         }
     }
