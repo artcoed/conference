@@ -18,25 +18,23 @@ namespace Conference.Commands.Meetings.GetForQuestById
 
         public async Task<Result<QuestMeetingDto>> Handle(GetForQuestByIdQuery request, CancellationToken cancellationToken)
         {
-            var meetingResult = await _unitOfWork.MeetingsRepository.GetByIdAsync(request.MeetingId, cancellationToken);
-            if (meetingResult.IsFailed)
-                return Result.Fail("Совещание не найдено");
-
             var userResult = await _usersService.GetCurrentUser(cancellationToken);
             if (userResult.IsFailed)
                 return Result.Fail("Ошибка аутентификации");
 
-            var meeting = meetingResult.Value;
             var user = userResult.Value;
+            
+            var meetingResult = await _unitOfWork.MeetingsRepository.GetByIdForQuestAsync(request.MeetingId, user, cancellationToken);
+            if (meetingResult.IsFailed)
+                return Result.Fail("Совещание не найдено");
 
-            if (!meeting.Users.Contains(user))
-                return Result.Fail("Пользователь не приглашен на это совещание");
+            var meeting = meetingResult.Value;
 
             bool hasVoted = false;
             string selectedOption = "";
             foreach (var vote in meeting.Votes)
             {
-                if (vote.User ==  user)
+                if (vote.User == user)
                 {
                     hasVoted = true;
                     selectedOption = vote.Option.Value;
@@ -44,7 +42,9 @@ namespace Conference.Commands.Meetings.GetForQuestById
                 }
             }
 
-            var notes = meeting.Notes.Where(x => x.User == user).Select(x => x.Value).ToList();
+            var notes = meeting.Notes.Where(x => x.User == user)
+                .Select(x => x.Value)
+                .ToList();
 
             var meetingDto = new QuestMeetingDto
             {

@@ -7,6 +7,7 @@ namespace Conference.Database.EntityFramework
     {
         DbSet<Decision> Decisions { get; }
         DbSet<Document> Documents { get; }
+        DbSet<DocumentSource> DocumentsSources { get; }
         DbSet<Meeting> Meetings { get; }
         DbSet<User> Users { get; }
         DbSet<Note> Notes { get; }

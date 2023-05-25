@@ -6,7 +6,7 @@ namespace Conference.Domain
     {
         public int Id { get; set; }
         [MaxLength]
-        public string Value { get; set; }
         public string Name { get; set; }
+        public DocumentSource Source { get; set; }
     }
 }

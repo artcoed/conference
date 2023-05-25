@@ -19,8 +19,9 @@ namespace Conference.Database.UnitOfWork
 
         public UnitOfWork(IEntityFrameworkContext context, IMeetingsRepository meetingsRepository,
             IUsersRepository usersRepository, IRolesRepository rolesRepository, 
-            INotificationsRepository notificationsRepository, IDocumentsRepository documentsRepository)
-        {
+            INotificationsRepository notificationsRepository, IDocumentsRepository documentsRepository
+        )
+            {
             _context = context;
             MeetingsRepository = meetingsRepository;
             UsersRepository = usersRepository;

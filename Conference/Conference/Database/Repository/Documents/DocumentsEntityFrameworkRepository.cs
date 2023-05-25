@@ -22,5 +22,17 @@ namespace Conference.Database.Repository.Documents
 
             return Result.Ok(document);
         }
+
+        public async Task<Result<Document>> GetByIdWithSource(int id, CancellationToken cancellationToken)
+        {
+            var document = await _entityFrameworkContext.Documents
+                .Where(x => x.Id == id)
+                .Include(x => x.Source)
+                .FirstOrDefaultAsync(cancellationToken);
+            if (document == null)
+                return Result.Fail("Документ не найден");
+
+            return Result.Ok(document);
+        }
     }
 }

@@ -20,7 +20,7 @@ import Heading from '../../components/Heading/Heading';
 const SecretaryMeetings: FC<{ fail: (message: string) => void, success: (message: string) => void }> = ({ fail, success }) => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-
+    
     const [meetings, setMeetings] = useState([] as IMeeting[])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -36,6 +36,8 @@ const SecretaryMeetings: FC<{ fail: (message: string) => void, success: (message
 
     const [users, setUsers] = useState<ITransferSource[]>()
     const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+
+    const mb = 1049116;
 
     const onChange = (nextTargetKeys: string[], direction: TransferDirection, moveKeys: string[]) => {
         setTargetKeys(nextTargetKeys);
@@ -308,6 +310,12 @@ const SecretaryMeetings: FC<{ fail: (message: string) => void, success: (message
                         <Form.Item label="Документы">
                             <Form.Item name="dragger" valuePropName="fileList" getValueFromEvent={normFile} noStyle>
                                 <Upload.Dragger name="files" beforeUpload={(file: UploadFile) => {
+                                    if ((file.size ?? 0) > mb * 2) {
+                                        console.log(file.size)
+                                        fail("Размер файла не должен превышать 2МБ")
+                                        return true;
+                                    }
+
                                     setFileList((prev) => [...prev, file]);
                                     return false;
 

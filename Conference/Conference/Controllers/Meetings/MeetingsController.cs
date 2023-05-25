@@ -87,15 +87,18 @@ namespace Conference.Controllers.Meetings
         [HttpGet]
         public async Task<IActionResult> DownloadFileByIdAsync([FromQuery] DownloadFileByIdQuery downloadFileByIdQuery, CancellationToken cancellationToken)
         {
-            var documentResult = await _unitOfWork.DocumentsRepository.GetById(downloadFileByIdQuery.DocumentId, cancellationToken);
+            
+            var documentResult  = await _unitOfWork.DocumentsRepository.GetByIdWithSource(downloadFileByIdQuery.DocumentId, cancellationToken);
 
             if (documentResult.IsFailed)
                 return NotFound();
-
+            
             var document = documentResult.Value;
+            var documentSource = document.Source;
+
             var mimeType = "application/octet-stream";
 
-            var s = document.Value.Remove(0, 37);
+            var s = documentSource.Value.Remove(0, 37);
             var documentBytes = Convert.FromBase64String(s);
 
             return new FileContentResult(documentBytes, mimeType)
