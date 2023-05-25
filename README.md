@@ -1,4 +1,17 @@
 # Conference
+<div>Stack:</div>
+<ul>
+  <li>C#</li>
+  <li>ASP.NET</li>
+  <li>Entity Framework Core</li>
+  <li>CQRS</li>
+  <li>MediatR</li>
+  <li>TypeScript</li>
+  <li>React</li>
+  <li>Ant Design</li>
+</ul>
+
+
 
 
 https://github.com/artcoed/conference/assets/90335472/07822f6c-e180-49b5-8b10-76abbd6bb980
