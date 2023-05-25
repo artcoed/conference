@@ -1,5 +1,5 @@
 import { Button, Row } from 'antd';
-import React, { FC, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import CreateVoting from '../../components/CreateVoting/CreateVoting';
@@ -26,7 +26,7 @@ const SecretaryMeeting: FC<{
     const [meeting, setMeeting] = useState({} as IMeeting);
     const [isCompleteLoading, setIsCompleteLoading] = useState(false)
 
-    const updateMeeting = async () => {
+    const updateMeeting = useCallback(async () => {
         setIsLoading(true);
 
         try {
@@ -35,7 +35,7 @@ const SecretaryMeeting: FC<{
         } catch (e) { }
 
         setIsLoading(false);
-    }
+    }, [id]);
 
     const tryCompleteMeeting = async () => {
         setIsCompleteLoading(true);
@@ -56,7 +56,7 @@ const SecretaryMeeting: FC<{
 
     useEffect(() => {
         updateMeeting();
-    }, [])
+    }, [updateMeeting])
 
     return (
         <div>

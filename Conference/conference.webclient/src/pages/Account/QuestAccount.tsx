@@ -66,12 +66,12 @@ const QuestAccount: FC<{ fail: (message: string) => void, success: (message: str
         }
     }
 
-    const updateAccount = () => {
-        updateMeetings();
-        updateNotifications();
-    }
-
     useEffect(() => {
+        const updateAccount = () => {
+            updateMeetings();
+            updateNotifications();
+        }
+
         updateAccount();
     }, [])
 

@@ -18,29 +18,29 @@ const Report: FC = () => {
     const [graphData, setGraphData] = useState([] as IGraphElement[]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const updateReport = async () => {
-        setIsLoading(true)
-        try {
-            const response = await $api.get(`Reports/GetByMeetingId?meetingId=${id}`) as IGetSingleResponse<IReport>;
-            setReport(response.data)
-
-            if (response.data.votes) {
-                const newGraphData = [] as IGraphElement[];
-                for (let i = 0; i < response.data.votes.length; i++) {
-                    if (response.data.votes[i].users) {
-                        newGraphData.push({ name: response.data.votes[i].value, pv: response.data.votes[i].users.length })
-                    }
-                }
-                
-                setGraphData(newGraphData)
-            }
-        } catch (e) { }
-        setIsLoading(false)
-    }
-
     useEffect(() => {
+        const updateReport = async () => {
+            setIsLoading(true)
+            try {
+                const response = await $api.get(`Reports/GetByMeetingId?meetingId=${id}`) as IGetSingleResponse<IReport>;
+                setReport(response.data)
+
+                if (response.data.votes) {
+                    const newGraphData = [] as IGraphElement[];
+                    for (let i = 0; i < response.data.votes.length; i++) {
+                        if (response.data.votes[i].users) {
+                            newGraphData.push({ name: response.data.votes[i].value, pv: response.data.votes[i].users.length })
+                        }
+                    }
+
+                    setGraphData(newGraphData)
+                }
+            } catch (e) { }
+            setIsLoading(false)
+        }
+
         updateReport();
-    }, [])
+    }, [id])
 
     if (isLoading) {
         return (

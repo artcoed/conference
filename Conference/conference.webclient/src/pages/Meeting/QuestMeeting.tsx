@@ -22,30 +22,30 @@ const QuestMeeting: FC<{ fail: (message: string) => void, success: (message: str
             setRole(Roles.Worker);
     }
 
-    const updateMeeting = async () => {
-        if (!id)
-            return;
-
-        try {
-            const response = await getForQuestById({ id: +id });
-            const meetingData = response.data;
-            if (meetingData.votingOptions) {
-                if (meetingData.selectedOption === "")
-                    meetingData.selectedOption = meetingData.votingOptions[0];
-            }
-            setMeeting(meetingData);
-        } catch (e) { }
-    }
-
-    const updateQuestMeeting = async () => {
-        updateRole();
-        await updateMeeting();
-        setIsLoading(false);
-    }
-
     useEffect(() => {
+        const updateMeeting = async () => {
+            if (!id)
+                return;
+
+            try {
+                const response = await getForQuestById({ id: +id });
+                const meetingData = response.data;
+                if (meetingData.votingOptions) {
+                    if (meetingData.selectedOption === "")
+                        meetingData.selectedOption = meetingData.votingOptions[0];
+                }
+                setMeeting(meetingData);
+            } catch (e) { }
+        }
+
+        const updateQuestMeeting = async () => {
+            updateRole();
+            await updateMeeting();
+            setIsLoading(false);
+        }
+
         updateQuestMeeting();
-    }, [])
+    }, [id])
 
     return (
         <div>
