@@ -5,7 +5,6 @@
   <li>C#</li>
   <li>ASP.NET</li>
   <li>Entity Framework Core</li>
-  <li>CQRS</li>
   <li>MediatR</li>
   <li>Swagger</li>
 </ul>
