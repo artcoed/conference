@@ -122,7 +122,7 @@ const Report: FC = () => {
                                 maxBarSize={100}
                             >
                                 <XAxis dataKey="name" scale="point" padding={{ left: 50, right: 50 }} />
-                                <YAxis scale="point" />
+                                <YAxis scale="linear" />
                                 <Tooltip />
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <Bar dataKey="pv" name="Проголосовало" fill="#8884d8" background={{ fill: '#eee' }} />
